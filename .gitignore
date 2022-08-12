@@ -1,0 +1,4 @@
+res/
+res/*
+env.php
+.php-cs-fixer.cache
