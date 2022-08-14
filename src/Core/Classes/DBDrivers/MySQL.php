@@ -27,7 +27,8 @@ class MySQL implements IDB
                 $this->DBConfig->getUsername(),
                 $this->DBConfig->getPassword(),
                 $this->DBConfig->getDB(),
-                $this->DBConfig->getPort()
+                $this->DBConfig->getPort(),
+                $this->DBConfig->getSocket()
             );
         }
     }

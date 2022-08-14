@@ -13,6 +13,13 @@ if (file_exists(ROOTDIR.DIRECTORY_SEPARATOR.'.env')) {
 }
 
 if (!function_exists('env')) {
+    /**
+     * Get environment value
+     * @param mixed $key
+     * @param mixed $default
+     * 
+     * @return [type]
+     */
     function env($key, $default = null)
     {
         return getenv($key) ?? $default;
@@ -20,6 +27,12 @@ if (!function_exists('env')) {
 }
 
 if (!function_exists('dd')) {
+    /**
+     * Dump and die.
+     * @param mixed ...$args
+     * 
+     * @return void
+     */
     function dd(...$args)
     {
         ob_clean();
