@@ -1,4 +1,5 @@
 res/
 res/*
 env.php
+.env
 *.cache

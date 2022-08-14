@@ -3,10 +3,13 @@
 if(!defined('ROOTDIR'))
     define('ROOTDIR',__DIR__.'\\..');
     
-if (file_exists(ROOTDIR.DIRECTORY_SEPARATOR.'env.php')) {
-    include ROOTDIR.DIRECTORY_SEPARATOR.'env.php';
+if (file_exists(ROOTDIR.DIRECTORY_SEPARATOR.'.env')) {
+    $env = parse_ini_file(ROOTDIR.DIRECTORY_SEPARATOR.'.env');
+    foreach ($env as $key => $value) {
+        putenv("$key=$value");
+    }
 } else {
-    die("no env file detected");
+    die("no environment file detected (.env)");
 }
 
 if (!function_exists('env')) {
