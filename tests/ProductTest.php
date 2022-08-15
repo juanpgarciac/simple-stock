@@ -19,8 +19,8 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         $mySQL = new MySQL( DBConfiguration::FromEnvFile());
-        $this->productRepository = new ProductRepository(  new FakeDB());
-        //$this->productRepository = new ProductRepository(  $mySQL);
+        //$this->productRepository = new ProductRepository(  new FakeDB());
+        $this->productRepository = new ProductRepository(  $mySQL);
         
     }
     
@@ -81,6 +81,7 @@ final class ProductTest extends TestCase
 
     }
 
+
     /** @test */
     public function all_product_can_be_deleted()
     {
@@ -101,6 +102,29 @@ final class ProductTest extends TestCase
         $this->assertCount(0, $this->productRepository->results());
     }
     
+    /** @test */
+    public function product_can_be_deleted_by_id()
+    {
+        $product = new Product('Tuna #1','1 Can','unit','cans');
+        $this->productRepository->insert($product);
+
+        $product = new Product('Tuna #2','1 Can','unit','cans');
+        $productAfterSave = $this->productRepository->insert($product);
+
+        $id = $productAfterSave->id();
+        $productFound = $this->productRepository->find($id);
+
+        $this->assertEquals($id, $productFound->id());
+
+        $this->productRepository->delete($id);
+
+        $productFound = $this->productRepository->find($id);
+
+        $this->assertNull($productFound);
+
+
+    }
+
     /** @test */
     public function product_can_be_retrieved()
     {
@@ -135,11 +159,11 @@ final class ProductTest extends TestCase
         $randomName = 'Random Name '.date('Ymdhis');
 
         $product = new Product($randomName,'1 Can','unit','cans');
-        $productAfterSave = $this->productRepository->insert($product);
+        $id = $this->productRepository->insert($product)->getValue('id');
 
-        $productArr = $this->productRepository->find($productAfterSave->getValue('id'));
+        $productAfterSave = $this->productRepository->find($id);
 
-        $this->assertSame($randomName, $productArr['name']);
+        $this->assertEquals($randomName, $productAfterSave->getValue('name'));
 
 
 

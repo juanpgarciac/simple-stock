@@ -8,10 +8,9 @@ abstract class Model
 {
 
 
-    public function id()
+    public function id($id_field = 'id')
     {
-        if(isset($this->id))        
-            return $this->id;
+        return $this->getValue($id_field);
     }
 
     public function getValue($fieldName)
@@ -22,13 +21,14 @@ abstract class Model
         
     }
 
-    public function setValue($fieldName,$value)
+    public function setValue($fieldName,$value,  $exceptionCheck = true )
     {
         if(property_exists($this::class,$fieldName)){
             $this->$fieldName = $value;
             return;
         }
             
-        throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
+        if($exceptionCheck)
+            throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
     }
 }

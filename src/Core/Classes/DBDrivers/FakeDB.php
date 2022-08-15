@@ -58,13 +58,15 @@ class FakeDB implements IDB
 
     }
 
-    public function insertRecord(array $recordData, string $table):int
+    public function insertRecord(array $recordData, string $table,  $id_field = 'id'):int
     {
 
         if(!isset($this->tables[$table] )){
             $this->tables[$table] = [];
         }
         $id = self::getNewID($table);
+
+        $recordData[$id_field] = $id;
 
         $this->tables[$table][ $id ] = $recordData;
 

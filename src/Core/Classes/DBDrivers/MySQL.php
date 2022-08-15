@@ -62,7 +62,7 @@ class MySQL implements IDB
         return count($results)>0 ? $results[0] : null;
     }
 
-    public function insertRecord($recordData,$table): int
+    public function insertRecord($recordData, $table, $id_field = 'id'): int
     {
         $id = null;
         $this->connect();

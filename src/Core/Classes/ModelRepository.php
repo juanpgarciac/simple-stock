@@ -100,7 +100,7 @@ abstract class ModelRepository
         }
 
         $id = $this->DB->insertRecord($insertArray,$this->getTable());
-        
+
         $modelRecord->setValue($this->id_field,$id);
 
         return $modelRecord;
@@ -129,10 +129,12 @@ abstract class ModelRepository
         $this->clear_query();
         $result = $this->DB->resultByID($recordID,$this->getTable());
         if(!empty($result)){
-            return $result;
+            return $this::class::fromState($result);
         }
         return null;
     }
+
+    abstract public static function fromState(array $recordArray): Model;
 
 
 }
