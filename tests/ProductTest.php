@@ -61,7 +61,7 @@ final class ProductTest extends TestCase
     /** @test */
     public function product_can_be_inserted()
     {
-        $randomName = 'Random Name '.date('Ymdhis');
+        $randomName = uniqid('Random Product Name ');
 
         $product = new Product($randomName,'1 Can','unit','cans');
         
@@ -131,7 +131,7 @@ final class ProductTest extends TestCase
         
         $this->productRepository->deleteBatch(true); //override flag to delete without conditions (all records)
 
-        $randomName = 'Random Name '.date('Ymdhis');
+        $randomName = uniqid('Random Product Name ');
 
         $product = new Product($randomName,'1 Can','unit','cans');
         $this->productRepository->insert($product);
@@ -156,7 +156,7 @@ final class ProductTest extends TestCase
     {
         $this->productRepository->deleteBatch(true);
      
-        $randomName = 'Random Name '.date('Ymdhis');
+        $randomName = uniqid('Random Product Name ');
 
         $product = new Product($randomName,'1 Can','unit','cans');
         $id = $this->productRepository->insert($product)->getValue('id');
@@ -173,8 +173,8 @@ final class ProductTest extends TestCase
     /** @test */
     public function product_can_be_updated()
     {
-        $randomName1 = uniqid('Random Name ');
-        $randomName2 = uniqid('Random Name ');
+        $randomName1 = uniqid('Random Product Name ');
+        $randomName2 = uniqid('Random Product Name ');
 
         $product = new Product($randomName1,'1 Can','unit','cans');
         $productAfterInsert = $this->productRepository->insert($product);
