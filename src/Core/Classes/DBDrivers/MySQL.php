@@ -62,7 +62,7 @@ class MySQL implements IDB
         return count($results)>0 ? $results[0] : null;
     }
 
-    public function insertRecord($recordData, $table, $id_field = 'id'): int
+    public function insertRecord($recordData, $table, $id_field = 'id'): string
     {
         $id = null;
         $this->connect();
@@ -74,12 +74,14 @@ class MySQL implements IDB
         return $id;
     }
 
-    public function updateRecord($recordID, $recordData, $table, $id_field = 'id')
+    public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string
     {
         $this->connect();
         $query = SQLUtils::updateQuery($recordData,["id = $recordID"],$table);
         mysqli_query($this->link, $query);
         $this->close();
+
+        return $recordID;
     }
 
     public function deleteRecord($recordID,$table, $id_field = 'id')

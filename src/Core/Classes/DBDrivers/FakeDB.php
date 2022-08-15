@@ -5,6 +5,7 @@ use Core\Classes\DBConfiguration;
 use Core\Interfaces\IDB;
 use Core\Traits\SQLUtils;
 use Core\Traits\Utils;
+use Exception;
 
 class FakeDB implements IDB
 {
@@ -58,7 +59,7 @@ class FakeDB implements IDB
 
     }
 
-    public function insertRecord(array $recordData, string $table,  $id_field = 'id'):int
+    public function insertRecord(array $recordData, string $table,  $id_field = 'id'):string
     {
 
         if(!isset($this->tables[$table] )){
@@ -75,9 +76,26 @@ class FakeDB implements IDB
     }
 
 
-    public function updateRecord($recordID,$recordData,$table,  $id_field = 'id')
+    public function updateRecord($recordID,$recordData,$table,  $id_field = 'id'):string
     {
+        if(!isset($this->tables[$table]) || !isset($this->tables[$table][$recordID])){
+            throw new Exception("Record not found", 1);            
+        }
 
+        $recordToBeUpdated = &$this->tables[$table][$recordID];
+        foreach ($recordData as $field => $value) {
+            
+
+            if($field == $id_field){
+                continue;
+            }
+
+            if(isset($recordToBeUpdated[$field]))
+                $recordToBeUpdated[$field] = $value;
+
+        }
+
+        return $recordToBeUpdated[$id_field];
     }
 
     public function deleteRecord($recordID, $table,  $id_field = 'id')

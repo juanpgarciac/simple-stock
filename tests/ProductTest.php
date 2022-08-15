@@ -19,8 +19,8 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         $mySQL = new MySQL( DBConfiguration::FromEnvFile());
-        //$this->productRepository = new ProductRepository(  new FakeDB());
-        $this->productRepository = new ProductRepository(  $mySQL);
+        $this->productRepository = new ProductRepository(  new FakeDB());
+        //$this->productRepository = new ProductRepository(  $mySQL);
         
     }
     
@@ -83,7 +83,7 @@ final class ProductTest extends TestCase
 
 
     /** @test */
-    public function all_product_can_be_deleted()
+    public function all_products_can_be_deleted()
     {
         $this->productRepository->deleteBatch(true); //override flag to delete without conditions (all records)
 
@@ -170,5 +170,26 @@ final class ProductTest extends TestCase
 
     }
 
+    /** @test */
+    public function product_can_be_updated()
+    {
+        $randomName1 = uniqid('Random Name ');
+        $randomName2 = uniqid('Random Name ');
+
+        $product = new Product($randomName1,'1 Can','unit','cans');
+        $productAfterInsert = $this->productRepository->insert($product);
+
+        $productAfterInsert->setValue('name',$randomName2);
+
+        $this->productRepository->update($productAfterInsert);
+
+        $productAfterUpdate = $this->productRepository->find($productAfterInsert->id());
+
+        $this->assertEquals($randomName2, $productAfterUpdate->getValue('name'));
+
+
+
+    }
+    
     
 }

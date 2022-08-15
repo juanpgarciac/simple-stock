@@ -107,6 +107,25 @@ abstract class ModelRepository
         
     }
 
+    public function update(Model $modelRecord)
+    {
+        if(!$this->DB){
+            throw new Exception("No DB configured", 1);
+        }
+
+        if(empty($modelRecord))
+            throw new Exception("Empty set", 1);
+
+        foreach($this->fields as $field){
+            $value = $modelRecord->getValue($field);
+            $insertArray[$field] = $value;
+        }
+
+        $this->DB->updateRecord($modelRecord->id($this->id_field), $insertArray, $this->getTable(), $this->id_field);
+        
+        return $modelRecord;
+    }
+
     public function delete($recordIDs)
     {
         $this->DB->deleteRecord($recordIDs, $this->getTable());
