@@ -21,4 +21,14 @@ abstract class Model
         throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
         
     }
+
+    public function setValue($fieldName,$value)
+    {
+        if(property_exists($this::class,$fieldName)){
+            $this->$fieldName = $value;
+            return;
+        }
+            
+        throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
+    }
 }

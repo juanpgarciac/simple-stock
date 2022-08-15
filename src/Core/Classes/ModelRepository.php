@@ -99,15 +99,9 @@ abstract class ModelRepository
             $insertArray[$field] = $value;
         }
 
-        /* *
-        foreach($recordData as $field => $value){
-            if(in_array($field,$this->fields)){
-                $insertArray[$field] = $value;
-            }
-        }
-        /* */
-
-        $this->DB->insertRecord($insertArray,$this->getTable());
+        $id = $this->DB->insertRecord($insertArray,$this->getTable());
+        
+        $modelRecord->setValue($this->id_field,$id);
 
         return $modelRecord;
         
@@ -128,6 +122,16 @@ abstract class ModelRepository
         $this->DB->deleteManyRecords($this->getConditions(), $this->getTable());
         $this->clear_query();
         return true;
+    }
+
+    public function find($recordID)
+    {
+        $this->clear_query();
+        $result = $this->DB->resultByID($recordID,$this->getTable());
+        if(!empty($result)){
+            return $result;
+        }
+        return null;
     }
 
 

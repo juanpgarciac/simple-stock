@@ -56,15 +56,25 @@ class MySQL implements IDB
         return $records;
     }
 
-    public function insertRecord($recordData,$table)
-    {
-        $this->connect();
-        $query = SQLUtils::insertQuery($recordData,$table);
-        mysqli_query($this->link, $query);
-        $this->close();
+    public function resultByID($recordID,$table, $id_field = 'id')
+    {        
+        $results = $this->results(['*'],["$id_field = $recordID"],$table);
+        return count($results)>0 ? $results[0] : null;
     }
 
-    public function updateRecord($recordID, $recordData, $table)
+    public function insertRecord($recordData,$table): int
+    {
+        $id = null;
+        $this->connect();
+        $query = SQLUtils::insertQuery($recordData,$table);
+        if(mysqli_query($this->link, $query)){
+            $id = $this->link->insert_id;
+        }
+        $this->close();
+        return $id;
+    }
+
+    public function updateRecord($recordID, $recordData, $table, $id_field = 'id')
     {
         $this->connect();
         $query = SQLUtils::updateQuery($recordData,["id = $recordID"],$table);
@@ -72,11 +82,11 @@ class MySQL implements IDB
         $this->close();
     }
 
-    public function deleteRecord($recordID, $table)
+    public function deleteRecord($recordID,$table, $id_field = 'id')
     {
         $this->connect();
         $recordIDs = is_array($recordID) ? implode(", ", $recordID) : $recordID;
-        $query = SQLUtils::deleteQuery(["id in ( $recordIDs )"], $table);
+        $query = SQLUtils::deleteQuery(["$id_field in ( $recordIDs )"], $table);
         mysqli_query($this->link, $query);
         $this->close();
     }

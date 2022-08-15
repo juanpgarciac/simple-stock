@@ -4,7 +4,12 @@ namespace Core\Traits;
 trait SQLUtils
 {
 
-    private static function whereQuery($conditions)
+    /**
+     * @param array $conditions
+     * 
+     * @return string
+     */
+    private static function whereQuery(array $conditions):string
     {
         $wherecount = count($conditions);
         if($wherecount  > 0){
@@ -17,7 +22,14 @@ trait SQLUtils
         return $whereString;
     }
 
-    public static function selectQuery($fields,$conditions,$table)
+    /**
+     * @param array $fields
+     * @param array $conditions
+     * @param string $table
+     * 
+     * @return string
+     */
+    public static function selectQuery(array $fields,array $conditions,string $table):string
     {
 
         $whereString = self::whereQuery($conditions);
@@ -29,7 +41,13 @@ trait SQLUtils
         return $query;
     }
 
-    public static function insertQuery($record, $table)
+    /**
+     * @param array $record
+     * @param string $table
+     * 
+     * @return string
+     */
+    public static function insertQuery(array $record, string $table): string
     {
         $fields = implode(', ', array_keys($record));
         $values = "'".implode("', '", array_values($record))."'";
@@ -37,7 +55,14 @@ trait SQLUtils
         return $query;
     }
 
-    public static function updateQuery($record,$conditions, $table)
+    /**
+     * @param array $record
+     * @param array $conditions
+     * @param string $table
+     * 
+     * @return string
+     */
+    public static function updateQuery(array $record,array $conditions, string $table): string
     {
         $whereString = self::whereQuery($conditions);
 
@@ -53,7 +78,13 @@ trait SQLUtils
         return $query;
     }
 
-    public static function deleteQuery($conditions,$table){
+    /**
+     * @param array $conditions
+     * @param string $table
+     * 
+     * @return string
+     */
+    public static function deleteQuery(array $conditions,string $table):string{
         
         $whereString = self::whereQuery($conditions);
 

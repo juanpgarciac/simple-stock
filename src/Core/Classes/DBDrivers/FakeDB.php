@@ -13,7 +13,7 @@ class FakeDB implements IDB
     private $tables = [];
     private $tables_ids = [];
 
-    private function getNewID($table)
+    private function getNewID($table): string
     {
         if(!isset($this->tables_ids[$table])){
             $this->tables_ids[$table] = 0;
@@ -21,7 +21,7 @@ class FakeDB implements IDB
         
         $this->tables_ids[$table]++;
 
-        return $this->tables_ids[$table];
+        return $this->tables_ids[$table]."";
     }
     public function __construct(?DBConfiguration $DBConfig = null)
     {
@@ -58,23 +58,27 @@ class FakeDB implements IDB
 
     }
 
-    public function insertRecord($recordData,$table)
+    public function insertRecord(array $recordData, string $table):int
     {
 
         if(!isset($this->tables[$table] )){
             $this->tables[$table] = [];
         }
-        $this->tables[$table][ self::getNewID($table) ] = $recordData;
+        $id = self::getNewID($table);
+
+        $this->tables[$table][ $id ] = $recordData;
+
+        return $id;
 
     }
 
 
-    public function updateRecord($recordID,$recordData,$table)
+    public function updateRecord($recordID,$recordData,$table,  $id_field = 'id')
     {
 
     }
 
-    public function deleteRecord($recordID,$table)
+    public function deleteRecord($recordID, $table,  $id_field = 'id')
     {
 
         $recordIDs = !is_array($recordID) ? [$recordID] : $recordID;
@@ -103,6 +107,11 @@ class FakeDB implements IDB
             return true;
         });
 
+    }
+
+    public function resultByID($recordID,$table, $id_field = 'id')
+    {
+        return isset($this->tables[$table]) && isset($this->tables[$table][$recordID]) ? $this->tables[$table][$recordID] : null;
     }
     
 }

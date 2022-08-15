@@ -19,8 +19,8 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         $mySQL = new MySQL( DBConfiguration::FromEnvFile());
-        //$this->productRepository = new ProductRepository(  new FakeDB());
-        $this->productRepository = new ProductRepository(  $mySQL);
+        $this->productRepository = new ProductRepository(  new FakeDB());
+        //$this->productRepository = new ProductRepository(  $mySQL);
         
     }
     
@@ -127,7 +127,24 @@ final class ProductTest extends TestCase
 
     }
 
+    /** @test */
+    public function product_can_be_retrieved_by_id()
+    {
+        $this->productRepository->deleteBatch(true);
+     
+        $randomName = 'Random Name '.date('Ymdhis');
 
+        $product = new Product($randomName,'1 Can','unit','cans');
+        $productAfterSave = $this->productRepository->insert($product);
+
+        $productArr = $this->productRepository->find($productAfterSave->getValue('id'));
+
+        $this->assertSame($randomName, $productArr['name']);
+
+
+
+
+    }
 
     
 }

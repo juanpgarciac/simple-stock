@@ -10,10 +10,11 @@ interface IDB
     public function __construct(DBConfiguration $DBConfig);
     public function connect();
     public function close();
-    public function results($fields,$conditions,$table);
-    public function insertRecord($recordData,$table);
-    public function updateRecord($recordID,$recordData,$table);
-    public function deleteRecord($recordID,$table);
-    public function deleteManyRecords($conditions,$table);
+    public function resultByID(array $recordID,string $table, string $id_field = 'id');
+    public function results(array $fields,array $conditions,string $table);
+    public function insertRecord(array $recordData,string $table): int;
+    public function updateRecord(string|int $recordID,array $recordData, string $table, string $id_field = 'id');
+    public function deleteRecord(string|int $recordID,string $table, string $id_field = 'id');
+    public function deleteManyRecords(array $conditions,string $table);
 
 }
