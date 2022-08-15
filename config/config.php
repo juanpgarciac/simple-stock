@@ -22,7 +22,7 @@ if (!function_exists('env')) {
      */
     function env($key, $default = null)
     {
-        return getenv($key) ?? $default;
+        return getenv($key, true) ?? $default;
     }
 }
 
