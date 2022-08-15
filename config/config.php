@@ -37,8 +37,12 @@ if (!function_exists('dd')) {
     {
         ob_clean();
         echo '<pre>';
-        die(var_dump($args));
+        foreach ($args as $arg) {
+            var_dump($arg);
+        }
+        
         echo '</pre>';
+        die;
         
     }
 }
