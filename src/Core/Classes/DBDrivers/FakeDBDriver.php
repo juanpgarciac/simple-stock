@@ -7,7 +7,7 @@ use Core\Traits\SQLUtils;
 use Core\Traits\Utils;
 use Exception;
 
-class FakeDB implements IDB
+class FakeDBDriver implements IDB
 {
     use SQLUtils;
 

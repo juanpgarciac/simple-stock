@@ -6,7 +6,7 @@ use Core\Classes\DBConfiguration;
 use Core\Interfaces\IDB;
 use Core\Traits\SQLUtils;
 
-class MySQL implements IDB
+class MySQLDriver implements IDB
 {
     use SQLUtils;
 

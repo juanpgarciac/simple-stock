@@ -3,8 +3,9 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\FakeDB;
-use Core\Classes\DBDrivers\MySQL;
+use Core\Classes\DBDrivers\FakeDBDriver;
+use Core\Classes\DBDrivers\MySQLDriver;
+use Core\Classes\DBDrivers\SQLite3Driver;
 use Models\ProductRepository;
 use Models\Product;
 use PHPUnit\Framework\TestCase;
@@ -18,9 +19,13 @@ final class ProductTest extends TestCase
     {
         parent::setUp();
 
-        $mySQL = new MySQL( DBConfiguration::FromEnvFile());
-        $this->productRepository = new ProductRepository(  new FakeDB());
+        //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
+        //$sqlite = new SQLite3Driver( new DBConfiguration("/home/juanp/quarantine_stock.db"));
+
+        //dd($sqlite->connect());
+        $this->productRepository = new ProductRepository(  new FakeDBDriver());
         //$this->productRepository = new ProductRepository(  $mySQL);
+        //$this->productRepository = new ProductRepository(  $sqlite );
         
     }
     
@@ -37,7 +42,7 @@ final class ProductTest extends TestCase
         
         $this->productRepository->select()->where('id','=','1');
 
-        $resultQuery = MySQL::selectQuery(
+        $resultQuery = MySQLDriver::selectQuery(
             $this->productRepository->getFieldSelection(),
             $this->productRepository->getConditions(),
             $this->productRepository->getTable());
