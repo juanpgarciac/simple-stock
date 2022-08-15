@@ -19,12 +19,12 @@ final class ProductTest extends TestCase
     {
         parent::setUp();
 
-        //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
+        $mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
         //$sqlite = new SQLite3Driver( new DBConfiguration("/home/juanp/quarantine_stock.db"));
 
         //dd($sqlite->connect());
-        $this->productRepository = new ProductRepository(  new FakeDBDriver());
-        //$this->productRepository = new ProductRepository(  $mySQL);
+        //$this->productRepository = new ProductRepository(  new FakeDBDriver());
+        $this->productRepository = new ProductRepository(  $mySQL);
         //$this->productRepository = new ProductRepository(  $sqlite );
         
     }

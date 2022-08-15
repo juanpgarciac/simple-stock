@@ -23,7 +23,7 @@ class SQLite3Driver implements IDB
     public function connect()
     {
         if(!$this->link || !is_a($this->link,'SQLite3') ){
-            $this->link = new SQLite3($this->DBConfig->getDB());
+            $this->link = new SQLite3($this->DBConfig->getDB(),SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->DBConfig->getPassword());
         }
         return $this->link;
     }
