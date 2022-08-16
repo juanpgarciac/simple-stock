@@ -11,7 +11,7 @@ class ProductRepository extends ModelRepository
 
     public static function fromState(array $recordArray): Product
     {
-        $product = new Product($recordArray['name'], $recordArray['presentation'], $recordArray['unit'], $recordArray['category'], $recordArray['stock']);
+        $product = new Product($recordArray['name'], $recordArray['presentation'], $recordArray['unit'], $recordArray['category']);
         $product->setValue('id', $recordArray['id']);
         return $product;
     }

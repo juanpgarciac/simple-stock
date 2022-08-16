@@ -19,13 +19,13 @@ interface IDBDriver
      */
     public function close(): void;
     /**
-     * @param array<string|int> $recordID
+     * @param string|int $recordID
      * @param string $table
      * @param string $id_field
      *
      * @return mixed
      */
-    public function resultByID(array $recordID, string $table, string $id_field = 'id'): mixed;
+    public function resultByID(string|int $recordID, string $table, string $id_field = 'id'): mixed;
     /**
      * @param array<string> $fields
      * @param array<string> $conditions

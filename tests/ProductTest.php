@@ -24,9 +24,6 @@ final class ProductTest extends TestCase
         $this->dbdriver = DBDriverFactory::createDBDriver(env('DB_DRIVER'),$dbconfiguration);
 
         $this->productRepository = new ProductRepository($this->dbdriver);
-        //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
-        //$postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
-        //$sqlite = new SQLite3Driver(new DBConfiguration("/home/juanp/quarantine_stock.db"));
 
     }
 

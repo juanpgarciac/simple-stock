@@ -22,16 +22,16 @@ class DBDriverFactory
 
 
     /**
-     * @param FAKEDBDRIVER|MYSQLDRIVER|POSTGRESDRIVER|SQLITE3DRIVER $driver
+     * @param DBDriverFactory::FAKEDBDRIVER|DBDriverFactory::MYSQLDRIVER|DBDriverFactory::POSTGRESDRIVER|DBDriverFactory::SQLITE3DRIVER $driver
      * @param DBConfiguration|null $DBConfiguration
      * 
      * @return IDBDriver
      */
-    public static function createDBDriver($driver = DBDriverFactory::FAKEDBDRIVER,?DBConfiguration $DBConfiguration = null): IDBDriver
+    public static function createDBDriver(string $driver = DBDriverFactory::FAKEDBDRIVER,?DBConfiguration $DBConfiguration = null): IDBDriver
     {
         if(!isset(self::$drivers[$driver]))
             throw new InvalidArgumentException("$driver driver is not supported", 1);
-                        
+
         return new self::$drivers[$driver]($DBConfiguration);
     }
 }

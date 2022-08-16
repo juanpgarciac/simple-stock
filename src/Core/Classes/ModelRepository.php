@@ -90,11 +90,6 @@ abstract class ModelRepository
 
     public function insert(Model $modelRecord)
     {
-        if (empty($modelRecord)) {
-            throw new Exception("Empty set", 1);
-        }
-
-
         $insertArray = [];
 
 
@@ -103,25 +98,27 @@ abstract class ModelRepository
             $insertArray[$field] = $value;
         }
 
-        $id = $this->DB->insertRecord($insertArray, $this->getTable());
+        if(!empty($insertArray)){
+            $id = $this->DB->insertRecord($insertArray, $this->getTable());
 
-        $modelRecord->setValue($this->id_field, $id);
+            $modelRecord->setValue($this->id_field, $id);
+        }
+
 
         return $modelRecord;
     }
 
     public function update(Model $modelRecord)
     {
-        if (empty($modelRecord)) {
-            throw new Exception("Empty set", 1);
-        }
+        $insertArray = [];
 
         foreach ($this->fields as $field) {
             $value = $modelRecord->getValue($field);
             $insertArray[$field] = $value;
         }
 
-        $this->DB->updateRecord($modelRecord->id($this->id_field), $insertArray, $this->getTable(), $this->id_field);
+        if(!empty($insertArray))
+            $this->DB->updateRecord($modelRecord->id($this->id_field), $insertArray, $this->getTable(), $this->id_field);
 
         return $modelRecord;
     }

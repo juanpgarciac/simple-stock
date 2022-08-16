@@ -12,15 +12,25 @@ class FakeDBDriver implements IDBDriver
 {
     use SQLUtils;
 
-    private $tables = [];
-    private $tables_ids = [];
+    /**
+     * @var array<mixed>
+     */
+    private array $tables = [];
+    /**
+     * @var array<int>
+     */
+    private array $tables_ids = [];
 
-    public function __construct(?DBConfiguration $DBConfig = null)
+    private ?DBConfiguration $DBConfig = null;
+
+    public function __construct(DBConfiguration $DBConfig = null)
     {
+        $this->DBConfig = $DBConfig;
     }
 
     public function connect(): mixed
     {
+        return $this->tables;
     }
 
     public function close(): void
