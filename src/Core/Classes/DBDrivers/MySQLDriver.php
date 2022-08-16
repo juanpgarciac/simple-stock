@@ -6,7 +6,6 @@ use mysqli;
 
 class MySQLDriver extends SQLBaseDriver
 {
-
     public function connect(): mysqli
     {
         if (!$this->link || !is_a($this->link, 'mysqli')) {
@@ -44,7 +43,7 @@ class MySQLDriver extends SQLBaseDriver
         $result->free_result();
     }
 
-    public function getInsertedID(mixed $result = null):int|string|null
+    public function getInsertedID(mixed $result = null): int|string|null
     {
         return $this->link->insert_id;
     }

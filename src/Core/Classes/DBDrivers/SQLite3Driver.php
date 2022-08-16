@@ -6,7 +6,6 @@ use SQLite3;
 
 class SQLite3Driver extends SQLBaseDriver
 {
-
     public function connect(): SQLite3
     {
         if (!$this->link || !is_a($this->link, 'SQLite3')) {
@@ -25,10 +24,9 @@ class SQLite3Driver extends SQLBaseDriver
 
     public function free_result(mixed $result): void
     {
-        
     }
 
-    public function getInsertedID(mixed $result = null):int | string | null
+    public function getInsertedID(mixed $result = null): int | string | null
     {
         return $this->link->lastInsertRowID();
     }

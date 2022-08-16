@@ -10,7 +10,7 @@ class Utils
      * @param string $exp1
      * @param string $operator
      * @param string $exp2
-     * 
+     *
      * @return bool
      */
     public static function operate(string $exp1, string $operator, string $exp2): bool
@@ -38,10 +38,10 @@ class Utils
 
     /**
      * @param string $classname
-     * 
+     *
      * @return string
      */
-    public static function baseClassName(string $classname):string
+    public static function baseClassName(string $classname): string
     {
         return (substr($classname, strrpos($classname, '\\') + 1));
     }

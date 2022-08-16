@@ -32,42 +32,42 @@ class DBConfiguration
     /**
      * @return string
      */
-    public function getDB():string
+    public function getDB(): string
     {
         return $this->db;
     }
     /**
      * @return string
      */
-    public function getUsername():string
+    public function getUsername(): string
     {
         return $this->username;
     }
     /**
      * @return string
      */
-    public function getPassword():string
+    public function getPassword(): string
     {
         return $this->password;
     }
     /**
      * @return string
      */
-    public function getHost():string
+    public function getHost(): string
     {
         return $this->host;
     }
     /**
      * @return int|null
      */
-    public function getPort():int|null
+    public function getPort(): int|null
     {
         return $this->port;
     }
     /**
      * @return string
      */
-    public function getSocket():string
+    public function getSocket(): string
     {
         return $this->socket;
     }
@@ -75,8 +75,8 @@ class DBConfiguration
     /**
      * @return DBConfiguration
      */
-    public static function FromEnvFile():DBConfiguration
+    public static function FromEnvFile(): DBConfiguration
     {
-        return new self(env('DB_NAME'), env('DB_USERNAME'), env('DB_PASSWORD'), env('DB_HOST'), env('DB_PORT'),env('DB_SOCKET'));
+        return new self(env('DB_NAME'), env('DB_USERNAME'), env('DB_PASSWORD'), env('DB_HOST'), env('DB_PORT'), env('DB_SOCKET'));
     }
 }

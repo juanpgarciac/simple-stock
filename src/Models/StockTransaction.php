@@ -34,5 +34,4 @@ class StockTransaction
     {
         return $this->date;
     }
-
 }

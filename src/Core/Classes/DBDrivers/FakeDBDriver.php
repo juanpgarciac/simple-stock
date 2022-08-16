@@ -75,13 +75,11 @@ class FakeDBDriver implements StorageMapper
 
     public function deleteManyRecordsByID($recordIDs, $table, $id_field = 'id'): void
     {
-
         foreach ($recordIDs as $id) {
             if (isset($this->tables[$table][$id])) {
                 unset($this->tables[$table][$id]);
             }
         }
-
     }
 
     public function deleteManyRecords($conditions, $table): void
@@ -117,5 +115,4 @@ class FakeDBDriver implements StorageMapper
 
         return $this->tables_ids[$table]."";
     }
-
 }

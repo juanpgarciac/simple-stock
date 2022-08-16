@@ -34,10 +34,10 @@ class Product extends Model
 
     /**
      * @param StockTransaction $stockAdjustment
-     * 
+     *
      * @return void
      */
-    public function updateStock(StockTransaction $stockAdjustment):void
+    public function updateStock(StockTransaction $stockAdjustment): void
     {
         $this->stock += $stockAdjustment->getAmount();
     }

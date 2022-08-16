@@ -11,7 +11,7 @@ class ProductRepository extends ModelRepository
 
     /**
      * @param array<mixed> $recordArray
-     * 
+     *
      * @return Product
      */
     public static function fromState(array $recordArray): Product

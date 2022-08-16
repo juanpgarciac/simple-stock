@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Core\Classes\DBDrivers;
 
@@ -8,7 +8,6 @@ use Core\Traits\SQLUtils;
 
 abstract class SQLBaseDriver implements StorageMapper
 {
-
     use SQLUtils;
 
     /**
@@ -60,7 +59,7 @@ abstract class SQLBaseDriver implements StorageMapper
         $this->close();
         return $records;
     }
-    
+
     public function resultByID($recordID, $table, $id_field = 'id'): mixed
     {
         $results = $this->results(['*'], ["$id_field = $recordID"], $table);
@@ -107,5 +106,4 @@ abstract class SQLBaseDriver implements StorageMapper
     abstract public function fetch_assoc(mixed $result): mixed;
 
     abstract public function query(string $query): mixed;
-
 }

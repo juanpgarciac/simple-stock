@@ -51,7 +51,7 @@ interface StorageMapper
      * @param array<string|int> $recordIDs
      * @param string $table
      * @param string $id_field
-     * 
+     *
      * @return void
      */
     public function deleteManyRecordsByID(array $recordIDs, string $table, string $id_field = 'id'): void;

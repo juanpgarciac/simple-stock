@@ -23,10 +23,9 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         $dbconfiguration = DBConfiguration::FromEnvFile();
-        $this->dbdriver = StorageDriverFactory::createStorage(env('DB_DRIVER'),$dbconfiguration);
+        $this->dbdriver = StorageDriverFactory::createStorage(env('DB_DRIVER'), $dbconfiguration);
 
         $this->productRepository = new ProductRepository($this->dbdriver);
-
     }
 
 
@@ -50,11 +49,12 @@ final class ProductTest extends TestCase
         $this->assertSame("SELECT * FROM product WHERE id = '1';", $resultQuery);
 
         $randomName = uniqid('Random Product Name ');
-        $resultQuery = SQLUtils::insertQuery(['name' => $randomName],$this->productRepository->getTable()
+        $resultQuery = SQLUtils::insertQuery(
+            ['name' => $randomName],
+            $this->productRepository->getTable()
         );
 
         $this->assertSame("INSERT INTO product (name) VALUES ('$randomName') ;", $resultQuery);
-
     }
 
     /** @test */
@@ -73,18 +73,15 @@ final class ProductTest extends TestCase
     {
         $dbclass = $this->productRepository->getDBClass();
         $this->setName($this->getName().' using '.Utils::baseClassName($dbclass));
-        $this->assertSame($this->dbdriver::class,$dbclass);
-
+        $this->assertSame($this->dbdriver::class, $dbclass);
     }
-    
+
 
 
 
     /** @test */
     public function product_can_be_inserted()
     {
-        
-
         $randomName = uniqid('Random Product Name ');
 
         $product = new Product($randomName, '1 Can', 'unit', 'cans');
@@ -160,12 +157,11 @@ final class ProductTest extends TestCase
         $id1 = $product1->id();
 
         $id2 = $product2->id();
-        
-        
+
+
         $this->productRepository->delete([$id1, $id2]);
 
         $this->assertCount(0, $this->productRepository->results());
-
     }
 
     /** @test */

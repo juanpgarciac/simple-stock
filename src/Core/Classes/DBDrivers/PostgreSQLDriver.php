@@ -13,7 +13,7 @@ class PostgreSQLDriver extends SQLBaseDriver
     }
 
     public function close(): void
-    {        
+    {
         pg_close($this->link);
         $this->link = null;
     }
@@ -52,5 +52,4 @@ class PostgreSQLDriver extends SQLBaseDriver
     {
         return pg_query($this->link, ($query));
     }
-    
 }
