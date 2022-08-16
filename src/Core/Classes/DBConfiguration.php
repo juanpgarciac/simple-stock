@@ -4,12 +4,12 @@ namespace Core\Classes;
 
 class DBConfiguration
 {
-    private ?string $db = null;
-    private ?string $host = null;
+    private string $db;
+    private string $host = '';
     private ?int $port = null;
-    private ?string $username = null;
-    private ?string $password = null;
-    private ?string $socket = null;
+    private string $username = '';
+    private string $password = '';
+    private string $socket = '';
 
     /**
      * @param string $db
@@ -19,7 +19,7 @@ class DBConfiguration
      * @param int|null $port
      * @param string $socket
      */
-    public function __construct(string $db, string $username = 'root', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = null)
+    public function __construct(string $db, string $username = 'root', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = '')
     {
         $this->db = $db;
         $this->username = $username;

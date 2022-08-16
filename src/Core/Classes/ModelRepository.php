@@ -25,9 +25,9 @@ abstract class ModelRepository
      */
     protected StorageMapper $DB;
     /**
-     * @var array<string>|null
+     * @var array<string>
      */
-    protected ?array $select = ['*'];
+    protected array $select = ['*'];
     /**
      * @var array<string>
      */

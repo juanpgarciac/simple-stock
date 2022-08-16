@@ -20,7 +20,7 @@ class DBDriver
 
 
     /**
-     * @param key-of<DBDriver::DRIVERS> $driver
+     * @param key-of<DBDriver::DRIVERS>|string $driver
      * @return value-of<DBDriver::DRIVERS>
      */
     public static function getDriverClass(string $driver): string
