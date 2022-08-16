@@ -27,18 +27,18 @@ interface StorageMapper
      * @param string $table
      * @param string $id_field
      *
-     * @return string
+     * @return string|int|null
      */
-    public function insertRecord(array $recordData, string $table, string $id_field = 'id'): string;
+    public function insertRecord(array $recordData, string $table, string $id_field = 'id'): string|int|null;
     /**
      * @param string|int $recordID
      * @param array<mixed> $recordData
      * @param string $table
      * @param string $id_field
      *
-     * @return string
+     * @return string|int
      */
-    public function updateRecord(string|int $recordID, array $recordData, string $table, string $id_field = 'id'): string;
+    public function updateRecord(string|int $recordID, array $recordData, string $table, string $id_field = 'id'): string|int;
     /**
      * @param string|int $recordID
      * @param string $table

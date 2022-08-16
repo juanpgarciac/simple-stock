@@ -35,7 +35,7 @@ abstract class SQLBaseDriver implements StorageMapper
      */
     abstract public function close(): void;
 
-    public function insertRecord($recordData, $table, $id_field = 'id'): string
+    public function insertRecord($recordData, $table, $id_field = 'id'): string|int|null
     {
         $id = null;
         $this->connect();
@@ -67,7 +67,7 @@ abstract class SQLBaseDriver implements StorageMapper
         return count($results)>0 ? $results[0] : null;
     }
 
-    public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string
+    public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string|int
     {
         $this->connect();
         $query = SQLUtils::updateQuery($recordData, ["id = $recordID"], $table);

@@ -4,7 +4,8 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\StorageFactory;
+use Core\Classes\DBDrivers\DBDriver;
+use Core\Classes\DBDrivers\StorageDriverFactory;
 use Core\Interfaces\StorageMapper;
 use Models\ProductRepository;
 use Models\Product;
@@ -22,7 +23,7 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         $dbconfiguration = DBConfiguration::FromEnvFile();
-        $this->dbdriver = StorageFactory::createStorage(env('DB_DRIVER'),$dbconfiguration);
+        $this->dbdriver = StorageDriverFactory::createStorage(env('DB_DRIVER'),$dbconfiguration);
 
         $this->productRepository = new ProductRepository($this->dbdriver);
 

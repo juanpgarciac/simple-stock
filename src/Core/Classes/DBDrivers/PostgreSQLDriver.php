@@ -2,8 +2,6 @@
 
 namespace Core\Classes\DBDrivers;
 
-use Core\Traits\SQLUtils;
-
 class PostgreSQLDriver extends SQLBaseDriver
 {
     public function connect(): mixed
@@ -15,18 +13,16 @@ class PostgreSQLDriver extends SQLBaseDriver
     }
 
     public function close(): void
-    {
-        if ($this->link && (is_a($this->link, 'PgSql\Connection') || is_a($this->link, 'resource'))) {
-            pg_close($this->link);
-        }
+    {        
+        pg_close($this->link);
         $this->link = null;
     }
 
-    public function insertRecord($recordData, $table, $id_field = 'id'): string
+    public function insertRecord($recordData, $table, $id_field = 'id'): int | string | null
     {
         $id = null;
         $this->connect();
-        $query = SQLUtils::insertQuery($recordData, $table, " RETURNING $id_field");
+        $query = self::insertQuery($recordData, $table, " RETURNING $id_field");
         $result = $this->query($query);
         $id = $this->getInsertedID($result);
         $this->close();
@@ -40,8 +36,9 @@ class PostgreSQLDriver extends SQLBaseDriver
 
     public function getInsertedID(mixed $result = null): int | string | null
     {
-        if ($result) {
-            return pg_fetch_row($result)[0];
+        if (!is_null($result)) {
+            $row = pg_fetch_row($result);
+            return is_array($row) ? $row[0] : null;
         }
         return null;
     }

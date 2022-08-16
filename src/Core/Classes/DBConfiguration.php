@@ -6,7 +6,7 @@ class DBConfiguration
 {
     private ?string $db = null;
     private ?string $host = null;
-    private string|int|null $port = null;
+    private ?int $port = null;
     private ?string $username = null;
     private ?string $password = null;
     private ?string $socket = null;
@@ -16,10 +16,10 @@ class DBConfiguration
      * @param string $username
      * @param string $password
      * @param string $host
-     * @param string|int|null $port
+     * @param int|null $port
      * @param string $socket
      */
-    public function __construct(string $db, string $username = 'root', string $password = '', string $host = 'localhost', string|int|null $port = 3306, string $socket = null)
+    public function __construct(string $db, string $username = 'root', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = null)
     {
         $this->db = $db;
         $this->username = $username;
@@ -58,9 +58,9 @@ class DBConfiguration
         return $this->host;
     }
     /**
-     * @return string|int|null
+     * @return int|null
      */
-    public function getPort():string|int|null
+    public function getPort():int|null
     {
         return $this->port;
     }
