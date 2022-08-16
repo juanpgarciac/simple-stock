@@ -4,10 +4,12 @@ if(!defined('ROOTDIR'))
     define('ROOTDIR',__DIR__.'\\..');
     
 if (file_exists(ROOTDIR.DIRECTORY_SEPARATOR.'.env')) {
-    $env = parse_ini_file(ROOTDIR.DIRECTORY_SEPARATOR.'.env');
-    foreach ($env as $key => $value) {
-        putenv("$key=$value");
+    if($env = parse_ini_file(ROOTDIR.DIRECTORY_SEPARATOR.'.env')){
+        foreach ($env as $key => $value) {
+            putenv("$key=$value");
+        }
     }
+
 } else {
     die("no environment file detected (.env)");
 }
@@ -15,12 +17,12 @@ if (file_exists(ROOTDIR.DIRECTORY_SEPARATOR.'.env')) {
 if (!function_exists('env')) {
     /**
      * Get environment value
-     * @param mixed $key
+     * @param string $key
      * @param mixed $default
      * 
-     * @return [type]
+     * @return mixed
      */
-    function env($key, $default = null)
+    function env(string $key, $default = null): mixed
     {
         return getenv($key, true) ?? $default;
     }
