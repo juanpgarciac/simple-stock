@@ -3,12 +3,12 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\IDBDriver;
+use Core\Interfaces\StorageMapper;
 use Core\Traits\SQLUtils;
 use Core\Traits\Utils;
 use Exception;
 
-class FakeDBDriver implements IDBDriver
+class FakeDBDriver implements StorageMapper
 {
     use SQLUtils;
 
@@ -20,29 +20,6 @@ class FakeDBDriver implements IDBDriver
      * @var array<int>
      */
     private array $tables_ids = [];
-
-    private ?DBConfiguration $DBConfig = null;
-
-    public function __construct(DBConfiguration $DBConfig = null)
-    {
-        $this->DBConfig = $DBConfig;
-    }
-
-    public function connect(): mixed
-    {
-        return $this->tables;
-    }
-
-    public function close(): void
-    {
-    }
-
-    public function getDBConfig()
-    {
-        return $this->DBConfig;
-    }
-
-
 
     public function results($fields, $conditions, $table): mixed
     {
@@ -145,8 +122,4 @@ class FakeDBDriver implements IDBDriver
         return $this->tables_ids[$table]."";
     }
 
-    public function query($query): mixed
-    {
-        return $query;
-    }
 }

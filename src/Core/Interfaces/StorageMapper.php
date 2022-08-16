@@ -4,20 +4,8 @@ namespace Core\Interfaces;
 
 use Core\Classes\DBConfiguration;
 
-interface IDBDriver
+interface StorageMapper
 {
-    /**
-     * @param DBConfiguration $DBConfig
-     */
-    public function __construct(DBConfiguration $DBConfig);
-    /**
-     * @return mixed
-     */
-    public function connect(): mixed;
-    /**
-     * @return void
-     */
-    public function close(): void;
     /**
      * @param string|int $recordID
      * @param string $table
@@ -74,5 +62,4 @@ interface IDBDriver
      * @return void
      */
     public function deleteManyRecords(array $conditions, string $table): void;
-    public function query(string $query): mixed;
 }

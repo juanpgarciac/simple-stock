@@ -3,9 +3,10 @@ namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
 use Core\Interfaces\IDBDriver;
+use Core\Interfaces\StorageMapper;
 use InvalidArgumentException;
 
-class DBDriverFactory
+class StorageFactory
 {
     public const FAKEDBDRIVER = 'fakedb';
     public const MYSQLDRIVER = 'mysql';    
@@ -22,12 +23,12 @@ class DBDriverFactory
 
 
     /**
-     * @param DBDriverFactory::FAKEDBDRIVER|DBDriverFactory::MYSQLDRIVER|DBDriverFactory::POSTGRESDRIVER|DBDriverFactory::SQLITE3DRIVER $driver
+     * @param StorageFactory::FAKEDBDRIVER|StorageFactory::MYSQLDRIVER|StorageFactory::POSTGRESDRIVER|StorageFactory::SQLITE3DRIVER $driver
      * @param DBConfiguration|null $DBConfiguration
      * 
      * @return IDBDriver
      */
-    public static function createDBDriver(string $driver = DBDriverFactory::FAKEDBDRIVER,?DBConfiguration $DBConfiguration = null): IDBDriver
+    public static function createStorage(string $driver = StorageFactory::FAKEDBDRIVER,?DBConfiguration $DBConfiguration = null): StorageMapper
     {
         if(!isset(self::$drivers[$driver]))
             throw new InvalidArgumentException("$driver driver is not supported", 1);

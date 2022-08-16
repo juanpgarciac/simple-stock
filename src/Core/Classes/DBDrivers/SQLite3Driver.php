@@ -2,23 +2,10 @@
 
 namespace Core\Classes\DBDrivers;
 
-use Core\Classes\DBConfiguration;
-use Core\Interfaces\IDBDriver;
-use Core\Traits\SQLUtils;
 use SQLite3;
 
-class SQLite3Driver implements IDBDriver
+class SQLite3Driver extends SQLBaseDriver
 {
-    use SQLUtils;
-
-    private DBConfiguration $DBConfig;
-    private $link = null;
-
-
-    public function __construct(DBConfiguration $DBConfig)
-    {
-        $this->DBConfig = $DBConfig;
-    }
 
     public function connect(): SQLite3
     {
@@ -36,71 +23,22 @@ class SQLite3Driver implements IDBDriver
         $this->link = null;
     }
 
-
-    public function results($fields, $conditions, $table): mixed
+    public function free_result(mixed $result): void
     {
-        $records = [];
-        $this->connect();
-        $query = SQLUtils::selectQuery($fields, $conditions, $table);
-        $result = $this->query($query);
-        while ($row =  $result->fetchArray()) {
-            $records[] = $row;
-        }
-        $this->close();
-        return $records;
+        
     }
 
-    public function resultByID($recordID, $table, $id_field = 'id'): mixed
+    public function getInsertedID($result = null):int | string | null
     {
-        $results = $this->results(['*'], ["$id_field = $recordID"], $table);
-        return count($results)>0 ? $results[0] : null;
+        return $this->link->lastInsertRowID();
     }
 
-    public function insertRecord($recordData, $table, $id_field = 'id'): string
+    public function fetch_assoc(mixed $result): mixed
     {
-        $id = null;
-        $this->connect();
-        $query = SQLUtils::insertQuery($recordData, $table);
-        if ($this->link->query($query)) {
-            $id = $this->link->lastInsertRowID();
-        }
-        $this->close();
-        return $id;
+        return $result->fetchArray();
     }
 
-    public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string
-    {
-        $this->connect();
-        $query = SQLUtils::updateQuery($recordData, ["id = $recordID"], $table);
-        $this->query($query);
-        $this->close();
-
-        return $recordID;
-    }
-
-    public function deleteRecord($recordID, $table, $id_field = 'id'): void
-    {
-        $this->deleteManyRecordsByID([$recordID], $table, $id_field = 'id');
-    }
-
-    public function deleteManyRecordsByID(array $recordIDs, string $table, string $id_field = 'id'): void
-    {
-        $this->connect();
-        $recordIDs = implode(", ", $recordIDs);
-        $query = SQLUtils::deleteQuery(["$id_field in ( $recordIDs )"], $table);
-        $this->query($query);
-        $this->close();
-    }
-
-    public function deleteManyRecords($conditions, $table): void
-    {
-        $this->connect();
-        $query = SQLUtils::deleteQuery($conditions, $table);
-        $this->query($query);
-        $this->close();
-    }
-
-    public function query($query): mixed
+    public function query(string $query): mixed
     {
         return $this->link->query($query);
     }

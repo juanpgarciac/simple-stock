@@ -2,7 +2,7 @@
 
 namespace Core\Classes;
 
-use Core\Interfaces\IDBDriver;
+use Core\Interfaces\StorageMapper;
 use Exception;
 
 abstract class ModelRepository
@@ -11,12 +11,12 @@ abstract class ModelRepository
     protected array $fields = [];
 
     protected string $id_field = 'id';
-    protected IDBDriver $DB;
+    protected StorageMapper $DB;
     protected ?array $select = ['*'];
     protected array $where = [];
     protected array $results = [];
 
-    public function __construct(IDBDriver $DBDriver)
+    public function __construct(StorageMapper $DBDriver)
     {
         $this->DB = $DBDriver;
     }

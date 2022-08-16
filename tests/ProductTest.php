@@ -4,7 +4,8 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\DBDriverFactory;
+use Core\Classes\DBDrivers\StorageFactory;
+use Core\Interfaces\StorageMapper;
 use Models\ProductRepository;
 use Models\Product;
 use PHPUnit\Framework\TestCase;
@@ -14,14 +15,14 @@ use Core\Traits\Utils;
 final class ProductTest extends TestCase
 {
     private ProductRepository $productRepository;
-    private $dbdriver;
+    private StorageMapper $dbdriver;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $dbconfiguration = DBConfiguration::FromEnvFile();
-        $this->dbdriver = DBDriverFactory::createDBDriver(env('DB_DRIVER'),$dbconfiguration);
+        $this->dbdriver = StorageFactory::createStorage(env('DB_DRIVER'),$dbconfiguration);
 
         $this->productRepository = new ProductRepository($this->dbdriver);
 
@@ -154,7 +155,7 @@ final class ProductTest extends TestCase
         $product2 = $this->productRepository->insert(new Product('Tuna #2', '1 Can', 'unit', 'cans'));
 
         $this->assertCount(2, $this->productRepository->results());
-        
+
         $id1 = $product1->id();
 
         $id2 = $product2->id();
