@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Core\Traits;
 
@@ -13,7 +13,7 @@ class Utils
                 return $exp1 === $exp2;
             case '!=':
             case '<>':
-                return $exp1 != $exp2;    
+                return $exp1 != $exp2;
             case '>':
                 return $exp1 > $exp2;
             case '>=':
@@ -24,10 +24,8 @@ class Utils
                 return $exp1 <= $exp2;
             case 'like':
                 return $exp1 == $exp2;
-            
+
         }
         throw new InvalidArgumentException("No valid operator given", 1);
-        
     }
 }
-

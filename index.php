@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 require 'bootstrap.php';
 
 $request = $_SERVER['REQUEST_URI'];

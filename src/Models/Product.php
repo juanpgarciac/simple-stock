@@ -7,7 +7,6 @@ use Core\Models\StockTransaction;
 
 class Product extends Model
 {
-    
     protected ?int $id;
     protected string $name;
     protected string $presentation;
@@ -31,11 +30,4 @@ class Product extends Model
     {
         $this->stock += $stockAdjustment->amount;
     }
-
-
-
-
-
-
 }
-

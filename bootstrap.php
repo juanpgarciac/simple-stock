@@ -1,6 +1,6 @@
 <?php
 
-define('ROOTDIR',__DIR__);
+define('ROOTDIR', __DIR__);
 
 include './config/config.php';
 

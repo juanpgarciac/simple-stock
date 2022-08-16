@@ -10,7 +10,7 @@ class StockTransaction
 
     /**
      * @param float $amount
-     * @param string $observation 
+     * @param string $observation
      * @param string $date
      */
     public function __construct(float $amount, string $observation = 'Stock Adjustment', string $date = date('Ymdhis'))
@@ -19,5 +19,4 @@ class StockTransaction
         $this->observation = $observation;
         $this->date = $date;
     }
-
 }

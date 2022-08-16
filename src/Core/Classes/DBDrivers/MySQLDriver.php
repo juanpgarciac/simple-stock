@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Core\Classes\DBDrivers;
 
@@ -13,7 +13,7 @@ class MySQLDriver implements IDB
 
     private DBConfiguration $DBConfig;
     private $link = null;
-    
+
 
     public function __construct(DBConfiguration $DBConfig)
     {
@@ -22,7 +22,7 @@ class MySQLDriver implements IDB
 
     public function connect()
     {
-        if(!$this->link || !is_a($this->link,'mysqli') ){
+        if (!$this->link || !is_a($this->link, 'mysqli')) {
             $this->link = new mysqli(
                 $this->DBConfig->getHost(),
                 $this->DBConfig->getUsername(),
@@ -31,7 +31,7 @@ class MySQLDriver implements IDB
                 $this->DBConfig->getPort(),
                 $this->DBConfig->getSocket()
             );
-        }else{
+        } else {
             $this->link->connect(
                 $this->DBConfig->getHost(),
                 $this->DBConfig->getUsername(),
@@ -44,22 +44,22 @@ class MySQLDriver implements IDB
         return $this->link;
     }
 
-    public  function close()
+    public function close()
     {
-        if($this->link && is_a($this->link,'mysqli')){
+        if ($this->link && is_a($this->link, 'mysqli')) {
             $this->link->close();
         }
         $this->link = null;
     }
 
 
-    public function results($fields,$conditions,$table)
+    public function results($fields, $conditions, $table)
     {
         $records = [];
         $this->connect();
-        $query = SQLUtils::selectQuery($fields,$conditions,$table);
+        $query = SQLUtils::selectQuery($fields, $conditions, $table);
         $result = $this->link->query($query);
-        while ($row =  $result->fetch_assoc()){
+        while ($row =  $result->fetch_assoc()) {
             $records[] = $row;
         }
         $result->free_result();
@@ -67,9 +67,9 @@ class MySQLDriver implements IDB
         return $records;
     }
 
-    public function resultByID($recordID,$table, $id_field = 'id')
-    {        
-        $results = $this->results(['*'],["$id_field = $recordID"],$table);
+    public function resultByID($recordID, $table, $id_field = 'id')
+    {
+        $results = $this->results(['*'], ["$id_field = $recordID"], $table);
         return count($results)>0 ? $results[0] : null;
     }
 
@@ -77,8 +77,8 @@ class MySQLDriver implements IDB
     {
         $id = null;
         $this->connect();
-        $query = SQLUtils::insertQuery($recordData,$table);
-        if($this->link->query($query)){
+        $query = SQLUtils::insertQuery($recordData, $table);
+        if ($this->link->query($query)) {
             $id = $this->link->insert_id;
         }
         $this->close();
@@ -88,14 +88,14 @@ class MySQLDriver implements IDB
     public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string
     {
         $this->connect();
-        $query = SQLUtils::updateQuery($recordData,["id = $recordID"],$table);
+        $query = SQLUtils::updateQuery($recordData, ["id = $recordID"], $table);
         $this->link->query($query);
         $this->close();
 
         return $recordID;
     }
 
-    public function deleteRecord($recordID,$table, $id_field = 'id')
+    public function deleteRecord($recordID, $table, $id_field = 'id')
     {
         $this->connect();
         $recordIDs = is_array($recordID) ? implode(", ", $recordID) : $recordID;
@@ -104,13 +104,11 @@ class MySQLDriver implements IDB
         $this->close();
     }
 
-    public function deleteManyRecords($conditions,$table)
+    public function deleteManyRecords($conditions, $table)
     {
         $this->connect();
         $query = SQLUtils::deleteQuery($conditions, $table);
         $this->link->query($query);
         $this->close();
     }
-
-
 }
