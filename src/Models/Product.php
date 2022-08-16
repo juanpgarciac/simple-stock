@@ -28,6 +28,6 @@ class Product extends Model
 
     public function updateStock(StockTransaction $stockAdjustment)
     {
-        $this->stock += $stockAdjustment->amount;
+        $this->stock += $stockAdjustment->getAmount();
     }
 }

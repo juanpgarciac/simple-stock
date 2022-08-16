@@ -81,8 +81,13 @@ class PostgreSQLDriver implements IDBDriver
 
     public function deleteRecord($recordID, $table, $id_field = 'id'): void
     {
+        $this->deleteManyRecordsByID([$recordID], $table, $id_field = 'id');
+    }
+
+    public function deleteManyRecordsByID(array $recordIDs, string $table, string $id_field = 'id'): void
+    {
         $this->connect();
-        $recordIDs = is_array($recordID) ? implode(", ", $recordID) : $recordID;
+        $recordIDs = implode(", ", $recordIDs);
         $query = SQLUtils::deleteQuery(["$id_field in ( $recordIDs )"], $table);
         pg_query($this->link, ($query));
         $this->close();

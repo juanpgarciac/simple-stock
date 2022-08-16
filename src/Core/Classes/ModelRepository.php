@@ -26,10 +26,7 @@ abstract class ModelRepository
      */
     public function getDBClass(): string
     {
-        if (!is_null($this->DB)) {
-            return $this->DB::class;
-        }
-        return '';
+        return $this->DB::class;
     }
 
     public function select(array|String $fields = '*')
@@ -70,9 +67,6 @@ abstract class ModelRepository
 
     public function results($cached = false)
     {
-        if (!$this->DB) {
-            throw new Exception("No DB configured", 1);
-        }
 
         if (!$cached || empty($this->results)) {
             $this->results = $this->DB->results($this->getFieldSelection(), $this->getConditions(), $this->getTable());
@@ -125,7 +119,12 @@ abstract class ModelRepository
 
     public function delete($recordIDs)
     {
-        $this->DB->deleteRecord($recordIDs, $this->getTable());
+        if(is_array($recordIDs)){
+            $this->DB->deleteManyRecordsByID($recordIDs, $this->getTable());
+        }else{
+            $this->DB->deleteRecord($recordIDs, $this->getTable());
+        }
+        
     }
 
     public function deleteBatch($allowDeleteWithEmptyConditions = false)

@@ -143,6 +143,30 @@ final class ProductTest extends TestCase
     }
 
     /** @test */
+    public function many_products_can_be_deleted_by_id()
+    {
+        $this->productRepository->deleteBatch(true);
+
+        $this->assertCount(0, $this->productRepository->results());
+
+        $product1 = $this->productRepository->insert(new Product('Tuna #1', '1 Can', 'unit', 'cans'));
+
+        $product2 = $this->productRepository->insert(new Product('Tuna #2', '1 Can', 'unit', 'cans'));
+
+        $this->assertCount(2, $this->productRepository->results());
+        
+        $id1 = $product1->id();
+
+        $id2 = $product2->id();
+        
+        
+        $this->productRepository->delete([$id1, $id2]);
+
+        $this->assertCount(0, $this->productRepository->results());
+
+    }
+
+    /** @test */
     public function product_can_be_retrieved()
     {
         $this->productRepository->deleteBatch(true); //override flag to delete without conditions (all records)

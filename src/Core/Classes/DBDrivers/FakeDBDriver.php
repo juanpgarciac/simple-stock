@@ -37,6 +37,11 @@ class FakeDBDriver implements IDBDriver
     {
     }
 
+    public function getDBConfig()
+    {
+        return $this->DBConfig;
+    }
+
 
 
     public function results($fields, $conditions, $table): mixed
@@ -92,13 +97,18 @@ class FakeDBDriver implements IDBDriver
 
     public function deleteRecord($recordID, $table, $id_field = 'id'): void
     {
-        $recordIDs = !is_array($recordID) ? [$recordID] : $recordID;
+        $this->deleteManyRecordsByID([$recordID], $table);
+    }
+
+    public function deleteManyRecordsByID($recordIDs, $table, $id_field = 'id'): void
+    {
 
         foreach ($recordIDs as $id) {
             if (isset($this->tables[$table][$id])) {
                 unset($this->tables[$table][$id]);
             }
         }
+
     }
 
     public function deleteManyRecords($conditions, $table): void

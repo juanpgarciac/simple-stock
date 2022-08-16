@@ -4,7 +4,7 @@ namespace Core\Models;
 
 class StockTransaction
 {
-    public float $amount;
+    private float $amount;
     private string $observation;
     private string $date;
 
@@ -19,4 +19,20 @@ class StockTransaction
         $this->observation = $observation;
         $this->date = $date;
     }
+
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    public function getObservation()
+    {
+        return $this->observation;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
+    }
+
 }

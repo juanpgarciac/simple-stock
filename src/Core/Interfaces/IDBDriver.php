@@ -60,6 +60,14 @@ interface IDBDriver
      */
     public function deleteRecord(string|int $recordID, string $table, string $id_field = 'id'): void;
     /**
+     * @param array<string|int> $recordIDs
+     * @param string $table
+     * @param string $id_field
+     * 
+     * @return void
+     */
+    public function deleteManyRecordsByID(array $recordIDs, string $table, string $id_field = 'id'): void;
+    /**
      * @param array<string> $conditions
      * @param string $table
      *
