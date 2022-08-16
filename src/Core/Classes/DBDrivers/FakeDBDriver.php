@@ -19,17 +19,17 @@ class FakeDBDriver implements IDB
     {
     }
 
-    public function connect()
+    public function connect(): mixed
     {
     }
 
-    public function close()
+    public function close(): void
     {
     }
 
 
 
-    public function results($fields, $conditions, $table)
+    public function results($fields, $conditions, $table): mixed
     {
         return array_filter($this->tables[$table], function ($row) use ($conditions) {
             foreach ($conditions as $condition) {
@@ -80,7 +80,7 @@ class FakeDBDriver implements IDB
         return $recordToBeUpdated[$id_field];
     }
 
-    public function deleteRecord($recordID, $table, $id_field = 'id')
+    public function deleteRecord($recordID, $table, $id_field = 'id'): void
     {
         $recordIDs = !is_array($recordID) ? [$recordID] : $recordID;
 
@@ -91,7 +91,7 @@ class FakeDBDriver implements IDB
         }
     }
 
-    public function deleteManyRecords($conditions, $table)
+    public function deleteManyRecords($conditions, $table): void
     {
         if (empty($conditions)) {
             $this->tables[$table]  = [];
@@ -109,7 +109,7 @@ class FakeDBDriver implements IDB
         });
     }
 
-    public function resultByID($recordID, $table, $id_field = 'id')
+    public function resultByID($recordID, $table, $id_field = 'id'): mixed
     {
         return isset($this->tables[$table]) && isset($this->tables[$table][$recordID]) ? $this->tables[$table][$recordID] : null;
     }

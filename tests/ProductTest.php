@@ -21,14 +21,14 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
-        $postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
-        //$sqlite = new SQLite3Driver( new DBConfiguration("/home/juanp/quarantine_stock.db"));
+        //$postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
+        $sqlite = new SQLite3Driver(new DBConfiguration("/home/juanp/quarantine_stock.db"));
 
         //dd($sqlite->connect());
         //$this->productRepository = new ProductRepository(  new FakeDBDriver());
         //$this->productRepository = new ProductRepository(  $mySQL);
-        $this->productRepository = new ProductRepository($postgres);
-        //$this->productRepository = new ProductRepository(  $sqlite );
+        //$this->productRepository = new ProductRepository($postgres);
+        $this->productRepository = new ProductRepository($sqlite);
     }
 
 

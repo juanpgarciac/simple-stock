@@ -20,7 +20,7 @@ class MySQLDriver implements IDB
         $this->DBConfig = $DBConfig;
     }
 
-    public function connect()
+    public function connect(): mysqli
     {
         if (!$this->link || !is_a($this->link, 'mysqli')) {
             $this->link = new mysqli(
@@ -44,7 +44,7 @@ class MySQLDriver implements IDB
         return $this->link;
     }
 
-    public function close()
+    public function close(): void
     {
         if ($this->link && is_a($this->link, 'mysqli')) {
             $this->link->close();
@@ -53,7 +53,7 @@ class MySQLDriver implements IDB
     }
 
 
-    public function results($fields, $conditions, $table)
+    public function results($fields, $conditions, $table): mixed
     {
         $records = [];
         $this->connect();
@@ -67,7 +67,7 @@ class MySQLDriver implements IDB
         return $records;
     }
 
-    public function resultByID($recordID, $table, $id_field = 'id')
+    public function resultByID($recordID, $table, $id_field = 'id'): mixed
     {
         $results = $this->results(['*'], ["$id_field = $recordID"], $table);
         return count($results)>0 ? $results[0] : null;
@@ -95,7 +95,7 @@ class MySQLDriver implements IDB
         return $recordID;
     }
 
-    public function deleteRecord($recordID, $table, $id_field = 'id')
+    public function deleteRecord($recordID, $table, $id_field = 'id'): void
     {
         $this->connect();
         $recordIDs = is_array($recordID) ? implode(", ", $recordID) : $recordID;
@@ -104,7 +104,7 @@ class MySQLDriver implements IDB
         $this->close();
     }
 
-    public function deleteManyRecords($conditions, $table)
+    public function deleteManyRecords($conditions, $table): void
     {
         $this->connect();
         $query = SQLUtils::deleteQuery($conditions, $table);
