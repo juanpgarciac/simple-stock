@@ -55,7 +55,7 @@ trait SQLUtils
     }
 
     /**
-     * @param array<mixed> $record
+     * @param array<string,string|int|float|null> $record
      * @param array<string> $conditions
      * @param string $table
      *

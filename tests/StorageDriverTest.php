@@ -17,10 +17,8 @@ final class StorageDriverTest extends TestCase
 
     public function test_storage_creation(): void
     {
-        
         $storage = StorageDriverFactory::createStorage(DBDriver::FAKEDBDRIVER);
 
         $this->assertInstanceOf(FakeDBDriver::class, $storage);
-
     }
 }

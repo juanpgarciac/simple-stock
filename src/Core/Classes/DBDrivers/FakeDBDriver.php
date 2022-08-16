@@ -9,7 +9,7 @@ use Exception;
 class FakeDBDriver implements StorageMapper
 {
     /**
-     * @var array<mixed>
+     * @var array<string, array>
      */
     private array $tables = [];
     /**
@@ -17,7 +17,7 @@ class FakeDBDriver implements StorageMapper
      */
     private array $tables_ids = [];
 
-    public function results($fields, $conditions, $table): mixed
+    public function results($fields, $conditions, $table): array
     {
         return array_filter($this->tables[$table], function ($row) use ($conditions) {
             foreach ($conditions as $condition) {
@@ -100,7 +100,7 @@ class FakeDBDriver implements StorageMapper
         });
     }
 
-    public function resultByID($recordID, $table, $id_field = 'id'): mixed
+    public function resultByID($recordID, $table, $id_field = 'id'): array|null
     {
         return isset($this->tables[$table]) && isset($this->tables[$table][$recordID]) ? $this->tables[$table][$recordID] : null;
     }

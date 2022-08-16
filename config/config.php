@@ -23,9 +23,24 @@ if (!function_exists('env')) {
      *
      * @return mixed
      */
-    function env(string $key, $default = null): mixed
+    function env(string $key, string|array|null $default = null): string|array|null
     {
         return getenv($key, true) ?? $default;
+    }
+
+    /**
+     * @param string $key
+     * @param string $default
+     *
+     * @return string
+     */
+    function env_str(string $key, string $default = ''): string
+    {
+        $env = getenv($key, true);
+        if (is_array($env) && count($env)>0) {
+            $env = (string) $env[0];
+        }
+        return $env ?? $default;
     }
 }
 

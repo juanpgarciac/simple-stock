@@ -11,17 +11,17 @@ interface StorageMapper
      * @param string $table
      * @param string $id_field
      *
-     * @return mixed
+     * @return array<mixed>|null
      */
-    public function resultByID(string|int $recordID, string $table, string $id_field = 'id'): mixed;
+    public function resultByID(string|int $recordID, string $table, string $id_field = 'id'): array|null;
     /**
      * @param array<string> $fields
      * @param array<string> $conditions
      * @param string $table
      *
-     * @return mixed
+     * @return array<mixed>
      */
-    public function results(array $fields, array $conditions, string $table): mixed;
+    public function results(array $fields, array $conditions, string $table): array;
     /**
      * @param array<mixed> $recordData
      * @param string $table

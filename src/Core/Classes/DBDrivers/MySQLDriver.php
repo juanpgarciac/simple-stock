@@ -2,13 +2,15 @@
 
 namespace Core\Classes\DBDrivers;
 
+use Exception;
 use mysqli;
+use mysqli_result;
 
 class MySQLDriver extends SQLBaseDriver
 {
     public function connect(): mysqli
     {
-        if (!$this->link || !is_a($this->link, 'mysqli')) {
+        if (!$this->isLinked()) {
             $this->link = new mysqli(
                 $this->DBConfig->getHost(),
                 $this->DBConfig->getUsername(),
@@ -18,7 +20,7 @@ class MySQLDriver extends SQLBaseDriver
                 $this->DBConfig->getSocket()
             );
         } else {
-            $this->link->connect(
+            $this->link()->connect(
                 $this->DBConfig->getHost(),
                 $this->DBConfig->getUsername(),
                 $this->DBConfig->getPassword(),
@@ -27,34 +29,58 @@ class MySQLDriver extends SQLBaseDriver
                 $this->DBConfig->getSocket()
             );
         }
-        return $this->link;
+        return $this->link();
     }
 
     public function close(): void
     {
-        if ($this->link && is_a($this->link, 'mysqli')) {
-            $this->link->close();
+        if ($this->isLinked()) {
+            $this->link()->close();
         }
         $this->link = null;
     }
 
     public function free_result(mixed $result): void
     {
-        $result->free_result();
+        if ($result instanceof mysqli_result) {
+            $result->free_result();
+        }
     }
 
     public function getInsertedID(mixed $result = null): int|string|null
     {
-        return $this->link->insert_id;
+        if (!$this->isLinked()) {
+            return null;
+        }
+        return $this->link()->insert_id;
     }
 
-    public function fetch_assoc(mixed $result): mixed
+    public function fetch_assoc(mixed $result): array|bool|null
     {
-        return $result->fetch_assoc();
+        if ($result instanceof mysqli_result) {
+            return $result->fetch_assoc();
+        }
+        return null;
     }
 
     public function query(string $query): mixed
     {
-        return $this->link->query($query);
+        if (!$this->isLinked()) {
+            return null;
+        }
+        return $this->link()->query($query);
+    }
+
+    public function isLinked(): bool
+    {
+        return $this->link && $this->link instanceof mysqli;
+    }
+
+    public function link(): mysqli
+    {
+        if ($this->link instanceof mysqli) {
+            return $this->link;
+        }
+        throw new Exception("Error Processing Request", 1);
     }
 }

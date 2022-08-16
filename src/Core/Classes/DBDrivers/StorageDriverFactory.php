@@ -21,9 +21,10 @@ class StorageDriverFactory
             return new $storageMapperClass();
         }
 
-        if(is_null($DBConfiguration))
+        if (is_null($DBConfiguration)) {
             throw new InvalidArgumentException("DBConfiguration cannot be null for $storageMapperClass", 1);
-            
+        }
+
 
         return new $storageMapperClass($DBConfiguration);
     }

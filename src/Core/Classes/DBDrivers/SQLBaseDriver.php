@@ -14,6 +14,7 @@ abstract class SQLBaseDriver implements StorageMapper
      * @var DBConfiguration
      */
     protected DBConfiguration $DBConfig;
+
     /**
      * @var mixed|null
      */
@@ -46,21 +47,23 @@ abstract class SQLBaseDriver implements StorageMapper
         return $id;
     }
 
-    public function results($fields, $conditions, $table): mixed
+    public function results($fields, $conditions, $table): array
     {
         $records = [];
         $this->connect();
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
         $result = $this->query($query);
         while ($row =  $this->fetch_assoc($result)) {
-            $records[] = $row;
+            if (is_array($row)) {
+                $records[] = $row;
+            }
         }
         $this->free_result($result);
         $this->close();
         return $records;
     }
 
-    public function resultByID($recordID, $table, $id_field = 'id'): mixed
+    public function resultByID($recordID, $table, $id_field = 'id'): array|null
     {
         $results = $this->results(['*'], ["$id_field = $recordID"], $table);
         return count($results)>0 ? $results[0] : null;
@@ -98,12 +101,20 @@ abstract class SQLBaseDriver implements StorageMapper
         $this->close();
     }
 
+    abstract public function isLinked(): bool;
+
+    abstract public function link(): mixed;
 
     abstract public function free_result(mixed $result): void;
 
     abstract public function getInsertedID(mixed $result = null): int | string | null;
 
-    abstract public function fetch_assoc(mixed $result): mixed;
+    /**
+     * @param mixed $result
+     *
+     * @return array<mixed>|bool|null
+     */
+    abstract public function fetch_assoc(mixed $result): array|bool|null;
 
     abstract public function query(string $query): mixed;
 }

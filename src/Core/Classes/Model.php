@@ -11,15 +11,15 @@ abstract class Model
      *
      * @return string
      */
-    public function id(string $id_field = 'id'): string|int
+    public function id(string $id_field = 'id'): string
     {
-        return $this->getValue($id_field);
+        return $this->getValue($id_field)."";
     }
 
     /**
      * @param string $fieldName
      *
-     * @return mixed
+     * @return string|int|float|null
      */
     public function getValue(string $fieldName): mixed
     {

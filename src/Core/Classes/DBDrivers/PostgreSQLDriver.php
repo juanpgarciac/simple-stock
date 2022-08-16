@@ -2,19 +2,25 @@
 
 namespace Core\Classes\DBDrivers;
 
+use Exception;
+use PgSql\Connection as Postgres;
+use PgSql\Result as Result;
+
 class PostgreSQLDriver extends SQLBaseDriver
 {
     public function connect(): mixed
     {
-        if (!$this->link || (!is_a($this->link, 'PgSql\Connection') && !is_a($this->link, 'resource'))) {
+        if (!$this->isLinked()) {
             $this->link = pg_connect("host={$this->DBConfig->getHost()} user={$this->DBConfig->getUsername()} password={$this->DBConfig->getPassword()} dbname={$this->DBConfig->getDB()} port={$this->DBConfig->getPort()}");
         }
-        return $this->link;
+        return $this->link();
     }
 
     public function close(): void
     {
-        pg_close($this->link);
+        if ($this->isLinked() && $this->link instanceof Postgres) {
+            pg_close($this->link);
+        }
         $this->link = null;
     }
 
@@ -31,25 +37,43 @@ class PostgreSQLDriver extends SQLBaseDriver
 
     public function free_result(mixed $result): void
     {
-        pg_free_result($result);
+        if (!is_null($result) && ($result instanceof Result)) {
+            pg_free_result($result);
+        }
     }
 
     public function getInsertedID(mixed $result = null): int | string | null
     {
-        if (!is_null($result)) {
+        if (!is_null($result) && ($result instanceof Result)) {
             $row = pg_fetch_row($result);
             return is_array($row) ? $row[0] : null;
         }
         return null;
     }
 
-    public function fetch_assoc(mixed $result): mixed
+    public function fetch_assoc(mixed $result): array|bool|null
     {
-        return pg_fetch_assoc($result);
+        if (!is_null($result) && ($result instanceof Result)) {
+            return pg_fetch_assoc($result);
+        }
+        return null;
     }
 
     public function query(string $query): mixed
     {
-        return pg_query($this->link, ($query));
+        return pg_query($this->link(), $query);
+    }
+
+    public function isLinked(): bool
+    {
+        return $this->link && (($this->link instanceof Postgres) || is_resource($this->link));
+    }
+
+    public function link(): mixed
+    {
+        if ($this->link instanceof Postgres || is_resource($this->link)) {
+            return $this->link;
+        }
+        throw new Exception("Error Processing Request", 1);
     }
 }

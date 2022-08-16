@@ -2,22 +2,24 @@
 
 namespace Core\Classes\DBDrivers;
 
+use Exception;
 use SQLite3;
+use SQLite3Result;
 
 class SQLite3Driver extends SQLBaseDriver
 {
     public function connect(): SQLite3
     {
-        if (!$this->link || !is_a($this->link, 'SQLite3')) {
+        if (!$this->isLinked()) {
             $this->link = new SQLite3($this->DBConfig->getDB(), SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->DBConfig->getPassword());
         }
-        return $this->link;
+        return $this->link();
     }
 
     public function close(): void
     {
-        if ($this->link && is_a($this->link, 'SQLite3')) {
-            $this->link->close();
+        if ($this->isLinked()) {
+            $this->link()->close();
         }
         $this->link = null;
     }
@@ -28,16 +30,38 @@ class SQLite3Driver extends SQLBaseDriver
 
     public function getInsertedID(mixed $result = null): int | string | null
     {
-        return $this->link->lastInsertRowID();
+        if (!$this->isLinked()) {
+            return null;
+        }
+        return $this->link()->lastInsertRowID();
     }
 
-    public function fetch_assoc(mixed $result): mixed
+    public function fetch_assoc($result): array|bool|null
     {
-        return $result->fetchArray();
+        if ($result instanceof SQLite3Result) {
+            return $result->fetchArray();
+        }
+        return false;
     }
 
     public function query(string $query): mixed
     {
-        return $this->link->query($query);
+        if (!$this->isLinked()) {
+            return null;
+        }
+        return $this->link()->query($query);
+    }
+
+    public function isLinked(): bool
+    {
+        return $this->link && ($this->link instanceof SQLite3);
+    }
+
+    public function link(): SQLite3
+    {
+        if ($this->link instanceof SQLite3) {
+            return $this->link;
+        }
+        throw new Exception("Error Processing Request", 1);
     }
 }
