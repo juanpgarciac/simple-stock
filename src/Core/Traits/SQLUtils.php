@@ -47,11 +47,11 @@ trait SQLUtils
      * 
      * @return string
      */
-    public static function insertQuery(array $record, string $table): string
+    public static function insertQuery(array $record, string $table, $suffix = ''): string
     {
         $fields = implode(', ', array_keys($record));
         $values = "'".implode("', '", array_values($record))."'";
-        $query = "INSERT INTO $table ($fields) VALUES ($values);";
+        $query = "INSERT INTO $table ($fields) VALUES ($values) $suffix;";
         return $query;
     }
 

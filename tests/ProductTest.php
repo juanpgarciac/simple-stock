@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Core\Classes\DBConfiguration;
 use Core\Classes\DBDrivers\FakeDBDriver;
 use Core\Classes\DBDrivers\MySQLDriver;
+use Core\Classes\DBDrivers\PostgreSQLDriver;
 use Core\Classes\DBDrivers\SQLite3Driver;
 use Models\ProductRepository;
 use Models\Product;
@@ -19,12 +20,14 @@ final class ProductTest extends TestCase
     {
         parent::setUp();
 
-        $mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
+        //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
+        $postgres = new PostgreSQLDriver(  new DBConfiguration("quarantine_stock", 'debian', '12345','localhost',5432));
         //$sqlite = new SQLite3Driver( new DBConfiguration("/home/juanp/quarantine_stock.db"));
 
         //dd($sqlite->connect());
         //$this->productRepository = new ProductRepository(  new FakeDBDriver());
-        $this->productRepository = new ProductRepository(  $mySQL);
+        //$this->productRepository = new ProductRepository(  $mySQL);
+        $this->productRepository = new ProductRepository(  $postgres);
         //$this->productRepository = new ProductRepository(  $sqlite );
         
     }
