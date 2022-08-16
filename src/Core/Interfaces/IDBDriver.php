@@ -4,7 +4,7 @@ namespace Core\Interfaces;
 
 use Core\Classes\DBConfiguration;
 
-interface IDB
+interface IDBDriver
 {
     /**
      * @param DBConfiguration $DBConfig

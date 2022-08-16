@@ -4,32 +4,30 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\FakeDBDriver;
-use Core\Classes\DBDrivers\MySQLDriver;
-use Core\Classes\DBDrivers\PostgreSQLDriver;
-use Core\Classes\DBDrivers\SQLite3Driver;
+use Core\Classes\DBDrivers\DBDriverFactory;
 use Models\ProductRepository;
 use Models\Product;
 use PHPUnit\Framework\TestCase;
 use Core\Traits\SQLUtils;
+use Core\Traits\Utils;
 
 final class ProductTest extends TestCase
 {
     private ProductRepository $productRepository;
+    private $dbdriver;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $dbconfiguration = DBConfiguration::FromEnvFile();
+        $this->dbdriver = DBDriverFactory::createDBDriver(env('DB_DRIVER'),$dbconfiguration);
+
+        $this->productRepository = new ProductRepository($this->dbdriver);
         //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
-        $postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
+        //$postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
         //$sqlite = new SQLite3Driver(new DBConfiguration("/home/juanp/quarantine_stock.db"));
 
-        //dd($sqlite->connect());
-        //$this->productRepository = new ProductRepository(  new FakeDBDriver());
-        //$this->productRepository = new ProductRepository(  $mySQL);
-        $this->productRepository = new ProductRepository($postgres);
-        //$this->productRepository = new ProductRepository($sqlite);
     }
 
 
@@ -63,19 +61,30 @@ final class ProductTest extends TestCase
     /** @test */
     public function product_can_be_created()
     {
-        $product = new Product('Tuna', '1 Can', 'unit', 'cans');
+        $randomName = uniqid('Random Product Name ');
+
+        $product = new Product($randomName, '1 Can', 'unit', 'cans');
 
         $this->assertInstanceOf(Product::class, $product);
-        $this->assertSame('Tuna', $product->getValue('name'));
+        $this->assertSame($randomName, $product->getValue('name'));
     }
 
+    /** @test */
+    public function repository_can_manage_a_DB()
+    {
+        $dbclass = $this->productRepository->getDBClass();
+        $this->setName($this->getName().' using '.Utils::baseClassName($dbclass));
+        $this->assertSame($this->dbdriver::class,$dbclass);
+
+    }
+    
 
 
 
     /** @test */
     public function product_can_be_inserted()
     {
-        $this->setName($this->getName().' using '.$this->productRepository->getDBClass());
+        
 
         $randomName = uniqid('Random Product Name ');
 

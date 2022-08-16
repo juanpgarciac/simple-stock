@@ -3,11 +3,11 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\IDB;
+use Core\Interfaces\IDBDriver;
 use Core\Traits\SQLUtils;
 use mysqli;
 
-class MySQLDriver implements IDB
+class MySQLDriver implements IDBDriver
 {
     use SQLUtils;
 

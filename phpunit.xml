@@ -11,4 +11,7 @@
       <directory>tests/</directory>
     </testsuite>
   </testsuites>
+  <php>
+    <env name="DB_DRIVER"   value="fakedb" force="true" />
+  </php>
 </phpunit>

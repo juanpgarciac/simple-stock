@@ -3,3 +3,4 @@ res/*
 env.php
 .env
 *.cache
+local-tests/

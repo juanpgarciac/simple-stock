@@ -29,7 +29,7 @@ class Utils
         throw new InvalidArgumentException("No valid operator given", 1);
     }
 
-    public static function baseClassname($classname)
+    public static function baseClassName($classname)
     {
         return (substr($classname, strrpos($classname, '\\') + 1));
     }

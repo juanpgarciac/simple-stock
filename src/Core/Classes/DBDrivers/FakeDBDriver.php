@@ -3,12 +3,12 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\IDB;
+use Core\Interfaces\IDBDriver;
 use Core\Traits\SQLUtils;
 use Core\Traits\Utils;
 use Exception;
 
-class FakeDBDriver implements IDB
+class FakeDBDriver implements IDBDriver
 {
     use SQLUtils;
 

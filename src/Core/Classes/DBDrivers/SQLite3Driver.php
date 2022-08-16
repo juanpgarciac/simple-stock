@@ -3,11 +3,11 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\IDB;
+use Core\Interfaces\IDBDriver;
 use Core\Traits\SQLUtils;
 use SQLite3;
 
-class SQLite3Driver implements IDB
+class SQLite3Driver implements IDBDriver
 {
     use SQLUtils;
 

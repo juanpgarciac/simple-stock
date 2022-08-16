@@ -2,8 +2,7 @@
 
 namespace Core\Classes;
 
-use Core\Interfaces\IDB;
-use Core\Traits\Utils;
+use Core\Interfaces\IDBDriver;
 use Exception;
 
 abstract class ModelRepository
@@ -12,23 +11,24 @@ abstract class ModelRepository
     protected array $fields = [];
 
     protected string $id_field = 'id';
-    protected ?IDB $DB = null;
+    protected IDBDriver $DB;
     protected ?array $select = ['*'];
     protected array $where = [];
     protected array $results = [];
 
-    public function __construct(?IDB $DB = null)
+    public function __construct(IDBDriver $DBDriver)
     {
-        $this->DB = $DB;
+        $this->DB = $DBDriver;
     }
 
     /**
      * @return string
      */
-    public function getDBClass():string
+    public function getDBClass(): string
     {
-        if(!is_null($this->DB))
-            return Utils::baseClassname($this->DB::class);
+        if (!is_null($this->DB)) {
+            return $this->DB::class;
+        }
         return '';
     }
 
@@ -90,10 +90,6 @@ abstract class ModelRepository
 
     public function insert(Model $modelRecord)
     {
-        if (!$this->DB) {
-            throw new Exception("No DB configured", 1);
-        }
-
         if (empty($modelRecord)) {
             throw new Exception("Empty set", 1);
         }
@@ -116,10 +112,6 @@ abstract class ModelRepository
 
     public function update(Model $modelRecord)
     {
-        if (!$this->DB) {
-            throw new Exception("No DB configured", 1);
-        }
-
         if (empty($modelRecord)) {
             throw new Exception("Empty set", 1);
         }

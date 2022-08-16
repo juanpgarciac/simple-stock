@@ -3,10 +3,10 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\IDB;
+use Core\Interfaces\IDBDriver;
 use Core\Traits\SQLUtils;
 
-class PostgreSQLDriver implements IDB
+class PostgreSQLDriver implements IDBDriver
 {
     use SQLUtils;
 
