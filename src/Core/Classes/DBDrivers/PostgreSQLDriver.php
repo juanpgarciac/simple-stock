@@ -37,14 +37,14 @@ class PostgreSQLDriver extends SQLBaseDriver
 
     public function free_result(mixed $result): void
     {
-        if (!is_null($result) && ($result instanceof Result)) {
+        if (!is_null($result) && ($result instanceof Result || is_resource($result))) {
             pg_free_result($result);
         }
     }
 
     public function getInsertedID(mixed $result = null): int | string | null
     {
-        if (!is_null($result) && ($result instanceof Result)) {
+        if (!is_null($result) && ($result instanceof Result || is_resource($result))) {
             $row = pg_fetch_row($result);
             return is_array($row) ? $row[0] : null;
         }
@@ -53,7 +53,7 @@ class PostgreSQLDriver extends SQLBaseDriver
 
     public function fetch_assoc(mixed $result): array|bool|null
     {
-        if (!is_null($result) && ($result instanceof Result)) {
+        if (!is_null($result) && ($result instanceof Result || is_resource($result))) {
             return pg_fetch_assoc($result);
         }
         return null;
