@@ -144,4 +144,9 @@ class FakeDBDriver implements IDBDriver
 
         return $this->tables_ids[$table]."";
     }
+
+    public function query($query): mixed
+    {
+        return $query;
+    }
 }

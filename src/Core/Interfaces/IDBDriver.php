@@ -74,4 +74,5 @@ interface IDBDriver
      * @return void
      */
     public function deleteManyRecords(array $conditions, string $table): void;
+    public function query(string $query): mixed;
 }

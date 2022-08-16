@@ -58,7 +58,7 @@ class MySQLDriver implements IDBDriver
         $records = [];
         $this->connect();
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
-        $result = $this->link->query($query);
+        $result = $this->query($query);
         while ($row =  $result->fetch_assoc()) {
             $records[] = $row;
         }
@@ -89,7 +89,7 @@ class MySQLDriver implements IDBDriver
     {
         $this->connect();
         $query = SQLUtils::updateQuery($recordData, ["id = $recordID"], $table);
-        $this->link->query($query);
+        $this->query($query);
         $this->close();
 
         return $recordID;
@@ -105,7 +105,7 @@ class MySQLDriver implements IDBDriver
         $this->connect();
         $recordIDs = implode(", ", $recordIDs);
         $query = SQLUtils::deleteQuery(["$id_field in ( $recordIDs )"], $table);
-        $this->link->query($query);
+        $this->query($query);
         $this->close();
     }
 
@@ -113,7 +113,12 @@ class MySQLDriver implements IDBDriver
     {
         $this->connect();
         $query = SQLUtils::deleteQuery($conditions, $table);
-        $this->link->query($query);
+        $this->query($query);
         $this->close();
+    }
+
+    public function query($query): mixed
+    {
+        return $this->link->query($query);
     }
 }

@@ -5,6 +5,8 @@ namespace Core\Classes\DBDrivers;
 use Core\Classes\DBConfiguration;
 use Core\Interfaces\IDBDriver;
 use Core\Traits\SQLUtils;
+use PgSql;
+use PHPUnit\phpDocumentor\Reflection\Types\Resource_;
 
 class PostgreSQLDriver implements IDBDriver
 {
@@ -41,7 +43,7 @@ class PostgreSQLDriver implements IDBDriver
         $records = [];
         $this->connect();
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
-        $result = pg_query($this->link, ($query));
+        $result = $this->query($query);
         while ($row =  pg_fetch_assoc($result)
         ) {
             $records[] = $row;
@@ -62,7 +64,7 @@ class PostgreSQLDriver implements IDBDriver
         $id = null;
         $this->connect();
         $query = SQLUtils::insertQuery($recordData, $table, " RETURNING $id_field");
-        if ($result = pg_query($this->link, ($query))) {
+        if ($result = $this->query($query)) {
             $id = pg_fetch_row($result)[0];
         }
         $this->close();
@@ -73,7 +75,7 @@ class PostgreSQLDriver implements IDBDriver
     {
         $this->connect();
         $query = SQLUtils::updateQuery($recordData, ["id = $recordID"], $table);
-        pg_query($this->link, ($query));
+        $this->query($query);
         $this->close();
 
         return $recordID;
@@ -89,7 +91,7 @@ class PostgreSQLDriver implements IDBDriver
         $this->connect();
         $recordIDs = implode(", ", $recordIDs);
         $query = SQLUtils::deleteQuery(["$id_field in ( $recordIDs )"], $table);
-        pg_query($this->link, ($query));
+        $this->query($query);
         $this->close();
     }
 
@@ -97,7 +99,12 @@ class PostgreSQLDriver implements IDBDriver
     {
         $this->connect();
         $query = SQLUtils::deleteQuery($conditions, $table);
-        pg_query($this->link, ($query));
+        $this->query($query);
         $this->close();
+    }
+
+    public function query(string $query): mixed
+    {
+        return pg_query($this->link, ($query));
     }
 }
