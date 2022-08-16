@@ -7,15 +7,39 @@ use Exception;
 
 abstract class ModelRepository
 {
+    /**
+     * @var string
+     */
     protected string $table = '';
+    /**
+     * @var array<string>
+     */
     protected array $fields = [];
 
+    /**
+     * @var string
+     */
     protected string $id_field = 'id';
+    /**
+     * @var StorageMapper
+     */
     protected StorageMapper $DB;
+    /**
+     * @var array<string>|null
+     */
     protected ?array $select = ['*'];
+    /**
+     * @var array<string>
+     */
     protected array $where = [];
+    /**
+     * @var array<mixed>
+     */
     protected array $results = [];
 
+    /**
+     * @param StorageMapper $DBDriver
+     */
     public function __construct(StorageMapper $DBDriver)
     {
         $this->DB = $DBDriver;
@@ -29,7 +53,12 @@ abstract class ModelRepository
         return $this->DB::class;
     }
 
-    public function select(array|String $fields = '*')
+    /**
+     * @param array<string>|string $fields
+     * 
+     * @return ModelRepository
+     */
+    public function select(array|string $fields = '*'):ModelRepository
     {
         if (!is_array($fields)) {
             $this->select = explode(',', $fields);
@@ -37,35 +66,54 @@ abstract class ModelRepository
         return $this;
     }
 
-    public function getTable()
+    /**
+     * @return string
+     */
+    public function getTable():string
     {
         return $this->table;
     }
 
-    public function getFieldSelection()
+    /**
+     * @return array<string>
+     */
+    public function getFieldSelection():array
     {
         return $this->select;
     }
 
-    public function getConditions()
+    /**
+     * @return array<string>
+     */
+    public function getConditions():array
     {
         return $this->where;
     }
 
-    public function where($field, $operator, $compare)
+    /**
+     * @param string $field
+     * @param string $operator
+     * @param string $compare
+     * 
+     * @return ModelRepository
+     */
+    public function where(string $field, string $operator, string $compare): ModelRepository
     {
         if (!in_array($operator, ['=','>','<','>=','<=','like','<>','!='])) {
             throw new Exception("Invalid comparisor operator", 1);
         }
 
-        $compare = is_string($compare) ? "'$compare'" : $compare;
-
-        $this->where[] = "$field $operator $compare";
+        $this->where[] = "$field $operator '$compare'";
 
         return $this;
     }
 
-    public function results($cached = false)
+    /**
+     * @param bool $cached
+     * 
+     * @return array<mixed>
+     */
+    public function results(bool $cached = false):array
     {
 
         if (!$cached || empty($this->results)) {
@@ -75,14 +123,22 @@ abstract class ModelRepository
         return $this->results;
     }
 
-    private function clear_query()
+    /**
+     * @return void
+     */
+    private function clear_query():void
     {
         $this->select = ['*'];
         $this->where = [];
     }
 
 
-    public function insert(Model $modelRecord)
+    /**
+     * @param Model $modelRecord
+     * 
+     * @return Model
+     */
+    public function insert(Model $modelRecord):Model
     {
         $insertArray = [];
 
@@ -102,7 +158,12 @@ abstract class ModelRepository
         return $modelRecord;
     }
 
-    public function update(Model $modelRecord)
+    /**
+     * @param Model $modelRecord
+     * 
+     * @return Model
+     */
+    public function update(Model $modelRecord):Model
     {
         $insertArray = [];
 
@@ -117,7 +178,12 @@ abstract class ModelRepository
         return $modelRecord;
     }
 
-    public function delete($recordIDs)
+    /**
+     * @param array<int|string>|int|string $recordIDs
+     * 
+     * @return void
+     */
+    public function delete(array|int|string $recordIDs):void
     {
         if(is_array($recordIDs)){
             $this->DB->deleteManyRecordsByID($recordIDs, $this->getTable());
@@ -127,7 +193,12 @@ abstract class ModelRepository
         
     }
 
-    public function deleteBatch($allowDeleteWithEmptyConditions = false)
+    /**
+     * @param bool $allowDeleteWithEmptyConditions
+     * 
+     * @return bool
+     */
+    public function deleteBatch(bool $allowDeleteWithEmptyConditions = false):bool
     {
         if (empty($this->getConditions()) && !$allowDeleteWithEmptyConditions) {
             return false;
@@ -138,7 +209,12 @@ abstract class ModelRepository
         return true;
     }
 
-    public function find($recordID)
+    /**
+     * @param string|int $recordID
+     * 
+     * @return Model|null
+     */
+    public function find(string|int $recordID):Model|null
     {
         $this->clear_query();
         $result = $this->DB->resultByID($recordID, $this->getTable());
@@ -148,5 +224,10 @@ abstract class ModelRepository
         return null;
     }
 
+    /**
+     * @param array<mixed> $recordArray
+     * 
+     * @return Model
+     */
     abstract public static function fromState(array $recordArray): Model;
 }

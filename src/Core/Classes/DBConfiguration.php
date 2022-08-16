@@ -4,23 +4,22 @@ namespace Core\Classes;
 
 class DBConfiguration
 {
-    private $db = null;
-    private $host = null;
-    private $port = null;
-    private $username = null;
-    private $password = null;
-    private $socket = null;
+    private ?string $db = null;
+    private ?string $host = null;
+    private string|int|null $port = null;
+    private ?string $username = null;
+    private ?string $password = null;
+    private ?string $socket = null;
 
     /**
      * @param string $db
      * @param string $username
      * @param string $password
      * @param string $host
-     * @param string $port
-     *
-     * @return void
+     * @param string|int|null $port
+     * @param string $socket
      */
-    public function __construct($db, $username = 'root', $password = '', $host = 'localhost', $port = '3306', $socket = null)
+    public function __construct(string $db, string $username = 'root', string $password = '', string $host = 'localhost', string|int|null $port = 3306, string $socket = null)
     {
         $this->db = $db;
         $this->username = $username;
@@ -30,33 +29,54 @@ class DBConfiguration
         $this->socket = $socket;
     }
 
-    public function getDB()
+    /**
+     * @return string
+     */
+    public function getDB():string
     {
         return $this->db;
     }
-    public function getUsername()
+    /**
+     * @return string
+     */
+    public function getUsername():string
     {
         return $this->username;
     }
-    public function getPassword()
+    /**
+     * @return string
+     */
+    public function getPassword():string
     {
         return $this->password;
     }
-    public function getHost()
+    /**
+     * @return string
+     */
+    public function getHost():string
     {
         return $this->host;
     }
-    public function getPort()
+    /**
+     * @return string|int|null
+     */
+    public function getPort():string|int|null
     {
         return $this->port;
     }
-    public function getSocket()
+    /**
+     * @return string
+     */
+    public function getSocket():string
     {
         return $this->socket;
     }
 
-    public static function FromEnvFile()
+    /**
+     * @return DBConfiguration
+     */
+    public static function FromEnvFile():DBConfiguration
     {
-        return new self(env('DB_NAME'), env('DB_USERNAME'), env('DB_PASSWORD'), env('DB_HOST'), env('DB_PORT'));
+        return new self(env('DB_NAME'), env('DB_USERNAME'), env('DB_PASSWORD'), env('DB_HOST'), env('DB_PORT'),env('DB_SOCKET'));
     }
 }

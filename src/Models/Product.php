@@ -15,7 +15,13 @@ class Product extends Model
     protected float  $stock = 0.0;
 
 
-    public function __construct($name, $presentation = '1', $unit = 'unit', $category = '')
+    /**
+     * @param string $name
+     * @param string $presentation
+     * @param string $unit
+     * @param string $category
+     */
+    public function __construct(string $name, string $presentation = '1', string $unit = 'unit', string $category = '')
     {
         $this->id = null;
         $this->name = $name;
@@ -26,7 +32,12 @@ class Product extends Model
     }
 
 
-    public function updateStock(StockTransaction $stockAdjustment)
+    /**
+     * @param StockTransaction $stockAdjustment
+     * 
+     * @return void
+     */
+    public function updateStock(StockTransaction $stockAdjustment):void
     {
         $this->stock += $stockAdjustment->getAmount();
     }

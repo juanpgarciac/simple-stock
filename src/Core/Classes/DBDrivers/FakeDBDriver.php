@@ -2,16 +2,12 @@
 
 namespace Core\Classes\DBDrivers;
 
-use Core\Classes\DBConfiguration;
 use Core\Interfaces\StorageMapper;
-use Core\Traits\SQLUtils;
 use Core\Traits\Utils;
 use Exception;
 
 class FakeDBDriver implements StorageMapper
 {
-    use SQLUtils;
-
     /**
      * @var array<mixed>
      */
@@ -37,7 +33,7 @@ class FakeDBDriver implements StorageMapper
         });
     }
 
-    public function insertRecord(array $recordData, string $table, $id_field = 'id'): string
+    public function insertRecord(array $recordData, string $table, string $id_field = 'id'): string
     {
         if (!isset($this->tables[$table])) {
             $this->tables[$table] = [];
@@ -52,7 +48,7 @@ class FakeDBDriver implements StorageMapper
     }
 
 
-    public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string
+    public function updateRecord($recordID, $recordData, $table, string $id_field = 'id'): string
     {
         if (!isset($this->tables[$table]) || !isset($this->tables[$table][$recordID])) {
             throw new Exception("Record not found", 1);
@@ -111,7 +107,7 @@ class FakeDBDriver implements StorageMapper
         return isset($this->tables[$table]) && isset($this->tables[$table][$recordID]) ? $this->tables[$table][$recordID] : null;
     }
 
-    private function getNewID($table): string
+    private function getNewID(string $table): string
     {
         if (!isset($this->tables_ids[$table])) {
             $this->tables_ids[$table] = 0;

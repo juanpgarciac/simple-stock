@@ -5,7 +5,7 @@ namespace Core\Traits;
 trait SQLUtils
 {
     /**
-     * @param array $conditions
+     * @param array<string> $conditions
      *
      * @return string
      */
@@ -23,8 +23,8 @@ trait SQLUtils
     }
 
     /**
-     * @param array $fields
-     * @param array $conditions
+     * @param array<string> $fields
+     * @param array<string> $conditions
      * @param string $table
      *
      * @return string
@@ -41,12 +41,12 @@ trait SQLUtils
     }
 
     /**
-     * @param array $record
+     * @param array<mixed> $record
      * @param string $table
      *
      * @return string
      */
-    public static function insertQuery(array $record, string $table, $suffix = ''): string
+    public static function insertQuery(array $record, string $table, string $suffix = ''): string
     {
         $fields = implode(', ', array_keys($record));
         $values = "'".implode("', '", array_values($record))."'";
@@ -55,8 +55,8 @@ trait SQLUtils
     }
 
     /**
-     * @param array $record
-     * @param array $conditions
+     * @param array<mixed> $record
+     * @param array<string> $conditions
      * @param string $table
      *
      * @return string
@@ -78,7 +78,7 @@ trait SQLUtils
     }
 
     /**
-     * @param array $conditions
+     * @param array<string> $conditions
      * @param string $table
      *
      * @return string

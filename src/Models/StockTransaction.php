@@ -20,17 +20,17 @@ class StockTransaction
         $this->date = $date;
     }
 
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }
 
-    public function getObservation()
+    public function getObservation(): string
     {
         return $this->observation;
     }
 
-    public function getDate()
+    public function getDate(): string
     {
         return $this->date;
     }

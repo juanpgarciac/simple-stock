@@ -13,8 +13,10 @@ class StorageFactory
     public const POSTGRESDRIVER = 'postgres';
     public const SQLITE3DRIVER = 'sqlite3';
 
-
-    private static $drivers = [
+    /**
+     * @var array<mixed>
+     */
+    private static array $drivers = [
         self::FAKEDBDRIVER => FakeDBDriver::class,
         self::MYSQLDRIVER => MySQLDriver::class,        
         self::POSTGRESDRIVER => PostgreSQLDriver::class,
@@ -26,7 +28,7 @@ class StorageFactory
      * @param StorageFactory::FAKEDBDRIVER|StorageFactory::MYSQLDRIVER|StorageFactory::POSTGRESDRIVER|StorageFactory::SQLITE3DRIVER $driver
      * @param DBConfiguration|null $DBConfiguration
      * 
-     * @return IDBDriver
+     * @return StorageMapper
      */
     public static function createStorage(string $driver = StorageFactory::FAKEDBDRIVER,?DBConfiguration $DBConfiguration = null): StorageMapper
     {

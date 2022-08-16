@@ -44,7 +44,7 @@ class MySQLDriver extends SQLBaseDriver
         $result->free_result();
     }
 
-    public function getInsertedID($result = null):int|string|null
+    public function getInsertedID(mixed $result = null):int|string|null
     {
         return $this->link->insert_id;
     }
@@ -54,7 +54,7 @@ class MySQLDriver extends SQLBaseDriver
         return $result->fetch_assoc();
     }
 
-    public function query($query): mixed
+    public function query(string $query): mixed
     {
         return $this->link->query($query);
     }

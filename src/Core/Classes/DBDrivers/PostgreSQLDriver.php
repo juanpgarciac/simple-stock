@@ -38,7 +38,7 @@ class PostgreSQLDriver extends SQLBaseDriver
         pg_free_result($result);
     }
 
-    public function getInsertedID($result = null): int | string | null
+    public function getInsertedID(mixed $result = null): int | string | null
     {
         if ($result) {
             return pg_fetch_row($result)[0];

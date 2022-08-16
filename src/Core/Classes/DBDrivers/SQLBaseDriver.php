@@ -11,8 +11,14 @@ abstract class SQLBaseDriver implements StorageMapper
 
     use SQLUtils;
 
+    /**
+     * @var DBConfiguration
+     */
     protected DBConfiguration $DBConfig;
-    protected $link = null;
+    /**
+     * @var mixed|null
+     */
+    protected mixed $link = null;
 
 
     public function __construct(DBConfiguration $DBConfig)

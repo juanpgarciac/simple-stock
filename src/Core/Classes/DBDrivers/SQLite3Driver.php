@@ -28,7 +28,7 @@ class SQLite3Driver extends SQLBaseDriver
         
     }
 
-    public function getInsertedID($result = null):int | string | null
+    public function getInsertedID(mixed $result = null):int | string | null
     {
         return $this->link->lastInsertRowID();
     }
