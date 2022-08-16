@@ -15,16 +15,6 @@ class FakeDBDriver implements IDB
     private $tables = [];
     private $tables_ids = [];
 
-    private function getNewID($table): string
-    {
-        if (!isset($this->tables_ids[$table])) {
-            $this->tables_ids[$table] = 0;
-        }
-
-        $this->tables_ids[$table]++;
-
-        return $this->tables_ids[$table]."";
-    }
     public function __construct(?DBConfiguration $DBConfig = null)
     {
     }
@@ -122,5 +112,16 @@ class FakeDBDriver implements IDB
     public function resultByID($recordID, $table, $id_field = 'id')
     {
         return isset($this->tables[$table]) && isset($this->tables[$table][$recordID]) ? $this->tables[$table][$recordID] : null;
+    }
+
+    private function getNewID($table): string
+    {
+        if (!isset($this->tables_ids[$table])) {
+            $this->tables_ids[$table] = 0;
+        }
+
+        $this->tables_ids[$table]++;
+
+        return $this->tables_ids[$table]."";
     }
 }
