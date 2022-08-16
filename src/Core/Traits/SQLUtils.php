@@ -35,7 +35,7 @@ trait SQLUtils
 
         $selectString = implode(', ', $fields);
 
-        $query = "SELECT ".$selectString." FROM ".$table.$whereString;
+        $query = "SELECT ".$selectString." FROM ".$table.$whereString.';';
 
         return $query;
     }
@@ -72,7 +72,7 @@ trait SQLUtils
 
         $setString = implode(", ", $set);
 
-        $query = "UPDATE $table SET ".$setString.$whereString;
+        $query = "UPDATE $table SET ".$setString.$whereString.';';
 
         return $query;
     }

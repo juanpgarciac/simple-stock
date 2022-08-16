@@ -3,7 +3,7 @@
 namespace Core\Classes;
 
 use Core\Interfaces\IDB;
-use Core\Traits\SQLUtils;
+use Core\Traits\Utils;
 use Exception;
 
 abstract class ModelRepository
@@ -20,6 +20,16 @@ abstract class ModelRepository
     public function __construct(?IDB $DB = null)
     {
         $this->DB = $DB;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDBClass():string
+    {
+        if(!is_null($this->DB))
+            return Utils::baseClassname($this->DB::class);
+        return '';
     }
 
     public function select(array|String $fields = '*')

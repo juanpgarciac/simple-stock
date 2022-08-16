@@ -11,6 +11,7 @@ use Core\Classes\DBDrivers\SQLite3Driver;
 use Models\ProductRepository;
 use Models\Product;
 use PHPUnit\Framework\TestCase;
+use Core\Traits\SQLUtils;
 
 final class ProductTest extends TestCase
 {
@@ -21,35 +22,42 @@ final class ProductTest extends TestCase
         parent::setUp();
 
         //$mySQL = new MySQLDriver( DBConfiguration::FromEnvFile());
-        //$postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
-        $sqlite = new SQLite3Driver(new DBConfiguration("/home/juanp/quarantine_stock.db"));
+        $postgres = new PostgreSQLDriver(new DBConfiguration("quarantine_stock", 'debian', '12345', 'localhost', 5432));
+        //$sqlite = new SQLite3Driver(new DBConfiguration("/home/juanp/quarantine_stock.db"));
 
         //dd($sqlite->connect());
         //$this->productRepository = new ProductRepository(  new FakeDBDriver());
         //$this->productRepository = new ProductRepository(  $mySQL);
-        //$this->productRepository = new ProductRepository($postgres);
-        $this->productRepository = new ProductRepository($sqlite);
+        $this->productRepository = new ProductRepository($postgres);
+        //$this->productRepository = new ProductRepository($sqlite);
     }
 
 
     /** @test */
-    public function Product_class_can_be_instanciated()
+    public function product_class_can_be_instanciated()
     {
         $this->assertInstanceOf(Product::class, new Product("Product Name"));
     }
 
     /** @test */
-    public function test_product_can_create_mysql_query()
+    public function product_can_create_sql_query()
     {
         $this->productRepository->select()->where('id', '=', '1');
 
-        $resultQuery = MySQLDriver::selectQuery(
+        $resultQuery = SQLUtils::selectQuery(
             $this->productRepository->getFieldSelection(),
             $this->productRepository->getConditions(),
             $this->productRepository->getTable()
         );
 
-        $this->assertSame("SELECT * FROM product WHERE id = '1'", $resultQuery);
+        $this->assertSame("SELECT * FROM product WHERE id = '1';", $resultQuery);
+
+        $randomName = uniqid('Random Product Name ');
+        $resultQuery = SQLUtils::insertQuery(['name' => $randomName],$this->productRepository->getTable()
+        );
+
+        $this->assertSame("INSERT INTO product (name) VALUES ('$randomName') ;", $resultQuery);
+
     }
 
     /** @test */
@@ -67,6 +75,8 @@ final class ProductTest extends TestCase
     /** @test */
     public function product_can_be_inserted()
     {
+        $this->setName($this->getName().' using '.$this->productRepository->getDBClass());
+
         $randomName = uniqid('Random Product Name ');
 
         $product = new Product($randomName, '1 Can', 'unit', 'cans');
