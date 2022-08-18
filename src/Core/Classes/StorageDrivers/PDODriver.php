@@ -31,7 +31,7 @@ class PDODriver extends SQLBaseDriver
         $result = null;
     }
 
-    protected function getInsertedID(mixed $result = null): int | string | null
+    protected function getInsertedID(): int | string | null
     {
         return $this->link()->lastInsertId();
     }

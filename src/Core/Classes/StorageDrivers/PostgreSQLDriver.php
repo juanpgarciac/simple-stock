@@ -35,7 +35,7 @@ class PostgreSQLDriver extends SQLBaseDriver
 
     protected function getInsertedID(mixed $result = null): int | string | null
     {
-        if (self::is_result($result, Result::class)) {
+        if ($result && self::is_result($result, Result::class)) {
             $row = pg_fetch_row($result);
             return is_array($row) ? $row[0] : null;
         }

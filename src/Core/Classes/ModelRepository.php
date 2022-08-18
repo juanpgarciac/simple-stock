@@ -148,7 +148,7 @@ abstract class ModelRepository
         }
 
         if (!empty($insertArray)) {
-            $id = $this->DB->insertRecord($insertArray, $this->getTable());
+            $id = $this->DB->insertRecord($insertArray, $this->getTable(), $this->id_field);
 
             $modelRecord->setValue($this->id_field, $id);
         }

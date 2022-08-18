@@ -96,14 +96,14 @@ abstract class SQLBaseDriver implements IStorageDriver
 
     public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string|int
     {
-        $query = SQLUtils::updateQuery($recordData, ["id = $recordID"], $table);
+        $query = SQLUtils::updateQuery($recordData, ["$id_field = $recordID"], $table);
         $this->commonProcessQuery($query);
         return $recordID;
     }
 
     public function deleteRecord($recordID, $table, $id_field = 'id'): void
     {
-        $this->deleteManyRecordsByID([$recordID], $table, $id_field = 'id');
+        $this->deleteManyRecordsByID([$recordID], $table, $id_field);
     }
 
     public function deleteManyRecordsByID(array $recordIDs, string $table, string $id_field = 'id'): void
@@ -170,7 +170,7 @@ abstract class SQLBaseDriver implements IStorageDriver
 
     abstract protected function free_result(mixed $result): void;
 
-    abstract protected function getInsertedID(mixed $result = null): int | string | null;
+    abstract protected function getInsertedID(): int | string | null;
 
     /**
      * @param mixed $result

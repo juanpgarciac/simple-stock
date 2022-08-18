@@ -32,7 +32,7 @@ class MySQLDriver extends SQLBaseDriver
         }
     }
 
-    protected function getInsertedID(mixed $result = null): int|string|null
+    protected function getInsertedID(): int|string|null
     {
         return $this->link()->insert_id;
     }
