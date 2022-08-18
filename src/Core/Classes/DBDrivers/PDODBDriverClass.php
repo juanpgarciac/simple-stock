@@ -10,6 +10,15 @@ use PDOException;
 class PDODBDriverClass implements IDBDriver
 {
 
+    public const PDOMYSQLDRIVER = 'mysql';
+    public const PDOPOSTGRESDRIVER = 'pgsql';
+    public const PDOSQLITE3DRIVER = 'sqlite';
+
+    private const DRIVERS = [
+        self::PDOMYSQLDRIVER => PDODriver::class,
+        self::PDOPOSTGRESDRIVER => PDODriver::class,
+        self::PDOSQLITE3DRIVER => PDODriver::class
+    ];
 
     /**
      * @param string $driver
@@ -18,9 +27,7 @@ class PDODBDriverClass implements IDBDriver
     public static function getDriverClass(string $driver): string
     {   
         
-        self::checkPDODriverAvailability($driver);
-
-        $driverClass = PDODriver::class;
+        $driverClass = self::DRIVERS[self::checkPDODriverAvailability($driver)];
 
         return $driverClass;
     }
@@ -32,9 +39,9 @@ class PDODBDriverClass implements IDBDriver
         if(str_starts_with($driver,'pdo:')){
             $driver = explode(':',$driver)[1];
         }
-        if(!in_array($driver,PDO::getAvailableDrivers())){
+        if(!in_array($driver,PDO::getAvailableDrivers()) || !array_key_exists($driver, self::DRIVERS)){
             if($throw)
-                throw new PDOException("pdo $driver is not supported", 1);                
+                throw new PDOException("PDO $driver is not supported", 1);                
             return false;
         }
         return $driver;
