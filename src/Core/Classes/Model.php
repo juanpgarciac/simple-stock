@@ -13,7 +13,8 @@ abstract class Model
      */
     public function id(string $id_field = 'id'): string
     {
-        return $this->getValue($id_field)."";
+        $id = $this->getValue($id_field);
+        return !empty($id) ? $id."" : "";
     }
 
     /**

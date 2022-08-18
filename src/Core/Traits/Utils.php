@@ -43,6 +43,6 @@ class Utils
      */
     public static function baseClassName(string $classname): string
     {
-        return (substr($classname, strrpos($classname, '\\') + 1));
+        return (substr($classname, (strrpos($classname, '\\') ?: 0) + 1));
     }
 }

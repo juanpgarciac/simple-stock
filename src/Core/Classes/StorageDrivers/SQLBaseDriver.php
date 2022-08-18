@@ -127,7 +127,7 @@ abstract class SQLBaseDriver implements IStorageDriver
 
     protected function isLinked(): bool
     {
-        return !is_null($this->link) && (is_resource($this->link) || is_a($this->link, $this->nativeClass ?? ''));
+        return !is_null($this->link) && (is_resource($this->link) || (!is_null($this->nativeClass) && $this->link instanceof $this->nativeClass));
     }
 
     protected function isconnected(): bool
@@ -151,7 +151,7 @@ abstract class SQLBaseDriver implements IStorageDriver
      */
     protected static function is_result(mixed $result, string $nativeResult): bool
     {
-        return !is_null($result) && (is_resource($result) || is_a($result, $nativeResult));
+        return !is_null($result) && (is_resource($result) || ($result instanceof $nativeResult));
     }
 
     /**

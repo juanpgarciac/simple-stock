@@ -90,13 +90,13 @@ class DBConfiguration
     public static function FromEnvFile(): DBConfiguration
     {
         return new self(
-            env_str('DB_DRIVER'),
-            env_str('DB_NAME'),
-            env_str('DB_USERNAME'),
-            env_str('DB_PASSWORD'),
-            env_str('DB_HOST'),
-            (int) env_str('DB_PORT'),
-            env_str('DB_SOCKET')
+            env('DB_DRIVER'),
+            env('DB_NAME'),
+            env('DB_USERNAME'),
+            env('DB_PASSWORD'),
+            env('DB_HOST'),
+            (int) env('DB_PORT'),
+            env('DB_SOCKET')
         );
     }
 }

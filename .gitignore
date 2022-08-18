@@ -4,3 +4,4 @@ env.php
 .env
 *.cache
 local-tests/
+psalm.xml

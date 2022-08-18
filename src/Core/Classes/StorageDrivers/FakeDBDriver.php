@@ -23,7 +23,7 @@ class FakeDBDriver implements IStorageDriver
 
     public function results($fields, $conditions, $table): array
     {
-        return array_filter($this->tables[$table], function ($row) use ($conditions) {
+        return array_filter($this->tables[$table], function (array $row) use ($conditions) {
             foreach ($conditions as $condition) {
                 $arr = explode(' ', $condition);
                 $field = $arr[0];
@@ -93,7 +93,7 @@ class FakeDBDriver implements IStorageDriver
             return;
         }
 
-        $this->tables[$table]  = array_filter($this->tables[$table], function ($row) use ($conditions) {
+        $this->tables[$table]  = array_filter($this->tables[$table], function (array $row) use ($conditions) {
             foreach ($conditions as $condition) {
                 list($field, $operator, $compare) = explode(' ', $condition);
                 if (!Utils::operate($row[$field], $operator, $compare)) {

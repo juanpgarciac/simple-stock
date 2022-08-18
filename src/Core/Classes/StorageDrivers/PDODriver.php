@@ -16,7 +16,7 @@ class PDODriver extends SQLBaseDriver
         if ($driver == 'sqlite') {
             $dsn = "$driver:".$this->DBConfig->getDB()."";
         } else {
-            $dsn = "$driver:dbname=".$this->DBConfig->getDB().";host=".$this->DBConfig->getHost().";port=".$this->DBConfig->getPort().";";
+            $dsn = "$driver:dbname=".$this->DBConfig->getDB().";host=".$this->DBConfig->getHost().";port=".($this->DBConfig->getPort() ?? "").";";
         }
         return new PDO($dsn, $this->DBConfig->getUsername(), $this->DBConfig->getPassword());
     }

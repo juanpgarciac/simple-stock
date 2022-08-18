@@ -19,28 +19,14 @@ if (!function_exists('env')) {
     /**
      * Get environment value
      * @param string $key
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    function env(string $key, string|array|null $default = null): string|array|null
-    {
-        return getenv($key, true) ?? $default;
-    }
-
-    /**
-     * @param string $key
      * @param string $default
      *
      * @return string
      */
-    function env_str(string $key, string $default = ''): string
+    function env(string $key, string $default = ''): string
     {
         $env = getenv($key, true);
-        if (is_array($env) && count($env)>0) {
-            $env = (string) $env[0];
-        }
-        return $env ?? $default;
+        return !empty($env) ? $env : $default;
     }
 }
 
@@ -56,7 +42,7 @@ if (!function_exists('dd')) {
         ob_clean();
         echo '<pre>';
         foreach ($args as $arg) {
-            var_dump($arg);
+            var_export($arg);
         }
 
         echo '</pre>';
