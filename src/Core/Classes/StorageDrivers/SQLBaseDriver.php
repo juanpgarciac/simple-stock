@@ -5,7 +5,7 @@ namespace Core\Classes\StorageDrivers;
 use Core\Classes\DBConfiguration;
 use Core\Interfaces\IStorageDriver;
 use Core\Traits\SQLUtils;
-use Exception;
+
 
 abstract class SQLBaseDriver implements IStorageDriver
 {
@@ -31,11 +31,11 @@ abstract class SQLBaseDriver implements IStorageDriver
     /**
      * @return mixed
      */
-    abstract public function connect(): mixed;
+    abstract protected function connect(): mixed;
     /**
      * @return void
      */
-    abstract public function close(): void;
+    abstract protected function close(): void;
 
     private function commonConnect(): mixed
     {
@@ -75,10 +75,9 @@ abstract class SQLBaseDriver implements IStorageDriver
         $records = [];
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
         $result = $this->query($query);
-        while ($row =  $this->fetch_assoc($result)) {
-            if (is_array($row)) {
-                $records[] = $row;
-            }
+        $nativeResult = self::class_or_resource($result);
+        while ($row =  $this->commonFetch($result,$nativeResult)) {
+            $records[] = $row;
         }
         $this->free_result($result);
         $this->commonClose();
@@ -122,16 +121,16 @@ abstract class SQLBaseDriver implements IStorageDriver
         $this->commonClose();
     }
 
-    public function isLinked(): bool
+    protected function isLinked(): bool
     {
         return !is_null($this->link) && ( is_resource($this->link) || is_a($this->link,$this->nativeClass));
     }
     
-    public function isconnected(): bool{
+    protected function isconnected(): bool{
         return $this->isLinked();
     }
 
-    public function link(): mixed
+    protected function link(): mixed
     {
         if (!$this->isconnected()) {
             $this->link = $this->commonConnect();
@@ -139,13 +138,26 @@ abstract class SQLBaseDriver implements IStorageDriver
         return $this->link;
     }
 
-    abstract public function free_result(mixed $result): void;
+    protected static function is_result(mixed $result,$nativeResult)
+    {
+        return !is_null($result) && (is_resource($result) || is_a($result,$nativeResult));
+    }
 
-    abstract public function getInsertedID(mixed $result = null): int | string | null;
+    private function commonFetch(mixed $result, $nativeResult): array|false|null
+    {
+        if (self::is_result($result, $nativeResult)) {
+            return $this->fetch_assoc($result);
+        }
+        return false;
+    }
 
-    abstract public function fetch_assoc(mixed $result): mixed;
+    abstract protected function free_result(mixed $result): void;
 
-    abstract public function query(string $query): mixed;
+    abstract protected function getInsertedID(mixed $result = null): int | string | null;
 
-    abstract public function processQuery(string $query):bool;
+    abstract protected function fetch_assoc(mixed $result): array|false|null;
+
+    abstract protected function query(string $query): mixed;
+
+    abstract protected function processQuery(string $query):bool;
 }

@@ -11,7 +11,7 @@ use PDOStatement;
 class PDODriver extends SQLBaseDriver
 {
 
-    public function connect(): PDO
+    protected function connect(): PDO
     {
         $driver = PDODBDriverClass::checkPDODriverAvailability($this->DBConfig->getDriver());
         if($driver == 'sqlite'){
@@ -22,47 +22,34 @@ class PDODriver extends SQLBaseDriver
         return new PDO($dsn,$this->DBConfig->getUsername(),$this->DBConfig->getPassword());
     }
 
-    public function close(): void
+    protected function close(): void
     {
-        
+        //connection close by its own
     }
 
-    public function free_result(mixed $result): void
+    protected function free_result(mixed $result): void
     {
         $result = null;
     }
 
-    public function getInsertedID(mixed $result = null): int | string | null
+    protected function getInsertedID(mixed $result = null): int | string | null
     {
         return $this->link()->lastInsertId();
     }
 
-    public function results($fields, $conditions, $table): array
+    protected function fetch_assoc(mixed $result): array|false|null
     {
-        $records = [];
-        $query = SQLUtils::selectQuery($fields, $conditions, $table);
-        $result = $this->query($query);
-        foreach ($result as $row) {
-            $records[] = $row;
-        }
-        $this->free_result($result);
-        $this->close();
-        return $records;
+        return $result->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function fetch_assoc(mixed $result): mixed
-    {
-        return $result;
-    }
-
-    public function query(string $query): mixed
+    protected function query(string $query): mixed
     {
         return $this->link()->query($query, PDO::FETCH_ASSOC);
     }
 
-    public function processQuery(string $query): bool
+    protected function processQuery(string $query): bool
     {
-        return $this->link()->query($query) instanceof PDOStatement;
+        return self::is_result($this->link()->query($query),PDOStatement::class);
     }
 
 }
