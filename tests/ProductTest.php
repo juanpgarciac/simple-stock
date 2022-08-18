@@ -4,9 +4,8 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\DBDriver;
 use Core\Classes\DBDrivers\StorageDriverFactory;
-use Core\Interfaces\StorageMapper;
+use Core\Interfaces\IStorageMapper;
 use Models\ProductRepository;
 use Models\Product;
 use PHPUnit\Framework\TestCase;
@@ -16,16 +15,16 @@ use Core\Traits\Utils;
 final class ProductTest extends TestCase
 {
     private ProductRepository $productRepository;
-    private StorageMapper $dbdriver;
+    private IStorageMapper $storagemapper;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $dbconfiguration = DBConfiguration::FromEnvFile();
-        $this->dbdriver = StorageDriverFactory::createStorage(env('DB_DRIVER'), $dbconfiguration);
+        $this->storagemapper = StorageDriverFactory::createStorage(env('DB_DRIVER'), $dbconfiguration);
 
-        $this->productRepository = new ProductRepository($this->dbdriver);
+        $this->productRepository = new ProductRepository($this->storagemapper);
     }
 
 
@@ -73,7 +72,7 @@ final class ProductTest extends TestCase
     {
         $dbclass = $this->productRepository->getDBClass();
         $this->setName($this->getName().' using '.Utils::baseClassName($dbclass));
-        $this->assertSame($this->dbdriver::class, $dbclass);
+        $this->assertSame($this->storagemapper::class, $dbclass);
     }
 
 
