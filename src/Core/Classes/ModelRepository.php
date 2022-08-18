@@ -216,7 +216,7 @@ abstract class ModelRepository
     public function find(string|int $recordID): Model|null
     {
         $this->clear_query();
-        $result = $this->DB->resultByID($recordID, $this->getTable());
+        $result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
         if (!empty($result)) {
             return $this::class::fromState($result);
         }
