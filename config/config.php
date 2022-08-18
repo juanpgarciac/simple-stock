@@ -40,12 +40,15 @@ if (!function_exists('dd')) {
     function dd(...$args)
     {
         ob_clean();
-        echo '<pre>';
-        foreach ($args as $arg) {
-            var_export($arg);
+        $title = 'VAR DUMP';
+        if(php_sapi_name() === 'cli'){
+            echo "\e[1;31;47m$title\e[0m\n";            
+            array_map(function($arg) { echo "\n".var_export($arg)."\n"; }, func_get_args());
+        }else{
+            echo "<h3>$title</h3><pre>";
+            array_map(function($arg) { highlight_string("\n" . var_export($arg) . "\n"); }, func_get_args());
+            
         }
-
-        echo '</pre>';
         die;
     }
 }
