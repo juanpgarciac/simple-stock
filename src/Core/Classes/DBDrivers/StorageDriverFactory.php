@@ -11,7 +11,7 @@ class StorageDriverFactory
     /**
      * @param DBConfiguration|null $DBConfiguration
      *
-     * @return StorageMapper
+     * @return IStorageMapper
      */
     public static function createStorage(?DBConfiguration $DBConfiguration = null): IStorageMapper
     {
