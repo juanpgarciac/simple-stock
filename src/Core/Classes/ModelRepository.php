@@ -3,7 +3,7 @@
 namespace Core\Classes;
 
 use Core\Interfaces\IStorageDriver;
-use Exception;
+use InvalidArgumentException;
 
 abstract class ModelRepository
 {
@@ -100,7 +100,7 @@ abstract class ModelRepository
     public function where(string $field, string $operator, string $compare): ModelRepository
     {
         if (!in_array($operator, ['=','>','<','>=','<=','like','<>','!='])) {
-            throw new Exception("Invalid comparisor operator", 1);
+            throw new InvalidArgumentException("Invalid comparisor operator", 1);
         }
 
         $this->where[] = "$field $operator '$compare'";
