@@ -16,13 +16,14 @@ final class ProductTest extends TestCase
 {
     private ProductRepository $productRepository;
     private IStorageMapper $storagemapper;
+    private DBConfiguration $dbconfiguration;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $dbconfiguration = DBConfiguration::FromEnvFile();
-        $this->storagemapper = StorageDriverFactory::createStorage(env('DB_DRIVER'), $dbconfiguration);
+        $this->dbconfiguration = DBConfiguration::FromEnvFile();
+        $this->storagemapper = StorageDriverFactory::createStorage($this->dbconfiguration);
 
         $this->productRepository = new ProductRepository($this->storagemapper);
     }
@@ -71,7 +72,7 @@ final class ProductTest extends TestCase
     public function repository_can_manage_a_DB()
     {
         $dbclass = $this->productRepository->getDBClass();
-        $this->setName($this->getName().' using '.Utils::baseClassName($dbclass));
+        $this->setName($this->getName().' using '.Utils::baseClassName($dbclass).' (driver '.$this->dbconfiguration->getDriver().')');
         $this->assertSame($this->storagemapper::class, $dbclass);
     }
 

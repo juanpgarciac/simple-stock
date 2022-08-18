@@ -2,9 +2,10 @@
 
 namespace Core\Classes\DBDrivers;
 
+use Core\Interfaces\IDBDriver;
 use InvalidArgumentException;
 
-class DBDriver
+class DBDriver implements IDBDriver
 {
     public const FAKEDBDRIVER = 'fakedb';
     public const MYSQLDRIVER = 'mysql';

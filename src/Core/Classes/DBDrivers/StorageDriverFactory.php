@@ -9,14 +9,20 @@ use InvalidArgumentException;
 class StorageDriverFactory
 {
     /**
-     * @param key-of<DBDriver::DRIVERS>|string $storageDriver
      * @param DBConfiguration|null $DBConfiguration
      *
      * @return StorageMapper
      */
-    public static function createStorage(string $storageDriver, ?DBConfiguration $DBConfiguration = null): IStorageMapper
+    public static function createStorage(?DBConfiguration $DBConfiguration = null): IStorageMapper
     {
-        $storageMapperClass = DBDriver::getDriverClass($storageDriver);
+        $storageDriver = $DBConfiguration?->getDriver() ?? DBDriver::FAKEDBDRIVER;
+
+        if(str_starts_with($storageDriver, 'pdo:')){
+            $storageMapperClass = PDODBDriver::getDriverClass($storageDriver);
+        }else{
+            $storageMapperClass = DBDriver::getDriverClass($storageDriver);
+        }    
+        
         if ($storageMapperClass === FakeDBDriver::class) {
             return new $storageMapperClass();
         }

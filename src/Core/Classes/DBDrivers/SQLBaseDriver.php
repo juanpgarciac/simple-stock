@@ -109,12 +109,7 @@ abstract class SQLBaseDriver implements IStorageMapper
 
     abstract public function getInsertedID(mixed $result = null): int | string | null;
 
-    /**
-     * @param mixed $result
-     *
-     * @return array<mixed>|bool|null
-     */
-    abstract public function fetch_assoc(mixed $result): array|bool|null;
+    abstract public function fetch_assoc(mixed $result): mixed;
 
     abstract public function query(string $query): mixed;
 }
