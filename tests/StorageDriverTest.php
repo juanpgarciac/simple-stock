@@ -3,11 +3,9 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\DBDriver;
-use Core\Classes\DBDrivers\FakeDBDriver;
-use Core\Classes\DBDrivers\PDODBDriver;
-use Core\Classes\DBDrivers\PDODriver;
-use Core\Classes\DBDrivers\StorageDriverFactory;
+use Core\Classes\StorageDrivers\PDODriver;
+use Core\Classes\StorageDrivers\FakeDBDriver;
+use Core\Classes\StorageDrivers\StorageDriverFactory;
 use PHPUnit\Framework\TestCase;
 
 final class StorageDriverTest extends TestCase

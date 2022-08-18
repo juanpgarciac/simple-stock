@@ -2,12 +2,12 @@
 
 namespace Core\Classes\DBDrivers;
 
+use Core\Classes\StorageDrivers\PDODriver;
 use Core\Interfaces\IDBDriver;
-use InvalidArgumentException;
 use PDO;
 use PDOException;
 
-class PDODBDriver implements IDBDriver
+class PDODBDriverClass implements IDBDriver
 {
 
 

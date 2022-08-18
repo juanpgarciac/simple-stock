@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Classes\DBDrivers;
+namespace Core\Classes\StorageDrivers;
 
 use Exception;
 use SQLite3;

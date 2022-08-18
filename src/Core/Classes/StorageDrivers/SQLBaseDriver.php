@@ -1,12 +1,12 @@
 <?php
 
-namespace Core\Classes\DBDrivers;
+namespace Core\Classes\StorageDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\IStorageMapper;
+use Core\Interfaces\IStorageDriver;
 use Core\Traits\SQLUtils;
 
-abstract class SQLBaseDriver implements IStorageMapper
+abstract class SQLBaseDriver implements IStorageDriver
 {
     use SQLUtils;
 

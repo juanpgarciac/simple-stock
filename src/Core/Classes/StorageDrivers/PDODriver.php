@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Classes\DBDrivers;
+namespace Core\Classes\StorageDrivers;
 
+use Core\Classes\DBDrivers\PDODBDriverClass;
 use PDO;
 use PDOException;
-use PDOStatement;
 use Core\Traits\SQLUtils;
 
 class PDODriver extends SQLBaseDriver
@@ -13,7 +13,7 @@ class PDODriver extends SQLBaseDriver
     public function connect(): PDO
     {
         if (!$this->isLinked()) {
-            $driver = PDODBDriver::checkPDODriverAvailability($this->DBConfig->getDriver());
+            $driver = PDODBDriverClass::checkPDODriverAvailability($this->DBConfig->getDriver());
             if($driver == 'sqlite'){
                 $dsn = "$driver:".$this->DBConfig->getDB()."";
             }else{

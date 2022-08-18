@@ -2,7 +2,7 @@
 
 namespace Core\Classes;
 
-use Core\Classes\DBDrivers\DBDriver;
+use Core\Classes\DBDrivers\FakeDBDriverClass;
 
 class DBConfiguration
 {
@@ -23,7 +23,7 @@ class DBConfiguration
      * @param int|null $port
      * @param string $socket
      */
-    public function __construct(string $driver = DBDriver::FAKEDBDRIVER, string $db = 'fakedb', string $username = '', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = '')
+    public function __construct(string $driver = FakeDBDriverClass::FAKEDBDRIVER, string $db = 'fakedb', string $username = '', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = '')
     {
         $this->driver = $driver;
         $this->db = $db;

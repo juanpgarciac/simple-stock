@@ -1,12 +1,12 @@
 <?php
 
-namespace Core\Classes\DBDrivers;
+namespace Core\Classes\StorageDrivers;
 
-use Core\Interfaces\IStorageMapper;
+use Core\Interfaces\IStorageDriver;
 use Core\Traits\Utils;
 use Exception;
 
-class FakeDBDriver implements IStorageMapper
+class FakeDBDriver implements IStorageDriver
 {
     /**
      * @var array<string, array>

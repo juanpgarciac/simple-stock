@@ -4,7 +4,7 @@ namespace Core\Interfaces;
 
 
 
-interface IStorageMapper
+interface IStorageDriver
 {
     /**
      * @param string|int $recordID

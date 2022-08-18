@@ -4,8 +4,8 @@
 declare(strict_types=1);
 
 use Core\Classes\DBConfiguration;
-use Core\Classes\DBDrivers\StorageDriverFactory;
-use Core\Interfaces\IStorageMapper;
+use Core\Classes\StorageDrivers\StorageDriverFactory;
+use Core\Interfaces\IStorageDriver;
 use Models\ProductRepository;
 use Models\Product;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,7 @@ use Core\Traits\Utils;
 final class ProductTest extends TestCase
 {
     private ProductRepository $productRepository;
-    private IStorageMapper $storagemapper;
+    private IStorageDriver $storagedriver;
     private DBConfiguration $dbconfiguration;
 
     protected function setUp(): void
