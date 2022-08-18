@@ -2,7 +2,7 @@
 
 namespace Core\Classes;
 
-use Core\Interfaces\StorageMapper;
+use Core\Interfaces\IStorageMapper;
 use Exception;
 
 abstract class ModelRepository
@@ -23,7 +23,7 @@ abstract class ModelRepository
     /**
      * @var StorageMapper
      */
-    protected StorageMapper $DB;
+    protected IStorageMapper $DB;
     /**
      * @var array<string>
      */
@@ -38,9 +38,9 @@ abstract class ModelRepository
     protected array $results = [];
 
     /**
-     * @param StorageMapper $DBDriver
+     * @param IStorageMapper $DBDriver
      */
-    public function __construct(StorageMapper $DBDriver)
+    public function __construct(IStorageMapper $DBDriver)
     {
         $this->DB = $DBDriver;
     }

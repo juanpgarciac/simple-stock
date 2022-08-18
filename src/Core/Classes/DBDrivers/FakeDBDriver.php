@@ -2,11 +2,11 @@
 
 namespace Core\Classes\DBDrivers;
 
-use Core\Interfaces\StorageMapper;
+use Core\Interfaces\IStorageMapper;
 use Core\Traits\Utils;
 use Exception;
 
-class FakeDBDriver implements StorageMapper
+class FakeDBDriver implements IStorageMapper
 {
     /**
      * @var array<string, array>

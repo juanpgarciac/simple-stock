@@ -3,10 +3,10 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\StorageMapper;
+use Core\Interfaces\IStorageMapper;
 use Core\Traits\SQLUtils;
 
-abstract class SQLBaseDriver implements StorageMapper
+abstract class SQLBaseDriver implements IStorageMapper
 {
     use SQLUtils;
 

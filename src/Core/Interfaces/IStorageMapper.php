@@ -2,9 +2,9 @@
 
 namespace Core\Interfaces;
 
-use Core\Classes\DBConfiguration;
 
-interface StorageMapper
+
+interface IStorageMapper
 {
     /**
      * @param string|int $recordID

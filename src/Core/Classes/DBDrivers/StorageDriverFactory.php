@@ -3,7 +3,7 @@
 namespace Core\Classes\DBDrivers;
 
 use Core\Classes\DBConfiguration;
-use Core\Interfaces\StorageMapper;
+use Core\Interfaces\IStorageMapper;
 use InvalidArgumentException;
 
 class StorageDriverFactory
@@ -14,7 +14,7 @@ class StorageDriverFactory
      *
      * @return StorageMapper
      */
-    public static function createStorage(string $storageDriver, ?DBConfiguration $DBConfiguration = null): StorageMapper
+    public static function createStorage(string $storageDriver, ?DBConfiguration $DBConfiguration = null): IStorageMapper
     {
         $storageMapperClass = DBDriver::getDriverClass($storageDriver);
         if ($storageMapperClass === FakeDBDriver::class) {
