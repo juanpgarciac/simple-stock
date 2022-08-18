@@ -52,7 +52,7 @@ class PostgreSQLDriver extends SQLBaseDriver
         return pg_query($this->link(), $query);
     }
 
-    protected function processQuery(string $query):bool
+    protected function processQuery(string $query): bool
     {
         return self::is_result(pg_query($this->link(), $query), Result::class);
     }

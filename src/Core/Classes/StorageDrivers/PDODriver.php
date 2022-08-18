@@ -10,16 +10,15 @@ use PDOStatement;
 
 class PDODriver extends SQLBaseDriver
 {
-
     protected function connect(): PDO
     {
         $driver = PDODBDriverClass::checkPDODriverAvailability($this->DBConfig->getDriver());
-        if($driver == 'sqlite'){
+        if ($driver == 'sqlite') {
             $dsn = "$driver:".$this->DBConfig->getDB()."";
-        }else{
+        } else {
             $dsn = "$driver:dbname=".$this->DBConfig->getDB().";host=".$this->DBConfig->getHost().";port=".$this->DBConfig->getPort().";";
-        }            
-        return new PDO($dsn,$this->DBConfig->getUsername(),$this->DBConfig->getPassword());
+        }
+        return new PDO($dsn, $this->DBConfig->getUsername(), $this->DBConfig->getPassword());
     }
 
     protected function close(): void
@@ -49,7 +48,6 @@ class PDODriver extends SQLBaseDriver
 
     protected function processQuery(string $query): bool
     {
-        return self::is_result($this->link()->query($query),PDOStatement::class);
+        return self::is_result($this->link()->query($query), PDOStatement::class);
     }
-
 }

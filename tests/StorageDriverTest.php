@@ -35,18 +35,13 @@ final class StorageDriverTest extends TestCase
 
     public function test_pdo_supported_driver(): void
     {
-
         $pdodrivers = PDO::getAvailableDrivers();
-        if(!empty($pdodrivers)){
-            
+        if (!empty($pdodrivers)) {
             $dbconfig = new DBConfiguration('pdo:'.$pdodrivers[0]);
             $storage = StorageDriverFactory::createStorage($dbconfig);
-            $this->assertInstanceOf(PDODriver::class,$storage);
-
-        }else{
+            $this->assertInstanceOf(PDODriver::class, $storage);
+        } else {
             $this->markTestSkipped('No PDO driver supported to test on this server');
         }
-
-
     }
 }

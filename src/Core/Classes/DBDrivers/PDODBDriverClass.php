@@ -9,7 +9,6 @@ use PDOException;
 
 class PDODBDriverClass implements IDBDriver
 {
-
     public const PDOMYSQLDRIVER = 'mysql';
     public const PDOPOSTGRESDRIVER = 'pgsql';
     public const PDOSQLITE3DRIVER = 'sqlite';
@@ -22,29 +21,34 @@ class PDODBDriverClass implements IDBDriver
 
     /**
      * @param string $driver
-     * @return PDODriver::class
+     * @return value-of<PDODBDriverClass::DRIVERS>
      */
     public static function getDriverClass(string $driver): string
-    {   
-        
+    {
         $driverClass = self::DRIVERS[self::checkPDODriverAvailability($driver)];
 
         return $driverClass;
     }
 
-    public static function checkPDODriverAvailability(string $driver,$throw = true): string|false
+    /**
+     * @param string $driver
+     * @param bool $throw
+     *
+     * @return string|false
+     */
+    public static function checkPDODriverAvailability(string $driver, bool $throw = true): string|false
     {
         $driver = strtolower($driver);
 
-        if(str_starts_with($driver,'pdo:')){
-            $driver = explode(':',$driver)[1];
+        if (str_starts_with($driver, 'pdo:')) {
+            $driver = explode(':', $driver)[1];
         }
-        if(!in_array($driver,PDO::getAvailableDrivers()) || !array_key_exists($driver, self::DRIVERS)){
-            if($throw)
-                throw new PDOException("PDO $driver is not supported", 1);                
+        if (!in_array($driver, PDO::getAvailableDrivers()) || !array_key_exists($driver, self::DRIVERS)) {
+            if ($throw) {
+                throw new PDOException("PDO $driver is not supported", 1);
+            }
             return false;
         }
         return $driver;
-
     }
 }

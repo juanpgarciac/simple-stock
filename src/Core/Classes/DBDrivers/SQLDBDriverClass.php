@@ -10,7 +10,6 @@ use InvalidArgumentException;
 
 class SQLDBDriverClass implements IDBDriver
 {
-    
     public const MYSQLDRIVER = 'mysql';
     public const POSTGRESDRIVER = 'postgres';
     public const SQLITE3DRIVER = 'sqlite3';
@@ -23,8 +22,8 @@ class SQLDBDriverClass implements IDBDriver
 
 
     /**
-     * @param key-of<DBDriver::DRIVERS>|string $driver
-     * @return value-of<DBDriver::DRIVERS>
+     * @param key-of<SQLDBDriverClass::DRIVERS>|string $driver
+     * @return value-of<SQLDBDriverClass::DRIVERS>
      */
     public static function getDriverClass(string $driver): string
     {

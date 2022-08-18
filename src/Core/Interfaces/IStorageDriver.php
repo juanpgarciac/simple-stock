@@ -2,8 +2,6 @@
 
 namespace Core\Interfaces;
 
-
-
 interface IStorageDriver
 {
     /**

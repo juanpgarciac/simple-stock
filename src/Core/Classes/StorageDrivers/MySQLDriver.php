@@ -10,7 +10,6 @@ class MySQLDriver extends SQLBaseDriver
 {
     protected function connect(): mysqli
     {
-
         return new mysqli(
             $this->DBConfig->getHost(),
             $this->DBConfig->getUsername(),
@@ -19,7 +18,6 @@ class MySQLDriver extends SQLBaseDriver
             $this->DBConfig->getPort(),
             $this->DBConfig->getSocket()
         );
-
     }
 
     protected function close(): void
@@ -29,7 +27,7 @@ class MySQLDriver extends SQLBaseDriver
 
     protected function free_result(mixed $result): void
     {
-        if ($result instanceof mysqli_result) {
+        if (self::is_result($result, mysqli_result::class)) {
             $result->free_result();
         }
     }
@@ -41,7 +39,7 @@ class MySQLDriver extends SQLBaseDriver
 
     protected function fetch_assoc(mixed $result): array|false|null
     {
-        if ($result instanceof mysqli_result) {
+        if (self::is_result($result, mysqli_result::class)) {
             return $result->fetch_assoc();
         }
         return null;
@@ -53,9 +51,8 @@ class MySQLDriver extends SQLBaseDriver
         return $this->link()->store_result();
     }
 
-    protected function processQuery(string $query):bool
+    protected function processQuery(string $query): bool
     {
         return $this->link()->query($query);
     }
-
 }

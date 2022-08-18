@@ -9,13 +9,17 @@ use Exception;
 class FakeDBDriver implements IStorageDriver
 {
     /**
-     * @var array<string, array>
+     * @var array<mixed>
      */
     private array $tables = [];
     /**
      * @var array<int>
      */
     private array $tables_ids = [];
+
+    public function __construct()
+    {
+    }
 
     public function results($fields, $conditions, $table): array
     {

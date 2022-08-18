@@ -18,7 +18,7 @@ class SQLite3Driver extends SQLBaseDriver
         $this->link()->close();
     }
 
-    protected function free_result(mixed &$result): void
+    protected function free_result(mixed $result): void
     {
         $result = null;
     }
@@ -38,9 +38,8 @@ class SQLite3Driver extends SQLBaseDriver
         return $this->link()->query($query);
     }
 
-    protected function processQuery(string $query):bool
+    protected function processQuery(string $query): bool
     {
         return $this->link()->exec($query);
     }
-
 }

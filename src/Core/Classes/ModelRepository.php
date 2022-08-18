@@ -21,7 +21,7 @@ abstract class ModelRepository
      */
     protected string $id_field = 'id';
     /**
-     * @var StorageMapper
+     * @var IStorageDriver
      */
     protected IStorageDriver $DB;
     /**
@@ -38,7 +38,7 @@ abstract class ModelRepository
     protected array $results = [];
 
     /**
-     * @param IStorageMapper $DBDriver
+     * @param IStorageDriver $DBDriver
      */
     public function __construct(IStorageDriver $DBDriver)
     {

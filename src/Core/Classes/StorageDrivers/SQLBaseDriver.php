@@ -6,7 +6,6 @@ use Core\Classes\DBConfiguration;
 use Core\Interfaces\IStorageDriver;
 use Core\Traits\SQLUtils;
 
-
 abstract class SQLBaseDriver implements IStorageDriver
 {
     use SQLUtils;
@@ -46,7 +45,7 @@ abstract class SQLBaseDriver implements IStorageDriver
         return $this->link;
     }
 
-    private function commonClose():void
+    private function commonClose(): void
     {
         if ($this->isLinked()) {
             $this->close();
@@ -54,7 +53,12 @@ abstract class SQLBaseDriver implements IStorageDriver
         $this->link = null;
     }
 
-    private static function class_or_resource($obj)
+    /**
+     * @param mixed $obj
+     *
+     * @return string
+     */
+    private static function class_or_resource(mixed $obj)
     {
         return !is_resource($obj) ? $obj::class : get_resource_type($obj);
     }
@@ -63,7 +67,7 @@ abstract class SQLBaseDriver implements IStorageDriver
     {
         $id = null;
         $query = SQLUtils::insertQuery($recordData, $table);
-        if ($this->processQuery($query,false)) {
+        if ($this->processQuery($query)) {
             $id = $this->getInsertedID();
         }
         $this->commonClose();
@@ -76,7 +80,7 @@ abstract class SQLBaseDriver implements IStorageDriver
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
         $result = $this->query($query);
         $nativeResult = self::class_or_resource($result);
-        while ($row =  $this->commonFetch($result,$nativeResult)) {
+        while ($row =  $this->commonFetch($result, $nativeResult)) {
             $records[] = $row;
         }
         $this->free_result($result);
@@ -115,7 +119,7 @@ abstract class SQLBaseDriver implements IStorageDriver
         $this->commonProcessQuery($query);
     }
 
-    private function commonProcessQuery(string $query):void
+    private function commonProcessQuery(string $query): void
     {
         $this->processQuery($query);
         $this->commonClose();
@@ -123,10 +127,11 @@ abstract class SQLBaseDriver implements IStorageDriver
 
     protected function isLinked(): bool
     {
-        return !is_null($this->link) && ( is_resource($this->link) || is_a($this->link,$this->nativeClass));
+        return !is_null($this->link) && (is_resource($this->link) || is_a($this->link, $this->nativeClass ?? ''));
     }
-    
-    protected function isconnected(): bool{
+
+    protected function isconnected(): bool
+    {
         return $this->isLinked();
     }
 
@@ -134,15 +139,27 @@ abstract class SQLBaseDriver implements IStorageDriver
     {
         if (!$this->isconnected()) {
             $this->link = $this->commonConnect();
-        }        
+        }
         return $this->link;
     }
 
-    protected static function is_result(mixed $result,$nativeResult)
+    /**
+     * @param mixed $result
+     * @param string $nativeResult
+     *
+     * @return bool
+     */
+    protected static function is_result(mixed $result, string $nativeResult): bool
     {
-        return !is_null($result) && (is_resource($result) || is_a($result,$nativeResult));
+        return !is_null($result) && (is_resource($result) || is_a($result, $nativeResult));
     }
 
+    /**
+     * @param mixed $result
+     * @param string $nativeResult
+     *
+     * @return array<mixed>|false|null
+     */
     private function commonFetch(mixed $result, $nativeResult): array|false|null
     {
         if (self::is_result($result, $nativeResult)) {
@@ -155,9 +172,14 @@ abstract class SQLBaseDriver implements IStorageDriver
 
     abstract protected function getInsertedID(mixed $result = null): int | string | null;
 
+    /**
+     * @param mixed $result
+     *
+     * @return array<mixed>|false|null
+     */
     abstract protected function fetch_assoc(mixed $result): array|false|null;
 
     abstract protected function query(string $query): mixed;
 
-    abstract protected function processQuery(string $query):bool;
+    abstract protected function processQuery(string $query): bool;
 }
