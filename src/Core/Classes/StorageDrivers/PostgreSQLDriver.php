@@ -10,24 +10,17 @@ class PostgreSQLDriver extends SQLBaseDriver
 {
     public function connect(): mixed
     {
-        if (!$this->isLinked()) {
-            $this->link = pg_connect("host={$this->DBConfig->getHost()} user={$this->DBConfig->getUsername()} password={$this->DBConfig->getPassword()} dbname={$this->DBConfig->getDB()} port={$this->DBConfig->getPort()}");
-        }
-        return $this->link();
+        return pg_connect("host={$this->DBConfig->getHost()} user={$this->DBConfig->getUsername()} password={$this->DBConfig->getPassword()} dbname={$this->DBConfig->getDB()} port={$this->DBConfig->getPort()}");
     }
 
     public function close(): void
     {
-        if ($this->isLinked() && $this->link instanceof Postgres) {
-            pg_close($this->link);
-        }
-        $this->link = null;
+        pg_close($this->link());
     }
 
     public function insertRecord($recordData, $table, $id_field = 'id'): int | string | null
     {
         $id = null;
-        $this->connect();
         $query = self::insertQuery($recordData, $table, " RETURNING $id_field");
         $result = $this->query($query);
         $id = $this->getInsertedID($result);
@@ -64,16 +57,8 @@ class PostgreSQLDriver extends SQLBaseDriver
         return pg_query($this->link(), $query);
     }
 
-    public function isLinked(): bool
+    public function processQuery(string $query):bool
     {
-        return $this->link && (($this->link instanceof Postgres) || is_resource($this->link));
-    }
-
-    public function link(): mixed
-    {
-        if ($this->link instanceof Postgres || is_resource($this->link)) {
-            return $this->link;
-        }
-        throw new Exception("Error Processing Request", 1);
+        return is_resource(pg_query($this->link(), $query));
     }
 }

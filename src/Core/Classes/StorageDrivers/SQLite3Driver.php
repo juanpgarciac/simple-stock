@@ -10,18 +10,12 @@ class SQLite3Driver extends SQLBaseDriver
 {
     public function connect(): SQLite3
     {
-        if (!$this->isLinked()) {
-            $this->link = new SQLite3($this->DBConfig->getDB(), SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->DBConfig->getPassword());
-        }
-        return $this->link();
+        return new SQLite3($this->DBConfig->getDB(), SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, $this->DBConfig->getPassword());
     }
 
     public function close(): void
     {
-        if ($this->isLinked()) {
-            $this->link()->close();
-        }
-        $this->link = null;
+        $this->link()->close();
     }
 
     public function free_result(mixed $result): void
@@ -30,9 +24,6 @@ class SQLite3Driver extends SQLBaseDriver
 
     public function getInsertedID(mixed $result = null): int | string | null
     {
-        if (!$this->isLinked()) {
-            return null;
-        }
         return $this->link()->lastInsertRowID();
     }
 
@@ -46,22 +37,12 @@ class SQLite3Driver extends SQLBaseDriver
 
     public function query(string $query): mixed
     {
-        if (!$this->isLinked()) {
-            return null;
-        }
         return $this->link()->query($query);
     }
 
-    public function isLinked(): bool
+    public function processQuery(string $query):bool
     {
-        return $this->link && ($this->link instanceof SQLite3);
+        return $this->link()->exec($query);
     }
 
-    public function link(): SQLite3
-    {
-        if ($this->link instanceof SQLite3) {
-            return $this->link;
-        }
-        throw new Exception("Error Processing Request", 1);
-    }
 }

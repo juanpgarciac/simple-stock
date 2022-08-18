@@ -6,28 +6,25 @@ use Core\Classes\DBDrivers\PDODBDriverClass;
 use PDO;
 use PDOException;
 use Core\Traits\SQLUtils;
+use PDOStatement;
 
 class PDODriver extends SQLBaseDriver
 {
 
     public function connect(): PDO
     {
-        if (!$this->isLinked()) {
-            $driver = PDODBDriverClass::checkPDODriverAvailability($this->DBConfig->getDriver());
-            if($driver == 'sqlite'){
-                $dsn = "$driver:".$this->DBConfig->getDB()."";
-            }else{
-                $dsn = "$driver:dbname=".$this->DBConfig->getDB().";host=".$this->DBConfig->getHost().";port=".$this->DBConfig->getPort().";";
-            }
-            
-            $this->link = new PDO($dsn,$this->DBConfig->getUsername(),$this->DBConfig->getPassword(), [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]);
-        }
-        return $this->link();
+        $driver = PDODBDriverClass::checkPDODriverAvailability($this->DBConfig->getDriver());
+        if($driver == 'sqlite'){
+            $dsn = "$driver:".$this->DBConfig->getDB()."";
+        }else{
+            $dsn = "$driver:dbname=".$this->DBConfig->getDB().";host=".$this->DBConfig->getHost().";port=".$this->DBConfig->getPort().";";
+        }            
+        return new PDO($dsn,$this->DBConfig->getUsername(),$this->DBConfig->getPassword());
     }
 
     public function close(): void
     {
-        $this->link = null;
+        
     }
 
     public function free_result(mixed $result): void
@@ -37,16 +34,12 @@ class PDODriver extends SQLBaseDriver
 
     public function getInsertedID(mixed $result = null): int | string | null
     {
-        if (!$this->isLinked()) {
-            return null;
-        }
         return $this->link()->lastInsertId();
     }
 
     public function results($fields, $conditions, $table): array
     {
         $records = [];
-        $this->connect();
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
         $result = $this->query($query);
         foreach ($result as $row) {
@@ -59,27 +52,17 @@ class PDODriver extends SQLBaseDriver
 
     public function fetch_assoc(mixed $result): mixed
     {
-        return $result->getIterator()->next();
+        return $result;
     }
 
     public function query(string $query): mixed
     {
-        if (!$this->isLinked()) {
-            return null;
-        }
-        return $this->link()->query($query);
+        return $this->link()->query($query, PDO::FETCH_ASSOC);
     }
 
-    public function isLinked(): bool
+    public function processQuery(string $query): bool
     {
-        return $this->link && ($this->link instanceof PDO);
+        return $this->link()->query($query) instanceof PDOStatement;
     }
 
-    public function link(): PDO
-    {
-        if ($this->link instanceof PDO) {
-            return $this->link;
-        }
-        throw new PDOException("Error Processing Request", 1);
-    }
 }
