@@ -4,6 +4,7 @@ namespace Core\Classes;
 
 class DBConfiguration
 {
+    private string $driver;
     private string $db;
     private string $host = '';
     private ?int $port = null;
@@ -12,6 +13,7 @@ class DBConfiguration
     private string $socket = '';
 
     /**
+     * @param string $driver
      * @param string $db
      * @param string $username
      * @param string $password
@@ -19,8 +21,9 @@ class DBConfiguration
      * @param int|null $port
      * @param string $socket
      */
-    public function __construct(string $db, string $username = 'root', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = '')
+    public function __construct(string $driver, string $db, string $username = 'root', string $password = '', string $host = 'localhost', int|null $port = null, string $socket = '')
     {
+        $this->driver = $driver;
         $this->db = $db;
         $this->username = $username;
         $this->password = $password;
@@ -29,6 +32,13 @@ class DBConfiguration
         $this->socket = $socket;
     }
 
+    /**
+     * @return string
+     */
+    public function getDriver()
+    {
+        return $this->driver;
+    }
     /**
      * @return string
      */
@@ -78,6 +88,7 @@ class DBConfiguration
     public static function FromEnvFile(): DBConfiguration
     {
         return new self(
+            env_str('DB_DRIVER'),
             env_str('DB_NAME'),
             env_str('DB_USERNAME'),
             env_str('DB_PASSWORD'),
