@@ -1,40 +1,15 @@
 
 <?php
 
-use Core\Classes\DBConfiguration;
-use Core\Classes\StorageDrivers\StorageDriverFactory;
+use Core\Classes\App;
+use Core\Classes\Router;
 
-class App
+function app():App
 {
-    private $appStorage = null;
-    private static $instance = null;
+    return App::getInstance();
+}
 
-    private function __construct()
-    {
-        
-        $this->appStorage =  StorageDriverFactory::createStorage(DBConfiguration::FromEnvFile());
-    }
-
-    public static function getInstance()
-    {
-        if(self::$instance == null)
-            self::$instance = new static();
-        return self::$instance;
-    }
-
-    public function getAppStorage()
-    {
-        return $this->appStorage;
-    }
-
-    public function __clone()
-    {
-        
-    }
-    public function __wakeup()
-    {
-        throw '';
-    }
-
-
+function router():Router
+{
+    return app()->getRouter();
 }

@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use Core\Classes\App;
 use Core\Classes\DBConfiguration;
 use Core\Classes\StorageDrivers\StorageDriverFactory;
 use Core\Interfaces\IStorageDriver;
@@ -22,10 +23,10 @@ final class ProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->dbconfiguration = DBConfiguration::FromEnvFile();
-        $this->storagemapper = StorageDriverFactory::createStorage($this->dbconfiguration);
+        $this->dbconfiguration = app()->getDBConfiguration();
+        $this->storagedriver = app()->getAppStorage();
 
-        $this->productRepository = new ProductRepository($this->storagemapper);
+        $this->productRepository = new ProductRepository($this->storagedriver);
     }
 
 
@@ -73,7 +74,7 @@ final class ProductTest extends TestCase
     {
         $dbclass = $this->productRepository->getDBClass();
         $this->setName($this->getName().' using '.Utils::baseClassName($dbclass).' (driver '.$this->dbconfiguration->getDriver().')');
-        $this->assertSame($this->storagemapper::class, $dbclass);
+        $this->assertSame($this->storagedriver::class, $dbclass);
     }
 
 
