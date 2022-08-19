@@ -4,7 +4,7 @@ namespace Core\Classes;
 
 use Core\Classes\DBDrivers\FakeDBDriverClass;
 
-class DBConfiguration
+final class DBConfiguration
 {
     private string $driver;
     private string $db;

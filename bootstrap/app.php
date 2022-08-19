@@ -10,5 +10,15 @@ function app(): App
 
 function router(): Router
 {
-    return app()->getRouter();
+    return Router::getInstance();
+}
+
+/**
+ * I
+ * @return void
+ */
+function runApp():void
+{
+    router()->clearRoutePool();
+    router()->registerRoutes(arrayFromFile(path(CONFIGDIR,'routes.php')));
 }

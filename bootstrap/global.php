@@ -59,3 +59,13 @@ function arrayFromFile(string $filepath): array
     }
     throw new \InvalidArgumentException("includeArrFile: $filepath file cannot be found");
 }
+
+function slash():string
+{
+    return defined('DIRECTORY_SEPARATOR')?DIRECTORY_SEPARATOR:'/';
+}
+
+function path(string $dir,string $file):string
+{
+    return $dir.slash().$file;
+}

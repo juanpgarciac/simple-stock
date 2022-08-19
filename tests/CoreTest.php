@@ -29,7 +29,9 @@ final class CoreTest extends TestCase
 
         $this->assertSame($app1, app());
 
-        $this->assertSame($router1, router());
+        $this->assertSame($router1, app()->getRouter());
+
+        $this->assertSame(router(), app()->getRouter());
     }
 
     public function test_array_from_file_function_fails()
@@ -38,7 +40,7 @@ final class CoreTest extends TestCase
         arrayFromFile('falsedir/falsefile.extension');
     }
 
-    public function test_array_from_file_gets_an_array()
+    public function test_array_from_file_function_gets_an_array()
     {
         $arr = arrayFromFile(TESTSRESOURCESDIR.DIRECTORY_SEPARATOR.'filewitharray.php');
         $this->assertIsArray($arr);

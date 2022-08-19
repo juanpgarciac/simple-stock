@@ -8,7 +8,7 @@ define('CONFIGDIR', ROOTDIR.DIRECTORY_SEPARATOR.'config');
 
 define('SRCDIR', ROOTDIR.DIRECTORY_SEPARATOR.'src');
 
-define('TESTSRESOURCESDIR', ROOTDIR.DIRECTORY_SEPARATOR.'tests/res');
+define('TESTSRESOURCESDIR', ROOTDIR.DIRECTORY_SEPARATOR.'tests/resources');
 
 $_boostrap_includes = [
     BOOTSTRAPDIR => ['env.php','global.php','autoload.php','app.php'],
@@ -22,3 +22,5 @@ foreach ($_boostrap_includes as $dir => $files) {
         }
     }
 }
+
+runApp();
