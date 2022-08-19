@@ -31,4 +31,16 @@ final class CoreTest extends TestCase
 
         $this->assertSame($router1, router());
     }
+
+    public function test_array_from_file_function_fails()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        arrayFromFile('falsedir/falsefile.extension');
+    }
+
+    public function test_array_from_file_gets_an_array()
+    {
+        $arr = arrayFromFile(TESTSRESOURCESDIR.DIRECTORY_SEPARATOR.'filewitharray.php');
+        $this->assertIsArray($arr);
+    }
 }

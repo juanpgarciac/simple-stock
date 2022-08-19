@@ -2,8 +2,23 @@
 
 define('ROOTDIR', __DIR__);
 
-include './config/config.php';
+define('BOOTSTRAPDIR', ROOTDIR.DIRECTORY_SEPARATOR.'bootstrap');
 
-include './config/autoload.php';
+define('CONFIGDIR', ROOTDIR.DIRECTORY_SEPARATOR.'config');
 
-include './src/initApp.php';
+define('SRCDIR', ROOTDIR.DIRECTORY_SEPARATOR.'src');
+
+define('TESTSRESOURCESDIR', ROOTDIR.DIRECTORY_SEPARATOR.'tests/res');
+
+$_boostrap_includes = [
+    BOOTSTRAPDIR => ['env.php','global.php','autoload.php','app.php'],
+];
+
+foreach ($_boostrap_includes as $dir => $files) {
+    foreach ($files as $file) {
+        $filepath =  $dir.DIRECTORY_SEPARATOR.$file;
+        if (file_exists($filepath)) {
+            include $filepath;
+        }
+    }
+}
