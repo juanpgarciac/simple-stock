@@ -1,17 +1,22 @@
 <?php
+
 namespace Controllers;
 
 use Core\Classes\Controller;
 
 class ProductController extends Controller
 {
-    public function index()
+    /**
+     * @return void
+     */
+    public function index(): void
     {
-        
     }
 
-    public function show()
+    /**
+     * @return void
+     */
+    public function show(): void
     {
-
     }
 }

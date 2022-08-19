@@ -1,43 +1,46 @@
 <?php
+
 namespace Core\Classes;
 
 use Core\Classes\DBConfiguration;
 use Core\Classes\StorageDrivers\StorageDriverFactory;
+use Core\Interfaces\IStorageDriver;
 
 class App extends Singleton
 {
-    private $appDBConfiguration = null;
-    private $appStorage = null;
-    private $appRouter = null;
-    private static $instance = null;
-    
+    private static ?App $instance = null;
+    private Router $appRouter;
+    private DBConfiguration $appDBConfiguration;
+    private IStorageDriver $appStorage;
 
-    private function __construct()
+
+    final private function __construct()
     {
         $this->appDBConfiguration = DBConfiguration::FromEnvFile();
         $this->appStorage =  StorageDriverFactory::createStorage($this->appDBConfiguration);
         $this->appRouter = Router::getInstance();
-    }    
+    }
 
-    public static function getInstance():App
+    public static function getInstance(): App
     {
-        if(self::$instance == null)
+        if (empty(self::$instance)) {
             self::$instance = new static();
+        }
         return self::$instance;
     }
 
-    public function getAppStorage()
+    public function getAppStorage(): IStorageDriver
     {
         return $this->appStorage;
     }
 
-    public function getDBConfiguration()
+    public function getDBConfiguration(): DBConfiguration
     {
         return $this->appDBConfiguration;
     }
 
-    public function getRouter(){
+    public function getRouter(): Router
+    {
         return $this->appRouter;
     }
-
 }

@@ -1,16 +1,16 @@
 <?php
-namespace Core\Classes;
 
+namespace Core\Classes;
 
 final class Router extends Singleton
 {
-    private static $instance = null;
+    private static ?Router $instance = null;
 
-    public static function getInstance():Router
+    public static function getInstance(): Router
     {
-        if(self::$instance == null)
+        if (empty(self::$instance)) {
             self::$instance = new static();
+        }
         return self::$instance;
     }
-    
 }
