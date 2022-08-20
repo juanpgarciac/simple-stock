@@ -6,7 +6,15 @@ final class Router extends Singleton
 {
     private static ?Router $instance = null;
 
+    /**
+     * @var array<mixed>
+     */
     private array $routePool = [];
+
+    private function __construct()
+    {
+        $this->clearRoutePool();
+    }
 
     public static function getInstance(): Router
     {
@@ -16,6 +24,11 @@ final class Router extends Singleton
         return self::$instance;
     }
 
+    /**
+     * @param array<mixed> $routes
+     * 
+     * @return void
+     */
     public function registerRoutes(array $routes): void
     {
         foreach($routes as $route)
@@ -24,19 +37,22 @@ final class Router extends Singleton
         }
     } 
 
-    public function registerRoute(array|string $route):void
+    public function registerRoute(array|string|RouteHandler $route):void
     {
-        $this->routePool[] = $route;
+        $routeHandler = $route instanceof RouteHandler?$route:RouteHandler::create($route);
+        $this->routePool[$routeHandler->getMethod()][] = $routeHandler;
     } 
 
-    public function getRoutePool()
+    public function getRoutePool($method = RouteHandler::GET)
     {
-        return $this->routePool;
+        return $this->routePool[$method];
     }
 
     public function clearRoutePool()
     {
         $this->routePool = [];
+        foreach(RouteHandler::METHODS as $methodindex)
+            $this->routePool[$methodindex] = [];
     }
 
     

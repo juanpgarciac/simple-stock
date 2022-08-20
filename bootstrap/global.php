@@ -11,7 +11,7 @@ if (!function_exists('dd')) {
      */
     function dd()
     {
-        ob_clean();
+        //ob_clean();
         $title = 'VAR DUMP';
         if (php_sapi_name() === 'cli') {
             echo "\e[1;31;47m$title\e[0m\n";
