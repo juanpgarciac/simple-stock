@@ -21,7 +21,7 @@ if (!function_exists('dd')) {
         } else {
             echo "<h3>$title</h3><pre>";
             array_map(function (mixed $arg) {
-                highlight_string("\n" . var_export($arg, true) . "\n");
+                highlight_string("\n<?php\n" . var_export($arg, true) . "\n?>");
             }, func_get_args());
         }
         die;
