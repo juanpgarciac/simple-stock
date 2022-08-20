@@ -6,6 +6,9 @@ final class RouteHandler
     public const GET = 'GET';
     public const POST = 'POST';
     
+
+    public const PARAMETER_PATTERN = '[a-zA-Z0-9\_\-\.]+';
+
     public const METHODS = [
         RouteHandler::GET,
         RouteHandler::POST
@@ -44,12 +47,22 @@ final class RouteHandler
         
     }
 
-    public function id():string
+    public function getBaseURI()
     {
-        return self::getURIDynamicParameters($this->uri)['path'];
+        return $this->uri;
     }
 
-    private static function getURIDynamicParameters(string $uri): array
+    public function id():string
+    {
+        return self::getURIPattern($this->uri)['path'];
+    }
+
+    public function getURIParameters():array
+    {
+        return self::getURIPattern($this->uri)['parameters'];
+    }
+
+    private static function getURIPattern(string $uri): array
     {
         $uriParts = explode('/',$uri);
         $parameters = [];
@@ -57,12 +70,12 @@ final class RouteHandler
         foreach ($uriParts as $index => $part) {
             if(str_starts_with($part,':')){
                 $parameters[$index] = str_replace(':','',$part); 
-                $path[] = '@';
+                $path[] = self::PARAMETER_PATTERN;
             }else{
                 $path[] = $part;
             }
         }
-        return ['path' => implode('/',$path), 'parameters' => $parameters];
+        return ['path' => implode('\/',$path), 'parameters' => $parameters];
     }
 
     private static function fromArray(array $routeArray): RouteHandler

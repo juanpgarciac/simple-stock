@@ -92,5 +92,63 @@ final class RouteTest extends TestCase
         $this->assertCount(2,router()->getRoutePool(RouteHandler::POST));
     }
 
+    public function test_route_handler_id_correctlly_set()
+    {
+        $route1 = new RouteHandler('/test-route1');
+
+        $route2 = new RouteHandler('/test-route2/:id/edit');
+
+        $route3 = new RouteHandler('/test-route3/:id/:name/edit');
+
+        $pattern = RouteHandler::PARAMETER_PATTERN;
+        $this->assertSame('\/test-route1',$route1->id());
+        $this->assertSame('\/test-route2\/'.$pattern.'\/edit',$route2->id());
+        $this->assertSame('\/test-route3\/'.$pattern.'\/'.$pattern.'\/edit',$route3->id());
+    
+    }
+
+    public function test_route_handler_has_parameters()
+    {
+        $route1 = new RouteHandler('/test-route1');
+
+        $route2 = new RouteHandler('/test-route2/:id/edit');
+
+        $route3 = new RouteHandler('/test-route3/:id/:name/edit');
+
+        $this->assertCount(0,$route1->getURIParameters());
+        $this->assertCount(1,$route2->getURIParameters());
+
+        $parameters =  $route3->getURIParameters();
+        $this->assertContains('id',$parameters);
+        $this->assertContains('name',$parameters);
+    
+    }
+
+    public function test_find_route_with_uri_from_pool()
+    {
+        router()->clearRoutePool();
+        
+        $route1 =  new RouteHandler('/test-route1','', RouteHandler::POST);
+
+        router()->registerRoutes([
+            $route1,
+            new RouteHandler('/test-route2/:id/edit'),
+            new RouteHandler('/test-route3/:id/:name/edit'),
+        ]);
+
+        $route4 = RouteHandler::create('/non-existing-route');
+
+        $this->assertTrue(router()->routeExists($route1->getBaseURI(), $route1->getMethod()));
+        $this->assertTrue(router()->routeExists('/test-route2/55/edit', RouteHandler::GET));
+        $this->assertTrue(router()->routeExists('/test-route3/123456/juan/edit'));
+
+        $this->assertFalse(router()->routeExists($route4->getBaseURI(),RouteHandler::POST));
+        $this->assertFalse(router()->routeExists('/test-route2/123456/juan/edit'));
+
+        
+
+
+    }
+
 
 }
