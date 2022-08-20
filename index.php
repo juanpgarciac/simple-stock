@@ -2,8 +2,11 @@
 
 require 'bootstrap.php';
 
-$request = $_SERVER['REQUEST_URI'];
+router()->routeWithServerVars();
 
+/* *
+$request = $_SERVER['REQUEST_URI'];
+ 
 switch ($request) {
     case '/' :
     case '' :
@@ -14,3 +17,4 @@ switch ($request) {
         require __DIR__ . '/views/404.php';
         break;
 }
+/* */

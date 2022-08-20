@@ -31,15 +31,7 @@ final class RouteHandler
 
         $this->uri = $uri;
 
-        if(is_callable($callback)){
-            $this->callback = $callback;
-        }else if(is_string($callback)){
-            $this->callback =  function() use($callback){
-                return $callback;
-            };
-        }else{
-            throw new \InvalidArgumentException("callback parameter should be string or callable", 1);
-        }
+        $this->callback = $callback;
 
         if(!in_array($method,self::METHODS))
             throw new \InvalidArgumentException("Method parameter should be ".implode('|',self::METHODS).", '$method' given", 1);
@@ -57,6 +49,14 @@ final class RouteHandler
         return $this->callback;
     }
 
+    public function callback($vars = [])
+    {
+        if(is_callable($this->getCallback())){
+            return call_user_func_array($this->getCallback(), $vars);
+        }
+        return $this->getCallback();
+    }
+
     public function id():string
     {
         return self::getURIPattern($this->uri)['path'];
@@ -69,18 +69,21 @@ final class RouteHandler
 
     private static function getURIPattern(string $uri): array
     {
-        $uriParts = explode('/',$uri);
+        $uriParts = explode('/', $uri);
         $parameters = [];
-        $path = [];
+        $path = '';
+        
         foreach ($uriParts as $index => $part) {
+            if(empty($part))
+                continue;
             if(str_starts_with($part,':')){
                 $parameters[$index] = str_replace(':','',$part); 
-                $path[] = self::PARAMETER_PATTERN;
+                $path .= preg_quote('/','/'). self::PARAMETER_PATTERN;
             }else{
-                $path[] = $part;
+                $path .= preg_quote('/'.$part,'/');
             }
         }
-        return ['path' => implode('\/',$path), 'parameters' => $parameters];
+        return ['path' => empty($path)?'\/':$path, 'parameters' => $parameters];
     }
 
     private static function fromArray(array $routeArray): RouteHandler
@@ -135,7 +138,7 @@ final class RouteHandler
 
     public static function notFoundRoute():RouteHandler
     {
-        return new self('/404','Not found');
+        return new self('/404', function(){ echo 'Not Found'; return 'Not Found'; } );
     }
 
 

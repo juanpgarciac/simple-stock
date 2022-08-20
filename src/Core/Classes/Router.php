@@ -60,16 +60,17 @@ final class Router extends Singleton
 
     public function getRouteByURI($uri, $method = null):RouteHandler|false
     {
+        $uri = explode('?',$uri)[0];
         foreach($this->routePool as $methodKey => $methodRoutePool){
             if($method !== null  && $method !== $methodKey){                
                 continue;
             }
 
-            foreach ($methodRoutePool as $uri_pattern => $route) {               
-                if(preg_match("/$uri_pattern/",$uri)){
+            foreach ($methodRoutePool as $uri_pattern => $route) {  
+                if(preg_match("#^$uri_pattern$#",$uri)){    
                     return $route;
-                }
-            }
+                }           
+            }                 
         }
         return false;
     }
@@ -83,11 +84,10 @@ final class Router extends Singleton
     {
         $route = $this->getRouteByURI($uri, $method);
         if($route){
-            return call_user_func_array($route->getCallback(),[]);
-        }else{
-            http_response_code(404);
-            return call_user_func_array($this->notFoundRoute->getCallback(),[]);
+            return $route->callback();
         }
+        http_response_code(404);
+        return $this->notFoundRoute->callback();
     }
 
     public function setNotFoundRoute(array|string|RouteHandler $route)

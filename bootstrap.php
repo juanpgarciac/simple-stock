@@ -8,6 +8,8 @@ define('CONFIGDIR', ROOTDIR.DIRECTORY_SEPARATOR.'config');
 
 define('SRCDIR', ROOTDIR.DIRECTORY_SEPARATOR.'src');
 
+define('VIEWSDIR', ROOTDIR.DIRECTORY_SEPARATOR.'views');
+
 define('TESTSRESOURCESDIR', ROOTDIR.DIRECTORY_SEPARATOR.'tests/resources');
 
 $_boostrap_includes = [

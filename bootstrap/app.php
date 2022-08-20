@@ -20,5 +20,5 @@ function router(): Router
 function runApp():void
 {
     router()->clearRoutePool();
-    router()->registerRoutes(arrayFromFile(path(CONFIGDIR,'routes.php')));
+    router()->registerRoutes(arrayFromFile(path(CONFIGDIR,'routes.php')));    
 }

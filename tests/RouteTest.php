@@ -8,12 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 final class RouteTest extends TestCase
 {
-    public function test_router_clear_and_register_routes_on_app_run()
-    {
-        $routes = router()->getRoutePool();
-
-        $this->assertGreaterThanOrEqual(1,count($routes));
-    }
 
     public function test_router_register_failure_due_empty_route()
     {
@@ -103,9 +97,9 @@ final class RouteTest extends TestCase
         $route3 = new RouteHandler('/test-route3/:id/:name/edit');
 
         $pattern = RouteHandler::PARAMETER_PATTERN;
-        $this->assertSame('\/test-route1',$route1->id());
-        $this->assertSame('\/test-route2\/'.$pattern.'\/edit',$route2->id());
-        $this->assertSame('\/test-route3\/'.$pattern.'\/'.$pattern.'\/edit',$route3->id());
+        $this->assertSame('\/test\-route1',$route1->id());
+        $this->assertSame('\/test\-route2\/'.$pattern.'\/edit',$route2->id());
+        $this->assertSame('\/test\-route3\/'.$pattern.'\/'.$pattern.'\/edit',$route3->id());
     
     }
 
@@ -143,6 +137,7 @@ final class RouteTest extends TestCase
         $route4 = RouteHandler::create('/non-existing-route');
 
         $this->assertTrue(router()->routeExists($route1->getBaseURI(), $route1->getMethod()));
+        $this->assertTrue(router()->routeExists($route1->getBaseURI().'?var=1&var2=true', $route1->getMethod()));
         $this->assertTrue(router()->routeExists('/test-route2/55/edit', RouteHandler::GET));
         $this->assertTrue(router()->routeExists('/test-route3/123456/juan/edit'));
 
@@ -153,10 +148,10 @@ final class RouteTest extends TestCase
     public function test_route_can_do_the_callback()
     {
         router()->clearRoutePool();
-        $route1 =  new RouteHandler('/test-route1','hello', RouteHandler::POST);
-        $route2 =  new RouteHandler('/test-route2/:id/edit',function(){ return 'hi, this is the result';  });
-        $route3 =  new RouteHandler('/test-route3',function(){ return 150;  });
-        $route4 =  new RouteHandler('/get-router',function(){ return app();  });
+        $route1 =  new RouteHandler('/test-route1',fn() => 'hello', RouteHandler::POST);
+        $route2 =  new RouteHandler('/test-route2/:id/edit',fn() => 'hi, this is the result');
+        $route3 =  new RouteHandler('/test-route3',fn() => 150);
+        $route4 =  new RouteHandler('/get-router',fn() => app());
         router()->registerRoutes([
             $route1,
             $route2,
@@ -174,15 +169,13 @@ final class RouteTest extends TestCase
 
     public function test_not_found_route_default()
     {
-        //router()->clearRoutePool();
-        $this->assertSame('Not found',router()->route('/not-existing-route'));
+        $this->assertSame('Not Found',router()->route('/not-existing-route'));
         $this->assertSame('/404',router()->getNotFoundRoute()->getBaseURI());
     }
 
-    public function test_not_found_route_cutom()
+    public function test_not_found_route_custom()
     {
-        //router()->clearRoutePool();
-        router()->setNotFoundRoute(['/not-found','Sorry not found']);
+        router()->setNotFoundRoute(['/not-found',fn() => 'Sorry not found']);
 
         $this->assertSame('Sorry not found',router()->route('/not-existing-route'));
         //$this->assertSame('HTTP/1.1 404 Not Found',get_headers('http://127.0.0.1:8888/')[0]);
