@@ -15,7 +15,7 @@ final class RouteTest extends TestCase
         $this->assertGreaterThanOrEqual(1,count($routes));
     }
 
-    public function test_router_register_failure_due_emptyroute()
+    public function test_router_register_failure_due_empty_route()
     {
 
         $this->expectException(InvalidArgumentException::class);
@@ -26,7 +26,7 @@ final class RouteTest extends TestCase
 
     }
 
-    public function test_router_register_failure_due_bad_array_configuration()
+    public function test_router_register_failure_due_bad_method()
     {
 
         $this->expectException(InvalidArgumentException::class);
@@ -39,12 +39,12 @@ final class RouteTest extends TestCase
 
     }
 
-    public function test_router_register_failure_due_bad_array_configuration_2()
+    public function test_router_register_failure_due_bad_URI()
     {
 
         $this->expectException(InvalidArgumentException::class);
 
-        $this->expectExceptionMessage("The array should at least have a string value as a route, in the 'route' or 0 index");
+        $this->expectExceptionMessage("The array should at least have a string value as a URI, in the 'uri' or 0 index");
 
         router()->clearRoutePool();
 
@@ -94,6 +94,8 @@ final class RouteTest extends TestCase
 
     public function test_route_handler_id_correctlly_set()
     {
+        router()->clearRoutePool();
+
         $route1 = new RouteHandler('/test-route1');
 
         $route2 = new RouteHandler('/test-route2/:id/edit');
@@ -109,6 +111,8 @@ final class RouteTest extends TestCase
 
     public function test_route_handler_has_parameters()
     {
+        router()->clearRoutePool();
+
         $route1 = new RouteHandler('/test-route1');
 
         $route2 = new RouteHandler('/test-route2/:id/edit');
@@ -144,11 +148,47 @@ final class RouteTest extends TestCase
 
         $this->assertFalse(router()->routeExists($route4->getBaseURI(),RouteHandler::POST));
         $this->assertFalse(router()->routeExists('/test-route2/123456/juan/edit'));
+    }
 
-        
+    public function test_route_can_do_the_callback()
+    {
+        router()->clearRoutePool();
+        $route1 =  new RouteHandler('/test-route1','hello', RouteHandler::POST);
+        $route2 =  new RouteHandler('/test-route2/:id/edit',function(){ return 'hi, this is the result';  });
+        $route3 =  new RouteHandler('/test-route3',function(){ return 150;  });
+        $route4 =  new RouteHandler('/get-router',function(){ return app();  });
+        router()->registerRoutes([
+            $route1,
+            $route2,
+            $route4
+        ]);
+
+        $this->assertSame('hello', router()->route('/test-route1', RouteHandler::POST));
+        $this->assertSame('hi, this is the result', router()->route('/test-route2/100/edit'));
+        $this->assertSame(150, call_user_func($route3->getCallback()));
+
+        $this->assertInstanceOf(\Core\Classes\App::class, call_user_func($route4->getCallback()));
 
 
     }
 
+    public function test_not_found_route_default()
+    {
+        //router()->clearRoutePool();
+        $this->assertSame('Not found',router()->route('/not-existing-route'));
+        $this->assertSame('/404',router()->getNotFoundRoute()->getBaseURI());
+    }
+
+    public function test_not_found_route_cutom()
+    {
+        //router()->clearRoutePool();
+        router()->setNotFoundRoute(['/not-found','Sorry not found']);
+
+        $this->assertSame('Sorry not found',router()->route('/not-existing-route'));
+        //$this->assertSame('HTTP/1.1 404 Not Found',get_headers('http://127.0.0.1:8888/')[0]);
+        $this->assertSame('/not-found',router()->getNotFoundRoute()->getBaseURI());
+
+
+    }
 
 }

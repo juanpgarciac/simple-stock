@@ -34,8 +34,8 @@ final class RouteHandler
         if(is_callable($callback)){
             $this->callback = $callback;
         }else if(is_string($callback)){
-            $this->callback =  function()use($callback){
-                echo $callback;
+            $this->callback =  function() use($callback){
+                return $callback;
             };
         }else{
             throw new \InvalidArgumentException("callback parameter should be string or callable", 1);
@@ -50,6 +50,11 @@ final class RouteHandler
     public function getBaseURI()
     {
         return $this->uri;
+    }
+
+    public function getCallback():callable
+    {
+        return $this->callback;
     }
 
     public function id():string
@@ -82,15 +87,13 @@ final class RouteHandler
     {
 
         if(empty($routeArray) || (!isset($routeArray['uri']) && !is_string($routeArray[0]))){
-            throw new \InvalidArgumentException("The array should at least have a string value as a route, in the 'route' or 0 index", 1);            
+            throw new \InvalidArgumentException("The array should at least have a string value as a URI, in the 'uri' or 0 index", 1);            
         }
 
         if(isset($routeArray['uri'])){
-            $route = $routeArray['uri'];
+            $uri = $routeArray['uri'];
             $callback = isset($routeArray['callback']) ? $routeArray['callback'] : '';
-            $method = isset($routeArray['method']) ? $routeArray['method']: self::GET;
-
-            
+            $method = isset($routeArray['method']) ? $routeArray['method']: self::GET; 
         }else{
             $uri = array_shift($routeArray);
             $callback =  !empty($routeArray) ? array_shift($routeArray) : '';
@@ -119,11 +122,21 @@ final class RouteHandler
         return new self($uri);
     }
 
-    public static function create(string|array $route):RouteHandler
+    public static function create(string|array|RouteHandler $route):RouteHandler
     {
-        return is_array($route) ? self::fromArray($route) : self::fromString($route);
+        if($route instanceof RouteHandler)
+            return $route;
+        
+        if(is_array($route))
+            return self::fromArray($route);
+
+        return self::fromString($route);
     }
 
+    public static function notFoundRoute():RouteHandler
+    {
+        return new self('/404','Not found');
+    }
 
 
 

@@ -11,9 +11,12 @@ final class Router extends Singleton
      */
     private array $routePool = [];
 
+    private RouteHandler $notFoundRoute;
+
     private function __construct()
     {
         $this->clearRoutePool();
+        $this->notFoundRoute= RouteHandler::notFoundRoute();
     }
 
     public static function getInstance(): Router
@@ -39,7 +42,7 @@ final class Router extends Singleton
 
     public function registerRoute(array|string|RouteHandler $route):void
     {
-        $routeHandler = $route instanceof RouteHandler?$route:RouteHandler::create($route);
+        $routeHandler = RouteHandler::create($route);
         $this->routePool[$routeHandler->getMethod()][$routeHandler->id()] = $routeHandler;
     } 
 
@@ -61,7 +64,6 @@ final class Router extends Singleton
             if($method !== null  && $method !== $methodKey){                
                 continue;
             }
-                
 
             foreach ($methodRoutePool as $uri_pattern => $route) {               
                 if(preg_match("/$uri_pattern/",$uri)){
@@ -76,5 +78,30 @@ final class Router extends Singleton
     {
         return $this->getRouteByURI($uri, $method) !== false;
     }
-    
+
+    public function route($uri, $method = RouteHandler::GET)
+    {
+        $route = $this->getRouteByURI($uri, $method);
+        if($route){
+            return call_user_func_array($route->getCallback(),[]);
+        }else{
+            http_response_code(404);
+            return call_user_func_array($this->notFoundRoute->getCallback(),[]);
+        }
+    }
+
+    public function setNotFoundRoute(array|string|RouteHandler $route)
+    {
+        $this->notFoundRoute = RouteHandler::create($route);
+    }
+
+    public function getNotFoundRoute():RouteHandler
+    {
+        return $this->notFoundRoute;
+    }
+
+    public function routeWithServerVars()
+    {
+        $this->route($_SERVER['REQUEST_URI'],$_SERVER['REQUEST_METHOD']);
+    }
 }
