@@ -78,7 +78,7 @@ final class Router extends Singleton
             }
 
             foreach ($methodRoutePool as $uri_pattern => $route) {  
-                if(preg_match("#^$uri_pattern$#",$uri)){    
+                if(preg_match("#^$uri_pattern\/?$#",$uri)){    
                     return $route;
                 }           
             }                 
