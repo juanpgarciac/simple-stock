@@ -15,6 +15,8 @@ final class Router extends Singleton
 
     private RouteHandler $notFoundRoute;
 
+    private array $requestParameters = [];
+
     private function __construct()
     {
         $this->clearRoutePool();
@@ -94,31 +96,30 @@ final class Router extends Singleton
 
         if($uriParameters === false){
             if($requestData === null)
-                return $route->callback();
-            return $route->callback($requestData);
+                return $this->doTheRequest($route);
+            return $this->doTheRequest($route, $requestData);
         }else{
             if(empty($requestData))
-                return $route->callback($uriParameters);
-            return $route->callback(array_merge($uriParameters, ['request' => $requestData]));
+                return $this->doTheRequest($route, $uriParameters);
+            return $this->doTheRequest($route, array_merge($uriParameters, ['request' => $requestData]));
         }
+    }
 
-        /* *
-        
+    public function doTheRequest(RouteHandler $route, mixed $parameters = null)
+    {
+        $parameters = is_null($parameters) ? [] : (is_array($parameters) ? $parameters : [$parameters] );
+        $this->setRequestParameters($parameters);
+        return $route->callback($parameters);
+    }
 
-        $callbackReflection = new ReflectionFunction($route->getCallback());
-        $callbackParameters = $callbackReflection->getParameters();
+    public function setRequestParameters(mixed $data):void
+    {
+        $this->requestParameters = $data;
+    }
 
-
-        if($parameters === false){
-              
-        }
-
-        if(is_null($request))
-            return $route->callback(extract($parameters));
-        return $route->callback($request, extract($parameters));
-
-        return $this->notFoundRoute->callback($request);
-        /* */
+    public function getRequestParameters()
+    {
+        return $this->requestParameters;
     }
 
     public function setNotFoundRoute(array|string|RouteHandler $route)

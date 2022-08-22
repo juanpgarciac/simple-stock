@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Core\Classes\FakeClass;
 use Core\Classes\RouteHandler;
 use Core\Classes\Router;
 use PHPUnit\Framework\TestCase;
@@ -238,8 +239,28 @@ final class RouteTest extends TestCase
         $this->assertArrayHasKey('var2',$params);
 
         $this->assertEquals(5, router()->route("/route1/2/3"));
+    }
+
+    public function test_route_callback_can_call_class_methods()
+    {
+
+        /* */
+
+        $route1 = new RouteHandler('/route1',[FakeClass::class,'doSomethingStatically']);
+        $this->assertSame('something statically', $route1->callback());
 
 
+        $route2 = new RouteHandler('/route2',[FakeClass::class,'doSomethingWithInstance']);
+        $this->assertSame('something with instance', $route2->callback());
+
+        
+        $callback = '\Core\Classes\FakeClass@doSomethingWithInstance';
+        $route3 = new RouteHandler('/route3',$callback);
+        $this->assertSame('something with instance', $route3->callback());
+
+        $callback = 'FakeClass@doSomethingInstanceWithVars';
+        $route3 = new RouteHandler('/route4',$callback);
+        $this->assertSame('something with instance using 1 & 2', $route3->callback([1,2]));
 
     }
 }
