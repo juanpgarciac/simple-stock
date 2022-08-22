@@ -2,6 +2,8 @@
 
 namespace Core\Classes;
 
+use ReflectionFunction;
+
 final class Router extends Singleton
 {
     private static ?Router $instance = null;
@@ -80,14 +82,43 @@ final class Router extends Singleton
         return $this->getRouteByURI($uri, $method) !== false;
     }
 
-    public function route($uri, $method = RouteHandler::GET)
+    public function route($uri, $method = RouteHandler::GET, $requestData = null)
     {
         $route = $this->getRouteByURI($uri, $method);
-        if($route){
-            return $route->callback();
+        if($route === false){
+            http_response_code(404);
+            $route = $this->getNotFoundRoute();
         }
-        http_response_code(404);
-        return $this->notFoundRoute->callback();
+
+        $uriParameters = $route->getParametersValues($uri);
+
+        if($uriParameters === false){
+            if($requestData === null)
+                return $route->callback();
+            return $route->callback($requestData);
+        }else{
+            if(empty($requestData))
+                return $route->callback($uriParameters);
+            return $route->callback(array_merge($uriParameters, ['request' => $requestData]));
+        }
+
+        /* *
+        
+
+        $callbackReflection = new ReflectionFunction($route->getCallback());
+        $callbackParameters = $callbackReflection->getParameters();
+
+
+        if($parameters === false){
+              
+        }
+
+        if(is_null($request))
+            return $route->callback(extract($parameters));
+        return $route->callback($request, extract($parameters));
+
+        return $this->notFoundRoute->callback($request);
+        /* */
     }
 
     public function setNotFoundRoute(array|string|RouteHandler $route)
@@ -102,6 +133,6 @@ final class Router extends Singleton
 
     public function routeWithServerVars()
     {
-        $this->route($_SERVER['REQUEST_URI'],$_SERVER['REQUEST_METHOD']);
+        $this->route($_SERVER['REQUEST_URI'],$_SERVER['REQUEST_METHOD'], $GLOBALS[ '_'.$_SERVER['REQUEST_METHOD'] ]);
     }
 }

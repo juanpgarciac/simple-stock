@@ -145,6 +145,23 @@ final class RouteTest extends TestCase
         $this->assertFalse(router()->routeExists('/test-route2/123456/juan/edit'));
     }
 
+    public function test_not_found_route_default()
+    {
+        $this->assertSame('Not Found',router()->route('/not-existing-route'));
+        $this->assertSame('/404',router()->getNotFoundRoute()->getBaseURI());
+    }
+
+    public function test_not_found_route_custom()
+    {
+        router()->setNotFoundRoute(['/not-found',fn() => 'Sorry not found']);
+
+        $this->assertSame('Sorry not found',router()->route('/not-existing-route'));
+        //$this->assertSame('HTTP/1.1 404 Not Found',get_headers('http://127.0.0.1:8888/')[0]);
+        $this->assertSame('/not-found',router()->getNotFoundRoute()->getBaseURI());
+
+
+    }
+
     public function test_route_can_do_the_callback()
     {
         router()->clearRoutePool();
@@ -167,21 +184,62 @@ final class RouteTest extends TestCase
 
     }
 
-    public function test_not_found_route_default()
+    public function test_route_handler_callback_receives_vars()
     {
-        $this->assertSame('Not Found',router()->route('/not-existing-route'));
-        $this->assertSame('/404',router()->getNotFoundRoute()->getBaseURI());
+
+        //send route with empty vars
+        $route1 = new RouteHandler('/route-without-vars',fn()=> null );
+
+        $this->assertNull($route1->callback());
+
+        //request route with vars
+
+        $route2 = new RouteHandler('/route-with-var',fn($something)=> is_string($something) );
+
+        $this->assertTrue($route2->callback('string'));
+
+        $route3 = new RouteHandler('/route-with-2-vars',fn($a, $b) => $a + $b );
+
+        $this->assertEquals(5, $route3->callback(['a'=>2,'b'=>3]));
+        
+
     }
 
-    public function test_not_found_route_custom()
+    public function test_routed_route_callback_receives_vars()
     {
-        router()->setNotFoundRoute(['/not-found',fn() => 'Sorry not found']);
+        //send route with empty vars
+        $route1 = new RouteHandler('/route-without-vars',fn()=> null );
+        $route2 = new RouteHandler('/route-with-var',fn($request)=> 'string' === $request );
+        $route3 = new RouteHandler('/route-with-2-vars',fn($a , $b) => $a + $b );
 
-        $this->assertSame('Sorry not found',router()->route('/not-existing-route'));
-        //$this->assertSame('HTTP/1.1 404 Not Found',get_headers('http://127.0.0.1:8888/')[0]);
-        $this->assertSame('/not-found',router()->getNotFoundRoute()->getBaseURI());
+        router()->clearRoutePool();
 
+        router()->registerRoutes([$route1, $route2, $route3]);
+        /* */
+        $this->assertNull(router()->route('/route-without-vars'));
+        $this->assertTrue(router()->route('/route-with-var',RouteHandler::GET,'string'));
+        $this->assertEquals(5, router()->route('/route-with-2-vars',RouteHandler::GET,['a'=>2,'b'=>3]));
+        /* */
 
     }
 
+    public function test_routed_route_callback_Receive_url_parameters()
+    {
+        $route1 = new RouteHandler('/route1/:var1/:var2',fn($var1 , $var2)=> $var1 + $var2 );
+
+        router()->clearRoutePool();
+
+        router()->registerRoutes([$route1]);
+
+        $params = $route1->getParametersValues("/route1/2/3");
+
+        $this->assertIsArray($params);
+        $this->assertArrayHasKey('var1',$params);
+        $this->assertArrayHasKey('var2',$params);
+
+        $this->assertEquals(5, router()->route("/route1/2/3"));
+
+
+
+    }
 }

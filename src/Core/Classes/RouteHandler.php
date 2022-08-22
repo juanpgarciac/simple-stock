@@ -1,6 +1,8 @@
 <?php
 namespace Core\Classes;
 
+use ReflectionFunction;
+
 final class RouteHandler
 {
     public const GET = 'GET';
@@ -14,11 +16,12 @@ final class RouteHandler
         RouteHandler::POST
     ];
 
-
+    private string $id;
     private string $uri;
     private string $method =  '';
-    private mixed $callback;
-    
+    private mixed $callback;    
+    private array $parameters = [];
+
     /**
      * @param string $uri
      * @param string|callable $callback
@@ -31,11 +34,15 @@ final class RouteHandler
 
         $this->uri = $uri;
 
-        $this->callback = $callback;
+        $this->callback = is_callable($callback) ? $callback : fn($callback) => $callback;
 
         if(!in_array($method,self::METHODS))
             throw new \InvalidArgumentException("Method parameter should be ".implode('|',self::METHODS).", '$method' given", 1);
         $this->method = $method;
+
+        $this->id = self::getURIPattern($this->uri)['path'];
+
+        $this->parameters = self::getURIPattern($this->uri)['parameters'];
         
     }
 
@@ -49,22 +56,36 @@ final class RouteHandler
         return $this->callback;
     }
 
-    public function callback($vars = [])
+    public function callback(mixed $args = [])
     {
         if(is_callable($this->getCallback())){
-            return call_user_func_array($this->getCallback(), $vars);
+            /* */
+            $callbackReflection = new ReflectionFunction($this->getCallback());
+            $callbackParameters = $callbackReflection->getParameters();
+            /* */
+
+            $data = [];
+            if($callbackReflection->getNumberOfParameters() > 0){
+                //var_dump($callbackParameters, $args); die;
+                $args = is_array($args) ? $args : [ $callbackParameters[0]->name => $args ];
+                foreach($callbackParameters as $arg){
+                    $data[$arg->name] = isset($args[$arg->name]) ? $args[$arg->name] :  null  ;
+                }
+            }
+
+            return call_user_func_array($this->getCallback(), $data );
         }
         return $this->getCallback();
     }
 
     public function id():string
     {
-        return self::getURIPattern($this->uri)['path'];
+        return $this->id;
     }
 
     public function getURIParameters():array
     {
-        return self::getURIPattern($this->uri)['parameters'];
+        return $this->parameters;
     }
 
     private static function getURIPattern(string $uri): array
@@ -83,7 +104,7 @@ final class RouteHandler
                 $path .= preg_quote('/'.$part,'/');
             }
         }
-        return ['path' => empty($path)?'\/':$path, 'parameters' => $parameters];
+        return ['path' => empty($path)?preg_quote('/','/'):$path, 'parameters' => $parameters];
     }
 
     private static function fromArray(array $routeArray): RouteHandler
@@ -105,6 +126,23 @@ final class RouteHandler
 
         return new self($uri , $callback, $method);
         
+    }
+
+    public function getParametersValues(string $uri):array|false
+    {
+        if(empty($this->parameters))
+            return false;
+
+        $uriParts = explode('/', $uri);
+        $values = [];
+
+        foreach ($uriParts as $index => $part) {
+            if(empty($part) || !array_key_exists($index, $this->parameters))
+                continue;            
+            $values[  $this->parameters[$index] ] = $part; 
+        }
+
+        return $values;
     }
 
     /**
