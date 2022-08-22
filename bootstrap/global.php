@@ -69,3 +69,18 @@ function path(string $dir,string $file):string
 {
     return $dir.slash().$file;
 }
+
+function getClassesSourceFiles($dir = SRCDIR, $extension = 'php'):array
+{
+    $classes = [];
+    $dir_iterator = new RecursiveDirectoryIterator($dir);
+    $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($iterator as $file) {        
+        if($file->isFile() && $file->getExtension() == $extension){
+            $class =  str_replace(['.php',$dir,slash()],['', '', '\\'],$file->getPathname());
+            $classes[$class] = $file->getPathname(); 
+        }
+    }
+    
+    return $classes;
+}

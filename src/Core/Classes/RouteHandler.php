@@ -81,9 +81,12 @@ final class RouteHandler
             if(!class_exists($class)){
                 $classes = preg_grep("#".preg_quote($class)."#",  get_declared_classes() );
                 if(empty($classes)){
-                    throw new \InvalidArgumentException("$class is not defined", 1);                    
+                    $classes = preg_grep("#".preg_quote($class)."#",  array_keys(getClassesSourceFiles()) );
+                    if(empty($classes)) 
+                        throw new \InvalidArgumentException("$class is not defined", 1);    
                 }
                 $class = $classes[array_key_first($classes)];
+                
             }
             //$classReflection = new ReflectionClass($class);                    
             $callbackReflection = new ReflectionMethod($class,$method);
