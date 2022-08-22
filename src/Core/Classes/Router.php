@@ -148,8 +148,12 @@ final class Router extends Singleton
         return $this->notFoundRoute;
     }
 
-    public function routeWithServerVars()
+    public function listenServer()
     {
-        $this->route($_SERVER['REQUEST_URI'],$_SERVER['REQUEST_METHOD'], $GLOBALS[ '_'.$_SERVER['REQUEST_METHOD'] ]);
+        $this->route(
+            $_SERVER['REQUEST_URI'],
+            $_SERVER['REQUEST_METHOD'], 
+            $GLOBALS[ '_'.$_SERVER['REQUEST_METHOD'] ]
+        );
     }
 }
