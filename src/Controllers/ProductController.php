@@ -11,12 +11,14 @@ class ProductController extends Controller
      */
     public function index(): void
     {
+        echo "<h2>This is the Product index</h2>";
     }
 
     /**
      * @return void
      */
-    public function show(): void
+    public function show($id): void
     {
+        echo "<h2>This is the Product $id detail</h2>";
     }
 }

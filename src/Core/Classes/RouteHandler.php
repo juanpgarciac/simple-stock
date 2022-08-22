@@ -87,10 +87,11 @@ final class RouteHandler
             }
             //$classReflection = new ReflectionClass($class);                    
             $callbackReflection = new ReflectionMethod($class,$method);
-            if(!$callbackReflection->isStatic()){
-                $functionToCall = (new $class())->$method[1];
-            }
-            $functionToCall = [$class, $method];
+            
+            if(!$callbackReflection->isStatic()){                
+                $functionToCall = $callbackReflection->getClosure(new $class());
+            }else
+                $functionToCall = [$class, $method];
         }else{
             $callbackReflection = new ReflectionFunction($functionToCall);
         }
