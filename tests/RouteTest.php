@@ -263,4 +263,42 @@ final class RouteTest extends TestCase
         $this->assertSame('something with instance using 1 & 2', $route3->callback([1,2]));
 
     }
+
+    public function test_routed_route_callback_from_classes_methods()
+    {
+        $route1 = new RouteHandler('/route1',[FakeClass::class,'doSomethingStatically']);
+        $route2 = new RouteHandler('/route2/:param1/:param2',[FakeClass::class,'doSomethingInstanceWithVars']);
+        $route3 = new RouteHandler('/route3',[FakeClass::class,'doSomethingStaticallyWithVars']);
+
+        router()->add($route1, $route2, $route3);
+
+        $this->assertSame('something statically', router()->route($route1->getBaseURI()));
+
+        $this->assertSame('something with instance using 100 & 200', router()->route('/route2/100/200'));
+
+        $this->assertSame('something statically using 300 & 400', router()->route('/route3',$route3->getMethod(),[300,400]));
+    }
+
+    public function test_request_global_function()
+    {
+        router()->add(
+            ['/route1',fn() =>  request()['var1'] ],
+            ['/route2/:a',fn() =>  request('a') + request('request')['b'] ],
+            ['/route2/:a/:b',fn() =>  request('a') + request('b') ],
+            ['/route3/:a/:b/:c',fn() =>  request('a') + request('b') + request('c') ],
+            ['/route3/:a/:request',fn() =>  request('a') + request('request') + request('_GET')['c'] ],
+            //['/route4/:param1/:param2',fn() =>  request('a') + request('request') + request('_GET')['c'] ],
+        );
+
+        $this->assertSame('Something', router()->route('/route1','GET',['var1' => 'Something']));
+        $this->assertSame(5, router()->route('/route2/3','GET',['b' => 2]));
+        $this->assertSame(10, router()->route('/route2/3/7','GET',['c' => 100]));
+        $this->assertSame(6, router()->route('/route3/1/2/3','GET',['b' => 20]));
+        $this->assertSame(14, router()->route('/route3/5/5','GET',['c' => 4]));
+
+
+
+
+        
+    }
 }

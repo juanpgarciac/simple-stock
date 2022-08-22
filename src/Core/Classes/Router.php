@@ -50,6 +50,13 @@ final class Router extends Singleton
         $this->routePool[$routeHandler->getMethod()][$routeHandler->id()] = $routeHandler;
     } 
 
+    public function add(array|string|RouteHandler ...$routes):void
+    {
+
+        foreach ($routes as $route) 
+            $this->registerRoute($route);
+    }
+
     public function getRoutePool($method = RouteHandler::GET)
     {
         return $this->routePool[$method];
@@ -97,11 +104,20 @@ final class Router extends Singleton
         if($uriParameters === false){
             if($requestData === null)
                 return $this->doTheRequest($route);
-            return $this->doTheRequest($route, $requestData);
+            return $this->doTheRequest($route, array_merge(  
+                is_array($requestData) ? $requestData : [$requestData],
+                ['request' => $requestData ],
+                ['_'.$route->getMethod() => $requestData], 
+            ));
         }else{
             if(empty($requestData))
                 return $this->doTheRequest($route, $uriParameters);
-            return $this->doTheRequest($route, array_merge($uriParameters, ['request' => $requestData]));
+            return $this->doTheRequest($route, array_merge( 
+                is_array($requestData) ? $requestData : [$requestData],
+                ['request' => $requestData ],
+                $uriParameters,
+                ['_'.$route->getMethod() => $requestData], 
+            ));
         }
     }
 

@@ -13,6 +13,14 @@ function router(): Router
     return Router::getInstance();
 }
 
+function request($key = null):mixed
+{
+    $parameters = Router::getInstance()->getRequestParameters();
+    if(is_null($key))
+        return $parameters;
+    return isset($parameters[$key]) ? $parameters[$key] : null;
+}
+
 /**
  * I
  * @return void
