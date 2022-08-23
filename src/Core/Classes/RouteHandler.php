@@ -2,6 +2,7 @@
 
 namespace Core\Classes;
 
+use Closure;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -131,7 +132,7 @@ final class RouteHandler
                 $functionToCall = [$class, $method];
             }
         } else {
-            $callbackReflection = new ReflectionFunction($functionToCall);
+            $callbackReflection = new ReflectionFunction(Closure::fromCallable($functionToCall));
         }
 
         $callbackParameters = $callbackReflection->getParameters();
@@ -162,9 +163,9 @@ final class RouteHandler
                     }
                 }
             }
-        }
-        if (!is_null($functionToCall)) {
             return call_user_func_array($functionToCall, $data);
+        }else{
+            return call_user_func($functionToCall, $args);
         }
         return null;
     }
