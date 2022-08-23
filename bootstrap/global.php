@@ -60,27 +60,42 @@ function arrayFromFile(string $filepath): array
     throw new \InvalidArgumentException("includeArrFile: $filepath file cannot be found");
 }
 
-function slash():string
+/**
+ * @return string
+ */
+function slash(): string
 {
-    return defined('DIRECTORY_SEPARATOR')?DIRECTORY_SEPARATOR:'/';
+    return defined('DIRECTORY_SEPARATOR') ? DIRECTORY_SEPARATOR : '/';
 }
 
-function path(string $dir,string $file):string
+/**
+ * @param string $dir
+ * @param string $file
+ *
+ * @return string
+ */
+function path(string $dir, string $file): string
 {
     return $dir.slash().$file;
 }
 
-function getClassesSourceFiles($dir = SRCDIR, $extension = 'php'):array
+/**
+ * @param string $dir
+ * @param string $extension
+ *
+ * @return array
+ */
+function getClassesSourceFiles(string $dir = SRCDIR, string $extension = 'php'): array
 {
     $classes = [];
     $dir_iterator = new RecursiveDirectoryIterator($dir);
     $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
-    foreach ($iterator as $file) {        
-        if($file->isFile() && $file->getExtension() == $extension){
-            $class =  str_replace(['.php',$dir,slash()],['', '', '\\'],$file->getPathname());
-            $classes[$class] = $file->getPathname(); 
+    foreach ($iterator as $file) {
+        if ($file->isFile() && $file->getExtension() == $extension) {
+            $class =  str_replace(['.php',$dir,slash()], ['', '', '\\'], $file->getPathname());
+            $classes[$class] = $file->getPathname();
         }
     }
-    
+
     return $classes;
 }

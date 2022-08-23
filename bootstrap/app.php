@@ -13,11 +13,12 @@ function router(): Router
     return Router::getInstance();
 }
 
-function request($key = null):mixed
+function request(string $key = null): mixed
 {
     $parameters = Router::getInstance()->getRequestParameters();
-    if(is_null($key))
+    if (is_null($key)) {
         return $parameters;
+    }
     return isset($parameters[$key]) ? $parameters[$key] : null;
 }
 
@@ -25,8 +26,8 @@ function request($key = null):mixed
  * I
  * @return void
  */
-function runApp():void
+function runApp(): void
 {
     router()->clearRoutePool();
-    router()->registerRoutes(arrayFromFile(path(CONFIGDIR,'routes.php')));    
+    router()->registerRoutes(arrayFromFile(path(CONFIGDIR, 'routes.php')));
 }

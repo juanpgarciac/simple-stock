@@ -17,7 +17,7 @@ class ProductController extends Controller
     /**
      * @return void
      */
-    public function show($id): void
+    public function show(string $id): void
     {
         echo "<h2>This is the Product $id detail</h2>";
     }
