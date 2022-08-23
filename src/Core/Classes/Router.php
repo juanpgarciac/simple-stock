@@ -21,6 +21,8 @@ final class Router extends Singleton
      */
     private array $requestParameters = [];
 
+    private string $requestMethod = RouteHandler::GET;
+
     private function __construct()
     {
         $this->clearRoutePool();
@@ -178,6 +180,7 @@ final class Router extends Singleton
     {
         $parameters = is_null($parameters) ? [] : (is_array($parameters) ? $parameters : [$parameters]);
         $this->setRequestParameters($parameters);
+        $this->setRequestMethod($route->getMethod());
         return $route->callback($parameters);
     }
 
@@ -197,6 +200,24 @@ final class Router extends Singleton
     public function getRequestParameters(): array
     {
         return $this->requestParameters;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequestMethod(): string
+    {
+        return $this->requestMethod;
+    }
+
+    /**
+     * @param string $method
+     * 
+     * @return void
+     */
+    public function setRequestMethod(string $method): void
+    {
+        $this->requestMethod = $method;
     }
 
     /**

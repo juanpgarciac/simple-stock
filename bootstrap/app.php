@@ -15,11 +15,12 @@ function router(): Router
 
 function request(string $key = null): mixed
 {
-    $parameters = Router::getInstance()->getRequestParameters();
+    $parameters = Router::getInstance()->getRequestParameters();    
     if (is_null($key)) {
         return $parameters;
     }
-    return isset($parameters[$key]) ? $parameters[$key] : null;
+    $method = Router::getInstance()->getRequestMethod();
+    return isset($parameters[$key]) ? $parameters[$key] : (isset($parameters[$method]) ? $parameters[$method] : null);
 }
 
 /**
