@@ -4,6 +4,8 @@ namespace Core\Classes;
 use ReflectionFunction;
 use ReflectionMethod;
 
+use function PHPUnit\Framework\callback;
+
 final class RouteHandler
 {
     public const GET = 'GET';
@@ -51,11 +53,10 @@ final class RouteHandler
             return $callback; 
         }
 
-        if(preg_match("#(\w+(\:\:|\@)\w+)#",preg_quote($callback)))
+        if(preg_match("#^[\\a-zA-Z0-9_-]*(:{2}|@)\w+$#",$callback))
         {   
-            return preg_split("#(\:\:|\@)#",$callback);
-        }
-
+            return preg_split("#(\:{2}|\@)#",$callback);
+        }  
         return function($output = null) use ($callback) { return $output ?? $callback ; };
     }
 
