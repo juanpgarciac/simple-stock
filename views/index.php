@@ -1,4 +1,10 @@
-<h1>home</h1>
-<?php
+<h1>Home</h1>
 
-dd($_SERVER, $_GET, $_SERVER['REQUEST_METHOD'], $GLOBALS[  '_'.$_SERVER['REQUEST_METHOD']    ]);
+<h3><?=$name?></h3>
+<h3><?=$lastname?></h3>
+
+<form name="form1" method="post" action="/home">
+    <input name="name" />
+    <input name="lastname" />
+    <button>Submit</button>
+</form> 

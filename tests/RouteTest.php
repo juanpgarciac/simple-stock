@@ -139,6 +139,7 @@ final class RouteTest extends TestCase
 
     public function test_not_found_route_default()
     {
+        router()->setNotFoundRoute(RouteHandler::notFoundRoute());
         $this->assertSame('Not Found', router()->route('/not-existing-route'));
         $this->assertSame('/404', router()->getNotFoundRoute()->getBaseURI());
     }

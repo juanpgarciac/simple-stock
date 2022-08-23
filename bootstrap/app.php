@@ -2,6 +2,7 @@
 
 use Core\Classes\App;
 use Core\Classes\Router;
+use Core\Classes\View;
 
 function app(): App
 {
@@ -21,6 +22,11 @@ function request(string $key = null): mixed
     }
     $method = Router::getInstance()->getRequestMethod();
     return isset($parameters[$key]) ? $parameters[$key] : (isset($parameters[$method]) ? $parameters[$method] : null);
+}
+
+function view($name)
+{
+    return (new View($name));
 }
 
 /**
