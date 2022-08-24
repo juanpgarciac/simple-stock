@@ -48,4 +48,9 @@ abstract class Model
             throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
         }
     }
+
+    public function toArray(): array
+    {
+        return get_object_vars($this); 
+    }
 }

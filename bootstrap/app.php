@@ -24,8 +24,10 @@ function request(string $name = null): mixed
     return router()->getRequestParameter($name);
 }
 
-function view($name)
+function view($name, array $args = null)
 {
+    if(!is_null($args))
+        return (new View($name))->render($args);    
     return (new View($name));
 }
 
