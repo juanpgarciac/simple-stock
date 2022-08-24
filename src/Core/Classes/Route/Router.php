@@ -3,6 +3,7 @@
 namespace Core\Classes\Route;
 
 use Core\Classes\Singleton;
+use Core\Classes\Route\RouteHandler as Route;
 
 final class Router extends Singleton
 {
@@ -14,9 +15,9 @@ final class Router extends Singleton
     private array $routePool = [];
 
     /**
-     * @var RouteHandler
+     * @var Route
      */
-    private RouteHandler $notFoundRoute;
+    private Route $notFoundRoute;
 
     /**
      * @var Request|null
@@ -26,7 +27,7 @@ final class Router extends Singleton
     private function __construct()
     {
         $this->clearRoutePool();
-        $this->notFoundRoute= RouteHandler::notFoundRoute();
+        $this->notFoundRoute= Route::notFoundRoute();
     }
 
     /**
@@ -53,22 +54,22 @@ final class Router extends Singleton
     }
 
     /**
-     * @param array<mixed>|string|RouteHandler $route
+     * @param array<mixed>|string|Route $route
      *
      * @return void
      */
-    public function registerRoute(array|string|RouteHandler $route): void
+    public function registerRoute(array|string|Route $route): void
     {
-        $routeHandler = RouteHandler::create($route);
-        $this->routePool[$routeHandler->getMethod()][$routeHandler->id()] = $routeHandler;
+        $Route = Route::create($route);
+        $this->routePool[$Route->getMethod()][$Route->id()] = $Route;
     }
 
     /**
-     * @param array<mixed>|string|RouteHandler ...$routes
+     * @param array<mixed>|string|Route ...$routes
      *
      * @return void
      */
-    public function add(array|string|RouteHandler ...$routes): void
+    public function add(array|string|Route ...$routes): void
     {
         foreach ($routes as $route) {
             $this->registerRoute($route);
@@ -76,11 +77,11 @@ final class Router extends Singleton
     }
 
     /**
-     * @param value-of<RouteHandler::METHODS> $method
+     * @param value-of<Route::METHODS> $method
      *
-     * @return array<RouteHandler>
+     * @return array<Route>
      */
-    public function getRoutePool(string $method = RouteHandler::GET): array
+    public function getRoutePool(string $method = Route::GET): array
     {
         return $this->routePool[$method];
     }
@@ -91,7 +92,7 @@ final class Router extends Singleton
     public function clearRoutePool(): void
     {
         $this->routePool = [];
-        foreach (RouteHandler::METHODS as $methodindex) {
+        foreach (Route::METHODS as $methodindex) {
             $this->routePool[$methodindex] = [];
         }
     }
@@ -100,9 +101,9 @@ final class Router extends Singleton
      * @param string $uri
      * @param string|null $method
      *
-     * @return RouteHandler|false
+     * @return Route|false
      */
-    public function getRouteByURI(string $uri, ?string $method = null): RouteHandler|false
+    public function getRouteByURI(string $uri, ?string $method = null): Route|false
     {
         $uri = explode('?', $uri)[0];
         foreach ($this->routePool as $methodKey => $methodRoutePool) {
@@ -138,7 +139,7 @@ final class Router extends Singleton
      *
      * @return mixed
      */
-    public function route(string $uri, string $method = RouteHandler::GET, string|array $requestData = null): mixed
+    public function route(string $uri, string $method = Route::GET, string|array $requestData = null): mixed
     {
         $route = $this->getRouteByURI($uri, $method);
         if ($route === false) {
@@ -154,12 +155,12 @@ final class Router extends Singleton
     }
 
     /**
-     * @param RouteHandler $route
+     * @param Route $route
      * @param mixed|null $parameters
      *
      * @return mixed
      */
-    public function routeTheRequest(RouteHandler $route, Request $request): mixed
+    public function routeTheRequest(Route $route, Request $request): mixed
     {
         $this->currentRequest = $request;       
         return $route->callback($request->getParameters());
@@ -191,23 +192,23 @@ final class Router extends Singleton
      */
     public function getRequestMethod(): string
     {
-        return $this->currentRequest?->getMethod() ?? RouteHandler::GET;
+        return $this->currentRequest?->getMethod() ?? Route::GET;
     }
 
     /**
-     * @param array<mixed>|string|RouteHandler $route
+     * @param array<mixed>|string|Route $route
      *
      * @return void
      */
-    public function setNotFoundRoute(array|string|RouteHandler $route): void
+    public function setNotFoundRoute(array|string|Route $route): void
     {
-        $this->notFoundRoute = RouteHandler::create($route);
+        $this->notFoundRoute = Route::create($route);
     }
 
     /**
-     * @return RouteHandler
+     * @return Route
      */
-    public function getNotFoundRoute(): RouteHandler
+    public function getNotFoundRoute(): Route
     {
         return $this->notFoundRoute;
     }
