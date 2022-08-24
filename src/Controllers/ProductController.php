@@ -13,8 +13,8 @@ class ProductController extends Controller
      */
     public function index(): void
     {
-        echo "<h2>This is the Product index</h2>";
-        dd((new ProductRepository(app()->getAppStorage()))->results());
+        $products =((new ProductRepository(app()->getAppStorage()))->results());
+        view('/index')->with(compact('products'))->render();
     }
 
     /**
@@ -31,8 +31,6 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        echo "<h2>This is the Product $id detail</h2>";
-
         $product = (new ProductRepository(app()->getAppStorage()))->find($id);        
         view('/product/create')
         ->with($product?->toArray() ?? [])
@@ -44,7 +42,22 @@ class ProductController extends Controller
     public function store()
     {
         $productRepository = new ProductRepository(app()->getAppStorage());
-        $productRepository->insert(ProductRepository::fromState(request()));
-        view('/product/create',['message'=>'Awesome!!! Product Saved']);
+
+        $product = ProductRepository::fromState(request());
+
+        $message = 'Awesome!!! Product ';
+        if($product->id()){
+            $productRepository->update($product);
+            $message .= 'Saved';
+        }else{
+            $productRepository->insert($product);
+            $message .= 'Updated';            
+        }
+
+        view('/product/create')
+        ->with($product->toArray())
+        ->with(compact('message'))
+        ->render();
+   
     }
 }
