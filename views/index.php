@@ -1,5 +1,5 @@
 <h1>Product Index</h1>
-
+<a href="/product/create">Create product</a><br>
 <table border="1"><tbody>
     <tr><th>ID</th><th>Name</th><th>Presentation</th><th>Category</th><th>Stock</th><th>Actions</th></tr>
 <?php
@@ -13,7 +13,7 @@ foreach ($products as $id => $product) {
     <td><?=$presentation?></td>
     <td><?=$category?></td>
     <td><?=$stock?></td>
-    <td><a href="/product/edit/<?=$id?>">Edit</a>&nbsp;<a href="">Delete</a></td>
+    <td><a href="/product/edit/<?=$id?>">Edit</a>&nbsp;<form method="POST" action="/product/delete/<?=$id?>"><button type="submit">Delete</button></form></td>
 </tr>
 <?php
 }

@@ -8,7 +8,9 @@ return [
     ['/home',view('index'),'POST'],
     ['/product/','ProductController@index'],
     ['/product/create',view('product/create')],
+    ['/product/:id',[ProductController::class,'show']],
     ['/product/edit/:id','ProductController@edit'],
-    ['/product','ProductController@store','POST'],
-    ['/product/:id',[ProductController::class,'show']]
+    ['/product/store/','ProductController@store','POST'],
+    ['/product/delete/:id','ProductController@destroy','POST'],
+    
 ];

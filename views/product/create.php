@@ -4,7 +4,7 @@
 <?php else: ?>
     Product creation
 <?php endif;?>
-<form method="POST" action="/product">
+<form method="POST" action="/product/store">
     <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?>
     <label for="name">Name</label> <input name="name" value="<?=$name?>"><br>
     <label for="presentation">Presentation</label> <input name="presentation" value="<?=$presentation?>"><br>

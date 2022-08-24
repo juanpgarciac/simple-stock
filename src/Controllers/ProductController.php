@@ -48,10 +48,10 @@ class ProductController extends Controller
         $message = 'Awesome!!! Product ';
         if($product->id()){
             $productRepository->update($product);
-            $message .= 'Saved';
+            $message .= 'Updated';
         }else{
             $productRepository->insert($product);
-            $message .= 'Updated';            
+            $message .= 'Saved';            
         }
 
         view('/product/create')
@@ -59,5 +59,12 @@ class ProductController extends Controller
         ->with(compact('message'))
         ->render();
    
+    }
+
+    public function destroy($id)
+    {
+        $productRepository = new ProductRepository(app()->getAppStorage());
+        $productRepository->delete($id);
+        header('location:/product');
     }
 }
