@@ -2,7 +2,7 @@
 
 use Core\Classes\App;
 use Core\Classes\ConfigManager;
-use Core\Classes\Router;
+use Core\Classes\Route\Router;
 use Core\Classes\View;
 
 function app(): App

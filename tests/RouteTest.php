@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Core\Classes\RouteHandler;
+use Core\Classes\Route\RouteHandler;
 use MockClasses\FakeClass;
 use PHPUnit\Framework\TestCase;
 

@@ -3,6 +3,7 @@
 namespace Core\Classes;
 
 use Core\Classes\DBConfiguration;
+use Core\Classes\Route\Router;
 use Core\Classes\StorageDrivers\StorageDriverFactory;
 use Core\Interfaces\IStorageDriver;
 

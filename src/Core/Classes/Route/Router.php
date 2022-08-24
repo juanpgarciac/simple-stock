@@ -1,6 +1,8 @@
 <?php
 
-namespace Core\Classes;
+namespace Core\Classes\Route;
+
+use Core\Classes\Singleton;
 
 final class Router extends Singleton
 {

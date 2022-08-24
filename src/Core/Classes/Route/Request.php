@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Classes;
+namespace Core\Classes\Route;
 
 final class Request
 {

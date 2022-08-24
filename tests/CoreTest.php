@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Core\Classes\App;
-use Core\Classes\Router;
+use Core\Classes\Route\Router;
 use PHPUnit\Framework\TestCase;
 
 final class CoreTest extends TestCase
