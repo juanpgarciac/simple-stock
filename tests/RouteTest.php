@@ -266,7 +266,7 @@ final class RouteTest extends TestCase
     {
         router()->add(
             ['/route1',fn () =>  request()['var1'] ],
-            ['/route2/:a',fn () =>  request('a') + request('request')['b'] ],
+            ['/route2/:a',fn () =>  request('a') + request('_request')['b'] ],
             ['/route2/:a/:b',fn () =>  request('a') + request('b') ],
             ['/route3/:a/:b/:c',fn () =>  request('a') + request('b') + request('c') ],
             ['/route3/:a/:request',fn () =>  request('a') + request('request') + request('_GET')['c'] ],

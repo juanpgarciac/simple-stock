@@ -17,11 +17,9 @@ final class Router extends Singleton
     private RouteHandler $notFoundRoute;
 
     /**
-     * @var array<mixed>
+     * @var Request|null
      */
-    private array $requestParameters = [];
-
-    private string $requestMethod = RouteHandler::GET;
+    private ?Request $currentRequest = null;
 
     private function __construct()
     {
@@ -148,26 +146,9 @@ final class Router extends Singleton
 
         $uriParameters = $route->getParametersValues($uri);
 
-        if ($uriParameters === false) {
-            if ($requestData === null) {
-                return $this->doTheRequest($route);
-            }
-            return $this->doTheRequest($route, array_merge(
-                is_array($requestData) ? $requestData : [$requestData],
-                ['request' => $requestData ],
-                ['_'.$route->getMethod() => $requestData],
-            ));
-        } else {
-            if (empty($requestData)) {
-                return $this->doTheRequest($route, $uriParameters);
-            }
-            return $this->doTheRequest($route, array_merge(
-                is_array($requestData) ? $requestData : [$requestData],
-                ['request' => $requestData ],
-                $uriParameters,
-                ['_'.$route->getMethod() => $requestData],
-            ));
-        }
+        $request = new Request($method,$requestData,$uriParameters);
+
+        return $this->routeTheRequest($route,$request);
     }
 
     /**
@@ -176,22 +157,18 @@ final class Router extends Singleton
      *
      * @return mixed
      */
-    public function doTheRequest(RouteHandler $route, mixed $parameters = null): mixed
+    public function routeTheRequest(RouteHandler $route, Request $request): mixed
     {
-        $parameters = is_null($parameters) ? [] : (is_array($parameters) ? $parameters : [$parameters]);
-        $this->setRequestParameters($parameters);
-        $this->setRequestMethod($route->getMethod());
-        return $route->callback($parameters);
+        $this->currentRequest = $request;       
+        return $route->callback($request->getParameters());
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return void
+     * @return Request|null
      */
-    public function setRequestParameters(mixed $data): void
+    public function getCurrentRequest(): Request|null
     {
-        $this->requestParameters = $data;
+        return $this->currentRequest;
     }
 
     /**
@@ -199,7 +176,12 @@ final class Router extends Singleton
      */
     public function getRequestParameters(): array
     {
-        return $this->requestParameters;
+        return $this->currentRequest?->getParameters() ?? [];
+    }
+
+    public function getRequestParameter(string $name):mixed
+    {
+        return $this->currentRequest?->getParameter($name) ?? null;
     }
 
     /**
@@ -207,17 +189,7 @@ final class Router extends Singleton
      */
     public function getRequestMethod(): string
     {
-        return $this->requestMethod;
-    }
-
-    /**
-     * @param string $method
-     * 
-     * @return void
-     */
-    public function setRequestMethod(string $method): void
-    {
-        $this->requestMethod = $method;
+        return $this->currentRequest?->getMethod() ?? RouteHandler::GET;
     }
 
     /**

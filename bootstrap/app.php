@@ -15,14 +15,13 @@ function router(): Router
     return Router::getInstance();
 }
 
-function request(string $key = null): mixed
+function request(string $name = null): mixed
 {
     $parameters = router()->getRequestParameters();    
-    if (is_null($key)) {
+    if (is_null($name)) {
         return $parameters;
     }
-    $method = router()->getRequestMethod();
-    return isset($parameters[$key]) ? $parameters[$key] : (isset($parameters[$method]) ? $parameters[$method] : null);
+    return router()->getRequestParameter($name);
 }
 
 function view($name)
@@ -41,7 +40,7 @@ function configdir($dir)
 }
 
 /**
- * I
+ * Concrete application start. 
  * @return void
  */
 function runApp(): void
