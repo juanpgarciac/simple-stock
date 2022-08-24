@@ -13,6 +13,7 @@ class App extends Singleton
     private Router $appRouter;
     private DBConfiguration $appDBConfiguration;
     private IStorageDriver $appStorage;
+    private ConfigManager $configManager;
 
 
     final private function __construct()
@@ -20,6 +21,8 @@ class App extends Singleton
         $this->appDBConfiguration = DBConfiguration::FromEnvFile();
         $this->appStorage =  StorageDriverFactory::createStorage($this->appDBConfiguration);
         $this->appRouter = Router::getInstance();
+        $this->configManager = ConfigManager::getInstance();
+
     }
 
     public static function getInstance(): App
@@ -43,5 +46,10 @@ class App extends Singleton
     public function getRouter(): Router
     {
         return $this->appRouter;
+    }
+
+    public function getConfigManager(): ConfigManager
+    {
+        return $this->configManager;
     }
 }

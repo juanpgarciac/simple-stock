@@ -12,7 +12,7 @@ function app(): App
 
 function router(): Router
 {
-    return Router::getInstance();
+    return app()->getRouter();
 }
 
 function request(string $name = null): mixed
@@ -24,9 +24,9 @@ function request(string $name = null): mixed
     return router()->getRequestParameter($name);
 }
 
-function redirect($uri)
+function redirect($uri):void
 {
-    Router::getInstance()->redirect($uri);
+    router()->redirect($uri);
 }
 
 function view($name, array $args = null)
@@ -36,12 +36,12 @@ function view($name, array $args = null)
     return (new View($name));
 }
 
-function config()
+function config(): ConfigManager
 {
-   return ConfigManager::getInstance();
+   return app()->getConfigManager();
 }
 
-function configdir($dir)
+function configdir($dir):string
 {
     return config()->dir($dir);
 }
