@@ -22,7 +22,7 @@ class PostgreSQLDriver extends SQLBaseDriver
         $query = self::insertQuery($recordData, $table, " RETURNING $id_field");
         $result = $this->query($query);
         $id = $this->getInsertedID($result);
-        $this->close();
+        $this->commonClose();
         return $id;
     }
 

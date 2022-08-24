@@ -45,7 +45,7 @@ abstract class SQLBaseDriver implements IStorageDriver
         return $this->link;
     }
 
-    private function commonClose(): void
+    protected function commonClose(): void
     {
         if ($this->isLinked()) {
             $this->close();
