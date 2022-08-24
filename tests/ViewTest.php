@@ -9,6 +9,12 @@ use PHPUnit\Framework\TestCase;
 
 final class ViewTest extends TestCase
 {
+    private string $viewsdir;
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->viewsdir = path(config()->dir('tests_resources'),'views');
+    }
     public function test_view_return_string_content(): void
     {
         $view = new View('testview','this is content',true);
@@ -17,8 +23,8 @@ final class ViewTest extends TestCase
     }
 
     public function test_view_from_file_and_render(): void
-    {
-        $view = new View('testview','',true);
+    {        
+        $view = new View('testview','',true,$this->viewsdir);
         $this->assertSame('this is content from php template', $view());
     }
 
@@ -34,7 +40,7 @@ final class ViewTest extends TestCase
     public function test_view_as_routed_route_callback()
     {
         $view1 = new View('fakeview','this is content on view1',true);
-        $view2 = new View('testview','',true);
+        $view2 = new View('testview','',true,$this->viewsdir);
         //$view2 = new View('testview','',true);
         $route1 = new RouteHandler('/route-with-content-view', $view1);
         $route2 = new RouteHandler('/route-with-content-view-from-file', $view2);

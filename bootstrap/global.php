@@ -79,9 +79,9 @@ function slash(): string
  *
  * @return string
  */
-function path(string $dir, string $file): string
+function path(string  ...$pathParts): string
 {
-    return $dir.slash().$file;
+    return implode(slash(),$pathParts);
 }
 
 /**

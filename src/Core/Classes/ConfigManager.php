@@ -39,7 +39,7 @@ final class ConfigManager extends Singleton
         return self::getInstance()->configuration($dir."_DIR");
     }
 
-    public static function setConfig(string $key, string $value):void
+    public static function set(string $key, string $value):void
     {
         $key = strtoupper($key);
         if(array_key_exists($key, self::configurations())){
