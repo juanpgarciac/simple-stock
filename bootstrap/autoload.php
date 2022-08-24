@@ -11,14 +11,13 @@ function bootAutoload()
         $file = str_replace('\\', slash(), $file);
         if (is_file($file)) {
             include_once $file;
-        }
-
-        $file = path(env('TESTS_RESOURCES_DIR'),'src',$className . '.php');
-        $file = str_replace('\\', slash(), $file);
-        if (is_file($file)) {
-            include_once $file;
-        }
-        
+        }else {
+            $file = path(env('TESTS_RESOURCES_DIR'),'src',$className . '.php');
+            $file = str_replace('\\', slash(), $file);
+            if (is_file($file)) {
+                include_once $file;
+            }
+        }        
     });
 }
 

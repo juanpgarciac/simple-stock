@@ -13,7 +13,7 @@ final class ViewTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->viewsdir = path(config()->dir('tests_resources'),'views');
+        $this->viewsdir = path(configdir('tests_resources'),'views');
     }
     public function test_view_return_string_content(): void
     {

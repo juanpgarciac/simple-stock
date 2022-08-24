@@ -1,32 +1,36 @@
 <?php
 
 /* Environment and Constants initialization */
-$_enviroment_pool = [];
+$_environment_pool = [];
 
-function envPool():array
-{
-    global $_enviroment_pool;
-    return $_enviroment_pool;
+/**
+ * @param array $set
+ * 
+ * @return array
+ */
+function envPool(array $set = [] ):array|null
+{    
+    global $_environment_pool;
+    foreach ($set as $key => $value) {
+        $_environment_pool[$key] = $value;
+    }
+    return $_environment_pool;
 }
 
 
-function bootEnvironment(){
-    global $_enviroment_pool;
-    if (is_file(ROOT_DIR.DIRECTORY_SEPARATOR.'.env')) {
-        if ($env = parse_ini_file(ROOT_DIR.DIRECTORY_SEPARATOR.'.env')) {
-            //get and set env variables from .env file
-            foreach ($env as $key => $value) {
-                $_enviroment_pool[$key] = $value;//putenv("$key=$value");
-            }
-        }
+function bootEnvironment():void
+{
+    if (is_file(path(ROOT_DIR,'.env'))) {
         //get and set env variables from defined constants
-        foreach (get_defined_constants(true)['user'] as $key => $value) {
-            //putenv("$key=$value");
-            $_enviroment_pool[$key] = $value;
-        }
+        envPool(get_defined_constants(true)['user']);
+        
+        if ($env = parse_ini_file(path(ROOT_DIR,'.env'))) {
+            //get and set env variables from .env file
+            envPool($env);
+        }   
     } else {
         trigger_error("No environment file detected (.env)", E_USER_ERROR);
-    }
+    }    
 }
 
 bootEnvironment();

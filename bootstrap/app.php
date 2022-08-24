@@ -17,11 +17,11 @@ function router(): Router
 
 function request(string $key = null): mixed
 {
-    $parameters = Router::getInstance()->getRequestParameters();    
+    $parameters = router()->getRequestParameters();    
     if (is_null($key)) {
         return $parameters;
     }
-    $method = Router::getInstance()->getRequestMethod();
+    $method = router()->getRequestMethod();
     return isset($parameters[$key]) ? $parameters[$key] : (isset($parameters[$method]) ? $parameters[$method] : null);
 }
 
@@ -35,6 +35,11 @@ function config()
    return ConfigManager::getInstance();
 }
 
+function configdir($dir)
+{
+    return config()->dir($dir);
+}
+
 /**
  * I
  * @return void
@@ -42,5 +47,5 @@ function config()
 function runApp(): void
 {
     router()->clearRoutePool();
-    router()->registerRoutes(arrayFromFile(path(config()->dir('config'), 'routes.php')));    
+    router()->registerRoutes(arrayFromFile(path(configdir('config'), 'routes.php')));    
 }
