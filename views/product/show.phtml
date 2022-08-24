@@ -1,0 +1,15 @@
+<style>
+    label{
+        font-weight: bold;
+    }
+</style>
+<?php extract($product); ?>
+<h2>Product <?=$name?> (<?=$id?>) detail</h2>
+    <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?>
+    <label for="name">Name:</label> <span><?=$name?></span><br>
+    <label for="presentation">Presentation:</label> <span><?=$presentation?></span><br>
+    <label for="unit">Unit:</label> <span><?=$unit?></span><br>
+    <label for="category">Category:</label> <span><?=$category?></span><br>
+    <label for="stock">Stock:</label> <span><?=$stock?></span>
+<br>
+<a href="/product">Back to index</a>

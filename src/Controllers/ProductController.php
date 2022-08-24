@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index():void
     {
         $products =((new ProductRepository(app()->getAppStorage()))->results());
-        view('/index')->with(compact('products'))->render();
+        view('/product/index')->with(compact('products'))->render();
     }
 
     /**
@@ -24,10 +24,10 @@ class ProductController extends Controller
     {
         $product = (new ProductRepository(app()->getAppStorage()))->find($id);
         if(is_null($product)){
-            header('location: /product');
-            die;
+            redirect('/product');
         }
-        view('product/index')->with(compact('product'))->render();
+        $product = $product->toArray();
+        view('product/show')->with(compact('product'))->render();
     }
 
     /**
@@ -69,6 +69,6 @@ class ProductController extends Controller
     {
         $productRepository = new ProductRepository(app()->getAppStorage());
         $productRepository->delete($id);
-        header('location:/product');
+        redirect('/product');
     }
 }

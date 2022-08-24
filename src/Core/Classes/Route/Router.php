@@ -234,4 +234,10 @@ final class Router extends Singleton
         $this->render();
         return $response;
     }
+
+    public static function redirect(string $uri):void
+    {
+        header("location: $uri",true,301);
+        die;
+    }
 }

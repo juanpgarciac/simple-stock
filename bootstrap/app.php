@@ -24,6 +24,11 @@ function request(string $name = null): mixed
     return router()->getRequestParameter($name);
 }
 
+function redirect($uri)
+{
+    Router::getInstance()->redirect($uri);
+}
+
 function view($name, array $args = null)
 {
     if(!is_null($args))

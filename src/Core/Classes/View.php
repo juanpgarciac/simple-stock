@@ -48,6 +48,7 @@ final class View
             return $content;                                  
         }
         echo $content;
+        return '';
     }
 
     public function __invoke():string
