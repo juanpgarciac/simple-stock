@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-use Core\Classes\FakeClass;
 use Core\Classes\RouteHandler;
-use Core\Classes\Router;
+use MockClasses\FakeClass;
 use PHPUnit\Framework\TestCase;
 
 final class RouteTest extends TestCase
@@ -239,7 +238,7 @@ final class RouteTest extends TestCase
         $this->assertSame('something with instance', $route2->callback());
 
 
-        $callback = '\Core\Classes\FakeClass@doSomethingWithInstance';
+        $callback = '\MockClasses\FakeClass@doSomethingWithInstance';
         $route3 = new RouteHandler('/route3', $callback);
         $this->assertSame('something with instance', $route3->callback());
 

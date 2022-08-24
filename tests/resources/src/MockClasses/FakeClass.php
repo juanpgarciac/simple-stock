@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Classes;
+namespace MockClasses;
 
 class FakeClass
 {

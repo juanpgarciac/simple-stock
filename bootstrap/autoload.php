@@ -7,11 +7,18 @@ function bootAutoload()
     spl_autoload_extensions('.php');
     
     spl_autoload_register(function ($className) {
-        $file = env('SRC_DIR') . DIRECTORY_SEPARATOR . $className . '.php';
-        $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
+        $file = path(env('SRC_DIR'),$className . '.php');
+        $file = str_replace('\\', slash(), $file);
         if (is_file($file)) {
             include_once $file;
         }
+
+        $file = path(env('TESTS_RESOURCES_DIR'),'src',$className . '.php');
+        $file = str_replace('\\', slash(), $file);
+        if (is_file($file)) {
+            include_once $file;
+        }
+        
     });
 }
 
