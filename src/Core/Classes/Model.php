@@ -53,4 +53,9 @@ abstract class Model
     {
         return get_object_vars($this); 
     }
+
+    public function toObject(): object
+    {
+        return (object)$this->toArray();
+    }
 }

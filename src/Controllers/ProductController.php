@@ -11,7 +11,7 @@ class ProductController extends Controller
     /**
      * @return void
      */
-    public function index(): void
+    public function index():void
     {
         $products =((new ProductRepository(app()->getAppStorage()))->results());
         view('/index')->with(compact('products'))->render();
@@ -20,10 +20,14 @@ class ProductController extends Controller
     /**
      * @return void
      */
-    public function show(string $id): void
+    public function show(string $id)
     {
-        echo "<h2>This is the Product $id detail</h2>";
-        dd((new ProductRepository(app()->getAppStorage()))->find($id));
+        $product = (new ProductRepository(app()->getAppStorage()))->find($id);
+        if(is_null($product)){
+            header('location: /product');
+            die;
+        }
+        view('product/index')->with(compact('product'))->render();
     }
 
     /**

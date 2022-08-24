@@ -9,7 +9,7 @@ final class View
 
     private string $content = '';
 
-    private $returnString = true;
+    private $returnString = false;
 
     private $viewsDir = '';
 
@@ -23,7 +23,7 @@ final class View
         $this->viewsDir = $viewsDir;
     }
 
-    public function render($args = []):string
+    public function render($args = [], $returnString = false):string
     {   
         if(!empty($this->viewBag))
             $args = array_merge($args,$this->viewBag);
@@ -44,17 +44,16 @@ final class View
                 }
             }
         }
-        if($this->returnString){ 
+        if($returnString){ 
             return $content;                                  
         }
         echo $content;
-        return '';
     }
 
     public function __invoke():string
     {
         $args = !empty(func_get_args()) ? func_get_args()[0] : [];
-        return $this->render($args);
+        return $this->render($args,$this->returnString);
     }
 
     public static function view($definition)

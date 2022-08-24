@@ -24,6 +24,8 @@ final class Router extends Singleton
      */
     private ?Request $currentRequest = null;
 
+    private mixed $response = null;
+
     private function __construct()
     {
         $this->clearRoutePool();
@@ -151,7 +153,8 @@ final class Router extends Singleton
 
         $request = new Request($method,$requestData,$uriParameters);
 
-        return $this->routeTheRequest($route,$request);
+        $this->response = $this->routeTheRequest($route,$request);
+        return $this->response;
     }
 
     /**
@@ -164,6 +167,11 @@ final class Router extends Singleton
     {
         $this->currentRequest = $request;       
         return $route->callback($request->getParameters());
+    }
+
+    public function render()
+    {
+        echo $this->response;
     }
 
     /**
@@ -218,10 +226,12 @@ final class Router extends Singleton
      */
     public function listenServer(): mixed
     {
-        return $this->route(
+        $response = $this->route(
             $_SERVER['REQUEST_URI'],
             $_SERVER['REQUEST_METHOD'],
             $GLOBALS[ '_'.$_SERVER['REQUEST_METHOD'] ]
         );
+        $this->render();
+        return $response;
     }
 }
