@@ -1,6 +1,7 @@
 <?php
 
 use Core\Classes\App;
+use Core\Classes\ConfigManager;
 use Core\Classes\Router;
 use Core\Classes\View;
 
@@ -29,6 +30,11 @@ function view($name)
     return (new View($name));
 }
 
+function config()
+{
+   return ConfigManager::getInstance();
+}
+
 /**
  * I
  * @return void
@@ -36,5 +42,5 @@ function view($name)
 function runApp(): void
 {
     router()->clearRoutePool();
-    router()->registerRoutes(arrayFromFile(path(CONFIGDIR, 'routes.php')));
+    router()->registerRoutes(arrayFromFile(path(config()->dir('config'), 'routes.php')));    
 }

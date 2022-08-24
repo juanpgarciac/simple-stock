@@ -42,7 +42,7 @@ final class CoreTest extends TestCase
 
     public function test_array_from_file_function_gets_an_array()
     {
-        $arr = arrayFromFile(TESTSRESOURCESDIR.DIRECTORY_SEPARATOR.'filewitharray.php');
+        $arr = arrayFromFile(path(config()->dir('tests_resources'),'filewitharray.php'));
         $this->assertIsArray($arr);
     }
 }

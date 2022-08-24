@@ -1,19 +1,19 @@
 <?php
 
+function bootAutoload()
+{
+    set_include_path(env('SRC_DIR'));
 
-if (!defined('ROOTDIR')) {
-    define('ROOTDIR', __DIR__.'\\..');
+    spl_autoload_extensions('.php');
+    
+    spl_autoload_register(function ($className) {
+        $file = env('SRC_DIR') . DIRECTORY_SEPARATOR . $className . '.php';
+        $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
+        if (is_file($file)) {
+            include_once $file;
+        }
+    });
 }
 
 
-set_include_path(SRCDIR);
-
-spl_autoload_extensions('.php');
-
-spl_autoload_register(function ($className) {
-    $file = SRCDIR . DIRECTORY_SEPARATOR . $className . '.php';
-    $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
-    if (file_exists($file)) {
-        include_once $file;
-    }
-});
+bootAutoload();

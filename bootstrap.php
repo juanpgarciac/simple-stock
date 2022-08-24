@@ -1,28 +1,38 @@
 <?php
 
-define('ROOTDIR', __DIR__);
+define('ROOT_DIR', __DIR__);
 
-define('BOOTSTRAPDIR', ROOTDIR.DIRECTORY_SEPARATOR.'bootstrap');
+$_dir = ROOT_DIR.DIRECTORY_SEPARATOR;
 
-define('CONFIGDIR', ROOTDIR.DIRECTORY_SEPARATOR.'config');
+define('BOOTSTRAP_DIR', $_dir.'bootstrap');
 
-define('SRCDIR', ROOTDIR.DIRECTORY_SEPARATOR.'src');
+define('CONFIG_DIR', $_dir.'config');
 
-define('VIEWSDIR', ROOTDIR.DIRECTORY_SEPARATOR.'views');
+define('SRC_DIR', $_dir.'src');
 
-define('TESTSRESOURCESDIR', ROOTDIR.DIRECTORY_SEPARATOR.'tests/resources');
+define('VIEWS_DIR', $_dir.'views');
 
-$_boostrap_includes = [
-    BOOTSTRAPDIR => ['env.php','global.php','autoload.php','app.php'],
-];
+define('TESTS_RESOURCES_DIR', $_dir.'tests/resources');
 
-foreach ($_boostrap_includes as $dir => $files) {
-    foreach ($files as $file) {
-        $filepath =  $dir.DIRECTORY_SEPARATOR.$file;
-        if (file_exists($filepath)) {
-            include $filepath;
+function boot()
+{
+    $_boostrap_includes = [
+        //files in proper order
+        BOOTSTRAP_DIR => ['global','env','autoload','app'],
+    ];
+    
+    foreach ($_boostrap_includes as $dir => $files) {
+        foreach ($files as $file) {
+            $filepath =  $dir.DIRECTORY_SEPARATOR.$file.'.php';
+            if (is_file($filepath)) {
+                include_once $filepath;
+            }
         }
     }
+
+    runApp();
 }
 
-runApp();
+unset($_dir);
+
+boot();

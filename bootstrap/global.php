@@ -30,16 +30,21 @@ if (!function_exists('dd')) {
 
 if (!function_exists('env')) {
     /**
-     * Get environment value
+     * Get environment value. If $set value is sent, it will replace existing value or add it if doesn't exist.
+     *
      * @param string $key
-     * @param string $default
+     * @param string $set
      *
      * @return string
+     * return env value. If $set value is sent the function will return old value. Will return set value if doesn't exist. 
      */
-    function env(string $key, string $default = ''): string
+    function env(string $key, string $set = ''): string
     {
-        $env = getenv($key, true);
-        return !empty($env) ? $env : $default;
+        $env = array_key_exists($key, envPool()) ? envPool()[$key] : '';
+        if(!empty($set)){
+            envPool()[$key] = $set;
+        }
+        return !empty($env) ? $env : $set;
     }
 }
 
@@ -85,7 +90,7 @@ function path(string $dir, string $file): string
  *
  * @return array
  */
-function getClassesSourceFiles(string $dir = SRCDIR, string $extension = 'php'): array
+function getClassesSourceFiles(string $dir = SRC_DIR, string $extension = 'php'): array
 {
     $classes = [];
     $dir_iterator = new RecursiveDirectoryIterator($dir);
@@ -96,6 +101,5 @@ function getClassesSourceFiles(string $dir = SRCDIR, string $extension = 'php'):
             $classes[$class] = $file->getPathname();
         }
     }
-
     return $classes;
 }

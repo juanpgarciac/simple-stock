@@ -11,11 +11,14 @@ final class View
 
     private $returnString = true;
 
-    public function __construct($definition, $content = '', $returnString = false)
+    private $viewsDir = '';
+
+    public function __construct($definition, $content = '', $returnString = false, $viewsDir = VIEWS_DIR)
     {
         $this->definition = $definition;
         $this->content = $content;
         $this->returnString = $returnString;
+        $this->viewsDir = $viewsDir;
     }
 
     public function render($args = []):string
@@ -26,7 +29,7 @@ final class View
         }else{                       
             $supportedExtensions = ['php','html','phtml'];
             foreach ($supportedExtensions as $extension) {
-                $path = path(VIEWSDIR, $this->definition.'.'.$extension);
+                $path = path($this->viewsDir, $this->definition.'.'.$extension);
                 if(is_file($path)){
                     ob_start();
                     extract($args); 
