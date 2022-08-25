@@ -159,9 +159,9 @@ abstract class ModelRepository
 
         if (!empty($insertArray)) {
             $id = $this->DB->insertRecord($insertArray, $this->getTable(), $this->id_field);
-            $modelRecord = $this->find($id);//->setValue($this->id_field, $id);
+            if(!is_null($id))//ID null, why ?
+                $modelRecord = $this->find($id);//get whole record updated
         }
-
 
         return $modelRecord;
     }
