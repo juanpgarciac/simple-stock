@@ -2,9 +2,9 @@
 
 router()->setNotFoundRoute(['/404',view('404')]);
 return [
-    ['/',view('index')],
+    ['/',view('index')->layout('layouts/main')],
     ['/',view('index'),'POST'],
-    ['/home',view('index'),'GET'],   
+    ['/home',view('index')->layout('layouts/main'),'GET'],   
     ['/home',view('index'),'POST'],
     ['/product/','ProductController@index'],
     ['/product/:id',[ProductController::class,'show']],

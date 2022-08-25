@@ -72,4 +72,13 @@ final class ViewTest extends TestCase
 
         //$this->assertSame('this is content on route', $route->callback());
     }
+
+    public function test_view_with_layout()
+    {
+        $view1Content = 'This is content on view1 with layout';
+        $layoutContent = sprintf('header %s footer',$view1Content);
+
+        $view1 = (new View('testview',$view1Content,true,$this->viewsdir))->layout('layout');
+        $this->assertSame($layoutContent, $view1());
+    }
 }

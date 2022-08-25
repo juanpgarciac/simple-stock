@@ -15,12 +15,20 @@ final class View
 
     private array $viewBag = [];
 
+    public ?View $layout = null;
+
     public function __construct($definition, $content = '', $returnString = false, $viewsDir = VIEWS_DIR)
     {
         $this->definition = $definition;
         $this->content = $content;
         $this->returnString = $returnString;
         $this->viewsDir = $viewsDir;
+    }
+
+    public function layout($definition)
+    {
+        $this->layout = new self($definition,'',$this->returnString,$this->viewsDir);
+        return $this;
     }
 
     public function render($args = [], $returnString = false):string
@@ -44,6 +52,10 @@ final class View
                 }
             }
         }
+        if(!is_null($this->layout)){
+            return $this->layout->render(['yield'=>$content], $returnString);
+        }
+        
         if($returnString){ 
             return $content;                                  
         }

@@ -14,6 +14,8 @@ define('VIEWS_DIR', $_dir.'views');
 
 define('TESTS_RESOURCES_DIR', $_dir.'tests/resources');
 
+define('PUBLIC_DIR', $_dir.'public');
+
 function boot()
 {
     $_boostrap_includes = [
