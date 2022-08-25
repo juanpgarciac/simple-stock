@@ -37,6 +37,11 @@ final class RouteHandler
     private array $parameters = [];
 
     /**
+     * @var View|null
+     */
+    private ?View $view = null;
+
+    /**
      * @param string $uri
      * @param array<mixed>|string|callable $callback
      * @param value-of<RouteHandler::METHODS> $method
@@ -202,7 +207,7 @@ final class RouteHandler
     public static function create(string|array|RouteHandler $route): RouteHandler
     {
         if ($route instanceof RouteHandler) {
-            return clone $route;
+            return $route;
         }
 
         if (is_array($route)) {
@@ -215,5 +220,16 @@ final class RouteHandler
     public static function notFoundRoute(): RouteHandler
     {
         return new self('/404', 'Not Found');
+    }
+
+    public function view($path, $layout = null)
+    {
+        $this->view = (new View($path))->layout($layout);
+        return $this;
+    }
+
+    public function getView()
+    {
+        return $this->view;
     }
 }

@@ -159,6 +159,9 @@ final class Router extends Singleton
         $request = new Request($method,$requestData,$uriParameters);
 
         $this->response = $this->routeTheRequest($route,$request);
+
+        if($route->getView())
+            $this->response = $route->getView()->render($this->response,true);
         return $this->response;
     }
 

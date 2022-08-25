@@ -46,7 +46,7 @@ abstract class Model
         if(is_array($args))
             return static::fromArray($args);
         if($args instanceof static)
-            return clone $args;
+            return $args;
         return new static();
     }
 

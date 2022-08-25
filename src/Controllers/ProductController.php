@@ -15,13 +15,11 @@ class ProductController extends Controller
     /**
      * @return void
      */
-    public function index():void
+    public function index()
     {
         $products =((new ProductRepository(app()->getAppStorage()))->results());
-        view('/product/index')
-        ->layout('layouts/main')
-        ->with(compact('products'))
-        ->render();
+
+        return compact('products');
     }
 
     /**
