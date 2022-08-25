@@ -107,6 +107,7 @@ final class Router extends Singleton
      */
     public function getRouteByURI(string $uri, ?string $method = null): Route|false
     {
+        $candidates = [];
         $uri = explode('?', $uri)[0];
         foreach ($this->routePool as $methodKey => $methodRoutePool) {
             if (!is_null($method)  && $method !== $methodKey) {
@@ -114,12 +115,14 @@ final class Router extends Singleton
             }
 
             foreach ($methodRoutePool as $uri_pattern => $route) {
-                if (preg_match("#^$uri_pattern\/?$#", $uri)) {
-                    return $route;
+                if (preg_match("#^$uri_pattern\/?$#", $uri)) {                    
+                    if($route->getBaseURI() === $uri)
+                        return $route;
+                    $candidates[] = $route;
                 }
             }
         }
-        return false;
+        return !empty($candidates) ? $candidates[0] : false;
     }
 
     /**
