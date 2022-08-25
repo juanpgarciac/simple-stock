@@ -15,7 +15,7 @@ final class View
 
     private array $viewBag = [];
 
-    public ?View $layout = null;
+    private ?View $layout = null;
 
     public function __construct($definition, $content = '', $returnString = false, $viewsDir = VIEWS_DIR)
     {
@@ -61,6 +61,11 @@ final class View
         }
         echo $content;
         return '';
+    }
+
+    public function getLayout():View|null
+    {
+        return $this->layout;
     }
 
     public function __invoke():string

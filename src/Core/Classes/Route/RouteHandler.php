@@ -2,6 +2,8 @@
 
 namespace Core\Classes\Route;
 
+use Core\Classes\View;
+
 final class RouteHandler
 {
     public const GET = 'GET';
@@ -39,7 +41,7 @@ final class RouteHandler
      * @param array<mixed>|string|callable $callback
      * @param value-of<RouteHandler::METHODS> $method
      */
-    public function __construct(string $uri, string|array|callable|RouteCallback  $callback = '', string $method = RouteHandler::GET)
+    public function __construct(string $uri, string|array|callable|RouteCallback|View  $callback = '', string $method = RouteHandler::GET)
     {
         if (empty($uri)) {
             throw new \InvalidArgumentException("The route cannot be an empty string", 1);

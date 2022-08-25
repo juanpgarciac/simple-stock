@@ -2,6 +2,7 @@
 
 use Core\Classes\App;
 use Core\Classes\ConfigManager;
+use Core\Classes\Route\RouteHandler as Route;
 use Core\Classes\Route\Router;
 use Core\Classes\View;
 
@@ -13,6 +14,25 @@ function app(): App
 function router(): Router
 {
     return app()->getRouter();
+}
+
+function route(string|array|Route $route): Route
+{
+    $routeInstance = Route::create($route);
+    
+    router()->add($routeInstance);
+
+    return $routeInstance;
+}
+
+function get($uri, $handler = null): Route
+{
+    return route([$uri,$handler]);
+}
+
+function post($uri, $handler = null): Route
+{
+    return route([$uri, $handler ,Route::POST]);
 }
 
 function request(string $name = null): mixed
