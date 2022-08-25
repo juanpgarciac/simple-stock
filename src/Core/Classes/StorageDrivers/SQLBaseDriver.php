@@ -79,11 +79,13 @@ abstract class SQLBaseDriver implements IStorageDriver
         $records = [];
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
         $result = $this->query($query);
-        $nativeResult = self::class_or_resource($result);
-        while ($row =  $this->commonFetch($result, $nativeResult)) {
-            $records[] = $row;
+        if($result){
+            $nativeResult = self::class_or_resource($result);
+            while ($row =  $this->commonFetch($result, $nativeResult)) {
+                $records[] = $row;
+            }
+            $this->free_result($result);
         }
-        $this->free_result($result);
         $this->commonClose();
         return $records;
     }
