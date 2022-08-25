@@ -48,6 +48,11 @@ abstract class ModelRepository
     public function __construct(IStorageDriver $DBDriver)
     {
         $this->DB = $DBDriver;
+        if(!is_null($this->modelClass)){
+            if(!is_subclass_of($this->modelClass, Model::class) && ! $this->modelClass instanceof Model){
+                throw new \InvalidArgumentException(" {$this->modelClass} should extend ".Model::class, 1);
+            }
+        }
     }
 
     /**
@@ -155,8 +160,7 @@ abstract class ModelRepository
 
         if (!empty($insertArray)) {
             $id = $this->DB->insertRecord($insertArray, $this->getTable(), $this->id_field);
-
-            $modelRecord->setValue($this->id_field, $id);
+            $modelRecord = $this->find($id);//->setValue($this->id_field, $id);
         }
 
 
@@ -179,7 +183,8 @@ abstract class ModelRepository
         }
 
         if (!empty($insertArray)) {
-            $this->DB->updateRecord($modelRecord->id($this->id_field), $insertArray, $this->getTable(), $this->id_field);
+            $id = $this->DB->updateRecord($modelRecord->id($this->id_field), $insertArray, $this->getTable(), $this->id_field);
+            $modelRecord = $this->find($id);
         }
 
         return $modelRecord;
@@ -225,8 +230,8 @@ abstract class ModelRepository
         $this->clear_query();
         $result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
         if (!empty($result)) {
-            if(is_null($this->modelClass))
-                throw new \Exception("The protected variable \$modelClass haven't been declared on ".self::class." with a proper class Model name", 1);                
+            if(empty($this->modelClass))
+                return Model::fromState($result);
             return $this->modelClass::fromState($result);
         }
         return null;

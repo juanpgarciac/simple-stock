@@ -44,7 +44,9 @@ abstract class Model
     public static function create(mixed $args = []):Model
     {
         if(is_array($args))
-            return self::fromArray($args);
+            return static::fromArray($args);
+        if($args instanceof static)
+            return $args;
         return new static();
     }
 
