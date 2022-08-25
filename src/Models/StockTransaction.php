@@ -1,25 +1,34 @@
 <?php
 
-namespace Core\Models;
+namespace Models;
 
-class StockTransaction
+use Core\Classes\Model;
+
+class StockTransaction extends Model
 {
-    private float $amount;
-    private string $observation;
-    private string $date;
+    protected float $amount;
+    protected string $observation;
+    protected string $date;
+    protected ?int $product_id;
 
     /**
+     * @param null $product_id
      * @param float $amount
      * @param string $observation
-     * @param string $date
+     * @param string|null $date
      */
-    public function __construct(float $amount, string $observation = 'Stock Adjustment', string $date = date('Ymdhis'))
+    public function __construct($product_id = null, float $amount = 0, string $observation = 'Stock Adjustment', string $date = null)
     {
+        $this->product_id = $product_id;
         $this->amount = $amount;
         $this->observation = $observation;
-        $this->date = $date;
+        $this->date = $date ?? date('Y-m-d h:i:s');
     }
 
+    public function getProductID():int
+    {
+        return $this->product_id;
+    }
     public function getAmount(): float
     {
         return $this->amount;

@@ -3,9 +3,11 @@
 namespace Controllers;
 
 use Core\Classes\Controller;
+use Models\StockTransaction;
 use Models\CategoryRepository;
 use Models\Product;
 use Models\ProductRepository;
+use Models\StockTransactionRepository;
 use Models\UnitRepository;
 
 class ProductController extends Controller
@@ -54,15 +56,18 @@ class ProductController extends Controller
     public function store()
     {
         $productRepository = new ProductRepository(app()->getAppStorage());
-
+        
         $product = Product::create(request());
         $message = 'Awesome!!! Product ';
         if($product->id()){
-            $productRepository->update($product);
+            $product = $productRepository->update($product);
             $message .= 'Updated';
         }else{
-            $productRepository->insert($product);
-            $message .= 'Saved';            
+            $product = $productRepository->insert($product);
+            $message .= 'Saved';   
+            $stockTransaction = new StockTransaction($product->id(),request('initialStock'),'Initial Stock');
+            $stockRepository = new StockTransactionRepository(app()->getAppStorage());
+            $stockRepository->updateStock($productRepository, $stockTransaction);
         }
 
         redirect('/product?message='.$message);
