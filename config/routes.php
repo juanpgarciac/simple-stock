@@ -9,8 +9,8 @@ return [
     ['/product/','ProductController@index'],
     ['/product/:id',[ProductController::class,'show']],
     ['/product/create/','ProductController@edit'],
-    ['/product/edit/:id','ProductController@edit'],
+    ['/product/edit/:id:','ProductController@edit'],
     ['/product/store/','ProductController@store','POST'],
-    ['/product/delete/:id','ProductController@destroy','POST'],
+    ['/product/delete/{id}','ProductController@destroy','POST'],
     
 ];

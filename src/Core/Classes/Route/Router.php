@@ -115,13 +115,15 @@ final class Router extends Singleton
             }
 
             foreach ($methodRoutePool as $uri_pattern => $route) {
-                if (preg_match("#^$uri_pattern\/?$#", $uri)) {                    
-                    if($route->getBaseURI() === $uri)
+                if (preg_match("#^$uri_pattern\/?$#", $uri)) {    
+                    //check if the route is a direct route                     
+                    if(strtolower(str_replace('/','',$route->getBaseURI()) === strtolower(str_replace('/','',$uri))))
                         return $route;
-                    $candidates[] = $route;
+                    $candidates[] = $route;//save candidate URL. 
                 }
             }
         }
+        //TODO we can have a criterian for best candidate to route. 
         return !empty($candidates) ? $candidates[0] : false;
     }
 

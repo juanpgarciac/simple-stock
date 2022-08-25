@@ -116,8 +116,8 @@ final class RouteHandler
             if (empty($part)) {
                 continue;
             }
-            if (str_starts_with($part, ':')) {
-                $parameters[$index] = str_replace(':', '', $part);
+            if (preg_match('/:[a-zA-Z0-9\_\-]+:?|\{[a-zA-Z0-9\_\-]+\}/', $part)) {
+                $parameters[$index] = str_replace([':','{','}'], '', $part);
                 $path .= preg_quote('/', '/'). self::PARAMETER_PATTERN;
             } else {
                 $path .= preg_quote('/'.$part, '/');
