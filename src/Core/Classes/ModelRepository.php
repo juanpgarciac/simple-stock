@@ -40,7 +40,7 @@ abstract class ModelRepository
     /**
      * @var string
      */
-    protected string $modelClass;
+    protected string $modelClass = Model::class;
 
     /**
      * @param IStorageDriver $DBDriver
@@ -48,11 +48,6 @@ abstract class ModelRepository
     public function __construct(IStorageDriver $DBDriver)
     {
         $this->DB = $DBDriver;
-        if(!is_null($this->modelClass)){
-            if(!is_subclass_of($this->modelClass, Model::class) && ! $this->modelClass instanceof Model){
-                throw new \InvalidArgumentException(" {$this->modelClass} should extend ".Model::class, 1);
-            }
-        }
     }
 
     /**
@@ -63,6 +58,10 @@ abstract class ModelRepository
         return $this->DB::class;
     }
 
+    public function getModelClass():string
+    {
+        return $this->modelClass;
+    }
     /**
      * @param array<string>|string $fields
      *
@@ -230,9 +229,12 @@ abstract class ModelRepository
         $this->clear_query();
         $result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
         if (!empty($result)) {
-            if(empty($this->modelClass))
-                return Model::fromState($result);
-            return $this->modelClass::fromState($result);
+            if(!is_null($this->getModelClass())){
+                if(!is_subclass_of($this->getModelClass(), Model::class) && ! $this->getModelClass() instanceof Model){
+                    throw new \InvalidArgumentException(" {$this->getModelClass()} should extend ".Model::class, 1);
+                }
+                return $this->getModelClass()::fromState($result);
+            }
         }
         return null;
     }

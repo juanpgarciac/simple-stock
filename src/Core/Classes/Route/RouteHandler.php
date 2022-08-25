@@ -200,7 +200,7 @@ final class RouteHandler
     public static function create(string|array|RouteHandler $route): RouteHandler
     {
         if ($route instanceof RouteHandler) {
-            return $route;
+            return clone $route;
         }
 
         if (is_array($route)) {
