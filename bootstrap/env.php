@@ -27,7 +27,15 @@ function bootEnvironment():void
         if ($env = parse_ini_file(path(ROOT_DIR,'.env'))) {
             //get and set env variables from .env file
             envPool($env);
-        }   
+            $sysenv = getenv(null,true);
+            $newenv = [];
+            foreach($env as $key => $value){
+                if(isset($sysenv[$key])){
+                    $newenv[$key] = $sysenv[$key];
+                }
+            }
+            envPool($newenv);
+        }
     } else {
         trigger_error("No environment file detected (.env)", E_USER_ERROR);
     }    
