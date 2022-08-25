@@ -3,7 +3,7 @@
 namespace Models;
 
 use Core\Classes\Model;
-use Core\Models\StockTransaction;
+use Models\StockTransaction;
 
 class Product extends Model
 {
@@ -32,13 +32,4 @@ class Product extends Model
     }
 
 
-    /**
-     * @param StockTransaction $stockAdjustment
-     *
-     * @return void
-     */
-    public function updateStock(StockTransaction $stockAdjustment): void
-    {
-        $this->stock += $stockAdjustment->getAmount();
-    }
 }
