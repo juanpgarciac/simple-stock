@@ -7,7 +7,7 @@ use Core\Models\StockTransaction;
 
 class Product extends Model
 {
-    protected ?int $id;
+    protected ?int $id = null;
     protected string $name;
     protected string $presentation;
     protected string $unit;
@@ -21,7 +21,7 @@ class Product extends Model
      * @param string $unit
      * @param string $category
      */
-    public function __construct(string $name, string $presentation = '1', string $unit = 'unit', string $category = '', float $stock = 0.0)
+    public function __construct(string $name = '', string $presentation = '1', string $unit = 'unit', string $category = '', float $stock = 0.0)
     {
         $this->id = null;
         $this->name = $name;

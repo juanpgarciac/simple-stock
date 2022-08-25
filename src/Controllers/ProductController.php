@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Core\Classes\Controller;
 use Models\CategoryRepository;
+use Models\Product;
 use Models\ProductRepository;
 use Models\UnitRepository;
 
@@ -54,8 +55,7 @@ class ProductController extends Controller
     {
         $productRepository = new ProductRepository(app()->getAppStorage());
 
-        $product = ProductRepository::fromState(request());
-
+        $product = Product::create(request());
         $message = 'Awesome!!! Product ';
         if($product->id()){
             $productRepository->update($product);

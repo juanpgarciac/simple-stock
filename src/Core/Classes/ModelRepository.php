@@ -38,6 +38,11 @@ abstract class ModelRepository
     protected array $results = [];
 
     /**
+     * @var string
+     */
+    protected string $modelClass;
+
+    /**
      * @param IStorageDriver $DBDriver
      */
     public function __construct(IStorageDriver $DBDriver)
@@ -144,7 +149,8 @@ abstract class ModelRepository
 
         foreach ($this->fields as $field) {
             $value = $modelRecord->getValue($field);
-            $insertArray[$field] = $value;
+            if(!is_null($value))
+                $insertArray[$field] = $value;
         }
 
         if (!empty($insertArray)) {
@@ -168,7 +174,8 @@ abstract class ModelRepository
 
         foreach ($this->fields as $field) {
             $value = $modelRecord->getValue($field);
-            $insertArray[$field] = $value;
+            if(!is_null($value))
+                $insertArray[$field] = $value;
         }
 
         if (!empty($insertArray)) {
@@ -218,7 +225,9 @@ abstract class ModelRepository
         $this->clear_query();
         $result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
         if (!empty($result)) {
-            return $this::class::fromState($result);
+            if(is_null($this->modelClass))
+                throw new \Exception("The protected variable \$modelClass haven't been declared on ".self::class." with a proper class Model name", 1);                
+            return $this->modelClass::fromState($result);
         }
         return null;
     }

@@ -7,6 +7,48 @@ use Exception;
 abstract class Model
 {
     /**
+     * Receives an  associative array, set the properties accordingly and return a new Model instance
+     * @param array $args
+     * 
+     * @return Model
+     */
+    public static function fromArray(array $args = []):Model
+    {
+        $self = new static();
+        foreach ($args as $key => $value) {
+            if(property_exists($self,$key)){
+                if(!is_null($value) || gettype($self->$key) === "NULL")
+                    $self->$key = $value;
+            }
+        }
+        return $self;
+    }
+
+    /**
+     * (alias for fromArray) Receives an  associative array, set the properties accordingly and return a new Model instance
+     * @param array $args
+     * 
+     * @return Model
+     */
+    public static function fromState(array $args = []):Model
+    {
+        return self::fromArray($args);
+    }
+
+    /**
+     * creator function. Receives an array or nothing, set the properties accordingly and return a new Model instance
+     * @param mixed $args
+     * 
+     * @return Model
+     */
+    public static function create(mixed $args = []):Model
+    {
+        if(is_array($args))
+            return self::fromArray($args);
+        return new static();
+    }
+
+    /**
      * @param string $id_field
      *
      * @return string
@@ -22,12 +64,14 @@ abstract class Model
      *
      * @return string|int|float|null
      */
-    public function getValue(string $fieldName): mixed
+    public function getValue(string $fieldName, bool $exceptionCheck = true): mixed
     {
         if (property_exists($this::class, $fieldName)) {
-            return $this->$fieldName;
+            return isset($this->$fieldName) ? $this->$fieldName : null;
         }
-        throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
+        if($exceptionCheck)
+            throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
+        return null;
     }
 
     /**
