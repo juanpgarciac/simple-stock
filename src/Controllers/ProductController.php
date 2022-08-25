@@ -3,8 +3,9 @@
 namespace Controllers;
 
 use Core\Classes\Controller;
-use Models\Product;
+use Models\CategoryRepository;
 use Models\ProductRepository;
+use Models\UnitRepository;
 
 class ProductController extends Controller
 {
@@ -33,13 +34,19 @@ class ProductController extends Controller
     /**
      * @return void
      */
-    public function edit(string $id)
-    {
-        $product = (new ProductRepository(app()->getAppStorage()))->find($id);        
+    public function edit(string $id = null)
+    {   $product = null;
+        if(!is_null($id)){
+            $product = (new ProductRepository(app()->getAppStorage()))->find($id);   
+            if(is_null($product)){
+                redirect('/product');
+            }
+        }
+        $categories = (new CategoryRepository(app()->getAppStorage()))->results();     
+        $units = (new UnitRepository(app()->getAppStorage()))->results();     
         view('/product/create')
-        ->with($product?->toArray() ?? [])
-        ->with(['message'=>   is_null($product) ? 'Product '.$id.' doesn\'t exists' : ''])
-        ->with(uniqid())
+        ->with($product?->toArray() ?? [])        
+        ->with(compact('categories','units'))
         ->render();
     }
 
@@ -58,10 +65,7 @@ class ProductController extends Controller
             $message .= 'Saved';            
         }
 
-        view('/product/create')
-        ->with($product->toArray())
-        ->with(compact('message'))
-        ->render();
+        redirect('/product?message='.$message);
    
     }
 

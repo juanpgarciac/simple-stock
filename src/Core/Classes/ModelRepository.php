@@ -223,10 +223,4 @@ abstract class ModelRepository
         return null;
     }
 
-    /**
-     * @param array<mixed> $recordArray
-     *
-     * @return Model
-     */
-    abstract public static function fromState(array $recordArray): Model;
 }
