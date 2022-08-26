@@ -64,9 +64,13 @@ class FakeDBDriver implements IStorageDriver
                 continue;
             }
 
+            /* *
             if (isset($recordToBeUpdated[$field])) {
                 $recordToBeUpdated[$field] = $value;
             }
+            /* */
+            //any new field will be added
+            $recordToBeUpdated[$field] = $value;
         }
 
         return $recordToBeUpdated[$id_field];

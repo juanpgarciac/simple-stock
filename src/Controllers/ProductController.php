@@ -65,7 +65,7 @@ class ProductController extends Controller
             $product = $productRepository->update($product);
             $message .= 'Updated';
         }else{
-            $product = $productRepository->insert($product);
+            $product = $productRepository->insert(request());
             $message .= 'Saved';   
             $stockTransaction = new StockTransaction($product->id(),request('initialStock'),'Initial Stock');
             $stockRepository = new StockTransactionRepository(app()->getAppStorage());

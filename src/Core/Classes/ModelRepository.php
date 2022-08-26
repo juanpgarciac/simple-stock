@@ -146,16 +146,9 @@ abstract class ModelRepository
      *
      * @return Model
      */
-    public function insert(Model $modelRecord): Model
+    public function insert(Model|array $modelRecord): Model
     {
-        $insertArray = [];
-
-
-        foreach ($this->fields as $field) {
-            $value = $modelRecord->getValue($field);
-            if(!is_null($value))
-                $insertArray[$field] = $value;
-        }
+        $insertArray = $this->getInsertArray($modelRecord);
 
         if (!empty($insertArray)) {
             $id = $this->DB->insertRecord($insertArray, $this->getTable(), $this->id_field);
@@ -171,22 +164,45 @@ abstract class ModelRepository
      *
      * @return Model
      */
-    public function update(Model $modelRecord): Model
+    public function update(Model|array $modelRecord): Model
     {
-        $insertArray = [];
-
-        foreach ($this->fields as $field) {
-            $value = $modelRecord->getValue($field);
-            if(!is_null($value))
-                $insertArray[$field] = $value;
-        }
+        $insertArray = $this->getInsertArray($modelRecord);
 
         if (!empty($insertArray)) {
-            $id = $this->DB->updateRecord($modelRecord->id($this->id_field), $insertArray, $this->getTable(), $this->id_field);
-            $modelRecord = $this->find($id);
+            $modelID = null;
+            if(isset($record[$this->id_field])){
+                $modelID = $record[$this->id_field];
+            }elseif(is_subclass_of($modelRecord,Model::class)){
+                $modelID = $modelRecord->id($this->id_field);
+            }            
+            if(!is_null($modelID)){
+                $id = $this->DB->updateRecord($modelID, $insertArray, $this->getTable(), $this->id_field);
+                $modelRecord = $this->find($id);
+            }
         }
 
         return $modelRecord;
+    }
+
+    /**
+     * @param Model|array $modelRecord
+     * 
+     * @return array
+     */
+    private function getInsertArray(Model|array $modelRecord):array
+    {
+        $insertArray = [];
+        $record = is_array($modelRecord) ? $modelRecord : $modelRecord->toArray();
+
+        foreach ($this->fields as $field) {
+            if($field == $this->id_field)
+                continue;
+
+            if(isset($record[$field]) && !is_null($record[$field] ))
+                $insertArray[$field] = $record[$field];
+        }
+
+        return $insertArray;
     }
 
     /**
