@@ -33,9 +33,9 @@
                     <td><?=$category?></td>
                     <td><?=$stock?></td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="/product/edit/<?=$id?>">Edit</a>
+                        <a class="btn btn-primary btn-sm" href="/product/edit/<?=$id?>"><i class="bi bi-pencil-square"></i>Edit</a>
                         <form method="POST" action="/product/delete/<?=$id?>">
-                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash"></i>Delete</button>
                         </form>
                     </td>
                 </tr>
