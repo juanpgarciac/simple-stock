@@ -14,6 +14,8 @@ post('/product/delete/{id}','ProductController@destroy');
 
 route(['/product/:id',[ProductController::class,'show']])->view('product/show');
 
+post('/stock/adjust','StockController@adjustStock');
+
 return [
 
     ['/product/create/','ProductController@edit'],

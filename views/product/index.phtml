@@ -4,7 +4,15 @@
         <h2><i class="bi bi-list-check"></i>Product Index</h2>
     </div>
 </div>
-
+<?php if(request('message')):?>
+<div class="row mb-2 text-center">
+    <div class="col">        
+        <div class="alert alert-<?=request('error')?'danger':'success'?>" role="alert">
+            <?=request('message')?>
+        </div>
+    </div>
+</div>
+<?php endif;?>
 <div class="row">
     <div class="col-4">
         <a class="btn btn-primary" href="/product/create"><i class="bi bi-box-seam"></i> Create product</a>
@@ -32,7 +40,7 @@
                     <th scope="row"><?=$id?></th>
                     <td><a href="/product/<?=$id?>"><?=$name?></a></td>
                     <td><?=$category?></td>
-                    <td><?=$presentation?></td>
+                    <td><?=ucwords($presentation)?></td>
                     <td><?=$stock?></td>
                     <td><?=$unit?></td>
                     <td>
