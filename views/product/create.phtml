@@ -17,7 +17,7 @@
             <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?> 
             <div class="mb-3 col-4">
                 <label for="name" class="form-label">Product name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Kepthup" value="<?=$name?>">
+                <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Keptchup" value="<?=$name?>">
             </div>
             <div class="mb-3 col-4">
                 <label for="name" class="form-label">Product presentation</label>
@@ -47,7 +47,7 @@
                     <input type="text" class="form-control" id="initialStock" name="initialStock" placeholder="e.g. 100.00" value="0">
                 </div>   
             <?php endif;?>            
-            <button type="submit" class="btn btn-primary"><i class="bi bi-box-seam"></i> <?=isset($id)?'Update':'Create'?> product</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-box-seam"></i> <?=isset($id)?'Update':'Save'?> product</button>
             <a href="/product" class="btn btn-warning"><i class="bi bi-house-door"></i>Back to index</a>
         </form>
 
