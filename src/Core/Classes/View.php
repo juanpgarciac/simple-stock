@@ -31,8 +31,8 @@ final class View
         return $this;
     }
 
-    public function render($args = [], $returnString = false):string
-    {   
+    public function render(array|null $args = [], $returnString = false):string
+    {   $args = is_null($args) ? [] : $args;
         if(!empty($this->viewBag))
             $args = array_merge($args,$this->viewBag);
         $content = '';

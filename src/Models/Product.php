@@ -12,7 +12,7 @@ class Product extends Model
     protected string $presentation;
     protected string $unit;
     protected string $category;
-    protected float  $stock = 0.0;
+    protected ?float  $stock = null;
 
 
     /**
@@ -21,7 +21,7 @@ class Product extends Model
      * @param string $unit
      * @param string $category
      */
-    public function __construct(string $name = '', string $presentation = '1', string $unit = 'unit', string $category = '', float $stock = 0.0)
+    public function __construct(string $name = '', string $presentation = '1', string $unit = 'unit', string $category = '', ?float $stock = null)
     {
         $this->id = null;
         $this->name = $name;

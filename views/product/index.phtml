@@ -1,21 +1,48 @@
-<h1>Product Index</h1>
-<a href="/product/create/">Create product</a><br>
-<table border="1"><tbody>
-    <tr><th>ID</th><th>Name</th><th>Presentation</th><th>Category</th><th>Stock</th><th>Actions</th></tr>
-<?php
-//$products = (object)$products;
-foreach ($products as $id => $product) {
-    extract($product);
-?>
-<tr>
-    <td><?=$id?></td>
-    <td><a href="/product/<?=$id?>"><?=$name?></a></td>
-    <td><?=$presentation?></td>
-    <td><?=$category?></td>
-    <td><?=$stock?></td>
-    <td><a href="/product/edit/<?=$id?>">Edit</a>&nbsp;<form method="POST" action="/product/delete/<?=$id?>"><button type="submit">Delete</button></form></td>
-</tr>
-<?php
-}
-?>
-</tbody></table>
+
+<div class="row">
+    <div class="col">
+        <h2>Product Index</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Presentation</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Category</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+                //$products = (object)$products;
+                foreach ($products as $id => $product) {
+                extract($product);
+                ?>
+                <tr>
+                    <th scope="row"><?=$id?></th>
+                    <td><a href="/product/<?=$id?>"><?=$name?></a></td>
+                    <td><?=$presentation?></td>
+                    <td><?=$unit?></td>
+                    <td><?=$category?></td>
+                    <td><?=$stock?></td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="/product/edit/<?=$id?>">Edit</a>
+                        <form method="POST" action="/product/delete/<?=$id?>">
+                            <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php
+                }
+                ?>
+            </tbody>
+        </table>    
+    </div>
+</div>

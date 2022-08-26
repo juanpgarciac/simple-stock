@@ -1,10 +1,30 @@
 <?php extract($product); ?>
-<h2>Product <?=$name?> (<?=$id?>) detail</h2>
-    <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?>
-    <label for="name">Name:</label> <span><?=$name?></span><br>
-    <label for="presentation">Presentation:</label> <span><?=$presentation?></span><br>
-    <label for="unit">Unit:</label> <span><?=$unit?></span><br>
-    <label for="category">Category:</label> <span><?=$category?></span><br>
-    <label for="stock">Stock:</label> <span><?=$stock?></span>
-<br>
-<a href="/product">Back to index</a>
+<div class="row">
+    <div class="col">
+        <h2><?=$name?> details</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card text-center" style="width: 18rem;">
+            <img src="/img/product.png" class="card-img-top mx-auto d-block" alt="Product <?=$name?>" style="max-width:200px">
+            <div class="card-body">
+                <h5 class="card-title"><?=$name?></h5>
+                <h6 class="card-subtitle mb-2 text-muted">ID: <?=$id?></h6>
+                <p class="card-text"></p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><label for="presentation">Presentation:</label> <span><?=$presentation?></span></li>
+                    <li class="list-group-item"><label for="unit">Unit:</label> <span><?=$unit?></span><br></li>
+                    <li class="list-group-item"><label for="category">Category:</label> <span><?=$category?></span></li>
+                    <li class="list-group-item"><label for="stock">Stock:</label> <span><?=$stock?></span></li>
+                </ul>
+                <div class="card-body">
+                    <a href="/product" class="card-link">Back to index</a>
+                    <a href="/product/edit/<?=$id?>" class="card-link">Edit Product</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

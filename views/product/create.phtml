@@ -1,31 +1,57 @@
-<?=$message?>
-<?php if(isset($id) && $id): ?>
-<h2>Product <?=$name?> (<?=$id?>) detail</h2>
-<?php else: ?>
-    Product creation
-<?php endif;?>
-<form method="POST" action="/product/store">
-    <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?>
-    <label for="name">Name</label> <input name="name" value="<?=$name?>"><br>
-    <label for="presentation">Presentation</label> <input name="presentation" value="<?=$presentation?>"><br>
-    <label for="unit">Unit</label>
-    <select name="unit">
-        <?php foreach($units as $un):?>
-            <option <?= $unit == $un['unit'] ? 'selected' : ''; ?>><?=$un['unit'];?></option>
-        <?php endforeach; ?>
-        <option>Other</option>
-    </select><br>
-    <label for="category">Category</label>
-    <select name="category">
-        <?php foreach($categories as $cat):?>
-            <option <?= $category == $cat['category'] ? 'selected' : ''; ?>><?=$cat['category'];?></option>
-        <?php endforeach; ?>
-        <option>Other</option>
-    </select><br>
-    <?php if(!isset($id)):?>
-    <label for="stock">Stock</label> <input name="initialStock" value="<?=$stock?>"><br>
-    <?php endif;?>
-    <button type="submit">Save product</button>
-</form>
-<br>
-<a href="/product">Back to index</a>
+
+<div class="row">
+    <div class="col">
+        <?php if(isset($id) && $id): ?>
+        <h2>Product <?=$name?> (<?=$id?>) detail</h2>
+        <?php else: ?>
+            <h2>Product creation</h2>
+        <?php endif ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <?=$message?>
+
+        <form method="POST" action="/product/store">
+            <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?> 
+            <div class="mb-3 col-4">
+                <label for="name" class="form-label">Product name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Kepthup" value="<?=$name?>">
+            </div>
+            <div class="mb-3 col-4">
+                <label for="name" class="form-label">Product presentation</label>
+                <input type="text" class="form-control" id="presentation" name="presentation" placeholder="e.g. 1 Bottle" value="<?=$presentation?>">
+            </div>
+            <div class="mb-3 col-4">
+                <label for="unit" class="form-label">Unit</label>
+                <select name="unit" id="unit" class="form-select">
+                    <?php foreach($units as $un):?>
+                        <option <?= $unit == $un['unit'] ? 'selected' : ''; ?>><?=$un['unit'];?></option>
+                    <?php endforeach; ?>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="mb-3 col-4">
+                <label for="category" class="form-label">Category</label>
+                <select name="category" id="category" class="form-select">
+                    <?php foreach($categories as $cat):?>
+                        <option <?= $category == $cat['category'] ? 'selected' : ''; ?>><?=$cat['category'];?></option>
+                    <?php endforeach; ?>
+                    <option>Other</option>
+                </select>
+            </div>
+            <?php if(!isset($id)):?>
+                <div class="mb-3 col-4">
+                    <label for="initialStock" class="form-label">Initial stock</label>
+                    <input type="text" class="form-control" id="initialStock" name="initialStock" placeholder="e.g. 100.00" value="0">
+                </div>   
+            <?php endif;?>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+
+
+    </div>
+</div>
