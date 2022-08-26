@@ -1,0 +1,51 @@
+<?php /** @layout layouts.main */ ?>
+<div class="row mb-2">
+    <div class="col">
+        <h2><i class="bi bi-list-check"></i>Category Index</h2>
+    </div>
+</div>
+<?php if(request('message')):?>
+<div class="row mb-2 text-center">
+    <div class="col">        
+        <div class="alert alert-<?=request('error')?'danger':'success'?>" role="alert">
+            <?=request('message')?>
+        </div>
+    </div>
+</div>
+<?php endif;?>
+<div class="row">
+    <div class="col-12">
+        <a class="btn btn-primary" href="/category/create"><i class="bi bi-box-seam"></i> Create category</a>
+    </div>
+    <div class="col-4">        
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">#</th>
+                <th scope="col">Category</th>
+                <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+                foreach ($categories as $id => $category) {
+                extract($category);
+                ?>
+                <tr>
+                    <th scope="row"><?=$id?></th>
+                    <td><a href="/category/edit/<?=$id?>"><?=$category?></a></td>
+                    <td>
+                        <form method="POST" action="/category/delete/<?=$id?>" class="m-0">
+                            <a class="btn btn-secondary btn-sm" href="/category/edit/<?=$id?>"><i class="bi bi-pencil-square"></i></a>
+                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                <?php
+                }
+                ?>
+            </tbody>
+        </table>    
+    </div>
+
+</div>

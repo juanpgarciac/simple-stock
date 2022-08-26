@@ -10,6 +10,6 @@ class CategoryRepository extends ModelRepository
     /**
      * @var array<string>
      */
-    protected array $fields = ['category'];
+    protected array $fields = ['id','category'];
 
 }

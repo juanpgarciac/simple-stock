@@ -146,17 +146,15 @@ abstract class ModelRepository
      *
      * @return Model
      */
-    public function insert(Model|array $modelRecord): Model
+    public function insert(Model|array $modelRecord): Model|array|false
     {
-        $insertArray = $this->getInsertArray($modelRecord);
-
-        if (!empty($insertArray)) {
+        $insertArray = $this->getInsertArray($modelRecord, true);
+        if (!empty($insertArray)) {            
             $id = $this->DB->insertRecord($insertArray, $this->getTable(), $this->id_field);
             if(!is_null($id))//ID null, why ?
-                $modelRecord = $this->find($id);//get whole record updated
+                return $this->find($id);//get whole record updated
         }
-
-        return $modelRecord;
+        return false;
     }
 
     /**
@@ -164,24 +162,25 @@ abstract class ModelRepository
      *
      * @return Model
      */
-    public function update(Model|array $modelRecord): Model
+    public function update(Model|array $modelRecord): Model|array|false
     {
         $insertArray = $this->getInsertArray($modelRecord);
 
         if (!empty($insertArray)) {
             $modelID = null;
-            if(isset($record[$this->id_field])){
-                $modelID = $record[$this->id_field];
+            if(isset($insertArray[$this->id_field])){
+                $modelID = $insertArray[$this->id_field];
             }elseif(is_subclass_of($modelRecord,Model::class)){
                 $modelID = $modelRecord->id($this->id_field);
-            }            
+            }           
             if(!is_null($modelID)){
                 $id = $this->DB->updateRecord($modelID, $insertArray, $this->getTable(), $this->id_field);
                 $modelRecord = $this->find($id);
+                return $modelRecord;
             }
         }
-
-        return $modelRecord;
+        return false;
+        
     }
 
     /**
@@ -189,13 +188,13 @@ abstract class ModelRepository
      * 
      * @return array
      */
-    private function getInsertArray(Model|array $modelRecord):array
+    private function getInsertArray(Model|array $modelRecord, $ignoreIDField = false):array
     {
         $insertArray = [];
         $record = is_array($modelRecord) ? $modelRecord : $modelRecord->toArray();
 
         foreach ($this->fields as $field) {
-            if($field == $this->id_field)
+            if($field == $this->id_field && $ignoreIDField)
                 continue;
 
             if(isset($record[$field]) && !is_null($record[$field] ))
@@ -240,14 +239,15 @@ abstract class ModelRepository
      *
      * @return Model|null
      */
-    public function find(string|int $recordID): Model|null
+    public function find(string|int $recordID): Model|array|null
     {
         $this->clear_query();
         $result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
         if (!empty($result)) {
             if(!is_null($this->getModelClass())){
-                if(!is_subclass_of($this->getModelClass(), Model::class) && ! $this->getModelClass() instanceof Model){
-                    throw new \InvalidArgumentException(" {$this->getModelClass()} should extend ".Model::class, 1);
+                if(!is_subclass_of($this->getModelClass(), Model::class)){
+                    //throw new \InvalidArgumentException(" {$this->getModelClass()} should extend ".Model::class, 1);
+                    return $result;
                 }
                 return $this->getModelClass()::fromState($result);
             }
