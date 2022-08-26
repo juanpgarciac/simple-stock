@@ -1,10 +1,6 @@
-<h1>Home</h1>
-    <div class="card" style="width: 18rem;">
-    <img src="/img/product.png" class="card-img-top" alt="Simple stock">
-    <div class="card-body">
-        <h5 class="card-title">Simple Stock</h5>
-        <p class="card-text">Simple stock application. Made with <i class="bi bi-heart-fill" style="color:red"></i> with PHP & Bootstrap</p>
-        <a href="/product" class="btn btn-primary">Products Index</a>
-    </div>
-    </div>
-</div>
+<div class="row align-items-center">
+    <div class="col align-self-center text-center">
+    <h2>Simple Stock</h2>        
+    <p class="">Simple stock application. Made with love <i class="bi bi-heart-fill" style="color:red"></i> with PHP 8 & Bootstrap 5</p>
+    <a href="/product" class="btn btn-primary"><i class="bi bi-house-door"></i>Products Index</a>
+</div></div>

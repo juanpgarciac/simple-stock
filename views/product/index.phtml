@@ -1,21 +1,22 @@
 
 <div class="row">
     <div class="col">
-        <h2>Product Index</h2>
+        <h2><i class="bi bi-list-check"></i>Product Index</h2>
     </div>
 </div>
 
 <div class="row">
     <div class="col">
+        <button class="btn btn-primary"><i class="bi bi-box-seam"></i> Create product</button>
         <table class="table">
             <thead>
                 <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Presentation</th>
-                <th scope="col">Unit</th>
                 <th scope="col">Category</th>
+                <th scope="col">Presentation</th>                
                 <th scope="col">Stock</th>
+                <th scope="col">Unit</th>
                 <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -28,14 +29,14 @@
                 <tr>
                     <th scope="row"><?=$id?></th>
                     <td><a href="/product/<?=$id?>"><?=$name?></a></td>
-                    <td><?=$presentation?></td>
-                    <td><?=$unit?></td>
                     <td><?=$category?></td>
+                    <td><?=$presentation?></td>
                     <td><?=$stock?></td>
+                    <td><?=$unit?></td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="/product/edit/<?=$id?>"><i class="bi bi-pencil-square"></i>Edit</a>
-                        <form method="POST" action="/product/delete/<?=$id?>">
-                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash"></i>Delete</button>
+                        <form method="POST" action="/product/delete/<?=$id?>" class="m-0">
+                            <a class="btn btn-secondary btn-sm" href="/product/edit/<?=$id?>"><i class="bi bi-pencil-square"></i></a>
+                            <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
                 </tr>

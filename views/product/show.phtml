@@ -1,14 +1,14 @@
 <?php extract($product); ?>
 <div class="row">
     <div class="col">
-        <h2><?=$name?> details</h2>
+        <h2><i class="bi bi-journal-text"></i> Product details</h2>
     </div>
 </div>
 
 <div class="row">
-    <div class="col">
-        <div class="card text-center" style="width: 18rem;">
-            <img src="/img/product.png" class="card-img-top mx-auto d-block" alt="Product <?=$name?>" style="max-width:200px">
+    <div class="col-4">
+        <div class="card" style="width: 18rem;">
+            <img src="/img/product.png" class="card-img-top mx-auto d-block p-2" alt="Product <?=$name?>" style="max-width:200px">
             <div class="card-body">
                 <h5 class="card-title"><?=$name?></h5>
                 <h6 class="card-subtitle mb-2 text-muted">ID: <?=$id?></h6>
@@ -19,11 +19,11 @@
                     <li class="list-group-item"><label for="category">Category:</label> <span><?=$category?></span></li>
                     <li class="list-group-item"><label for="stock">Stock:</label> <span><?=$stock?></span></li>
                 </ul>
-                <div class="card-body">
-                    <a href="/product" class="card-link">Back to index</a>
-                    <a href="/product/edit/<?=$id?>" class="card-link">Edit Product</a>
-                </div>
+
             </div>
+            <div class="card-body">
+                <a href="/product" class="btn btn-primary btn-sm"><i class="bi bi-house-door"></i>Back to index</a>
+                <a href="/product/edit/<?=$id?>" class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i>Edit</a>
             </div>
         </div>
     </div>
