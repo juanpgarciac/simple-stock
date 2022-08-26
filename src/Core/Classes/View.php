@@ -25,9 +25,24 @@ final class View
         $this->viewsDir = $viewsDir;
     }
 
-    public function layout($definition)
+    private function getLayoutFromViewFileComment($file):void
     {
-        $this->layout = new self($definition,'',$this->returnString,$this->viewsDir);
+        if(!empty($file)){            
+            $tokens = token_get_all(file_get_contents($file));
+            $filtered = array_filter($tokens, fn($arr)=> ($arr[0] == T_DOC_COMMENT || $arr[0] == T_COMMENT) && preg_match('/.*\@layout.*/',$arr[1]));
+            if(!empty($filtered) && is_array($filtered)){
+                $filtered = ($filtered[array_key_first($filtered)]);
+                $layout = preg_replace('/(\@(\blayout\b))|[^a-z\_\-\.0-9]|\b\*\/\b/i','',explode(' ',$filtered[1]));
+                $layout = (implode('',$layout));                
+                $this->layout($layout);
+            }
+        }
+    }
+
+    public function layout($definition = null)
+    {
+        if(!is_null($definition))
+            $this->layout = new self(str_replace('.','/',$definition),'',$this->returnString,$this->viewsDir);
         return $this;
     }
 
@@ -48,15 +63,17 @@ final class View
                     include $path;                    
                     $content = ob_get_contents();
                     ob_end_clean();  
+                    $this->getLayoutFromViewFileComment($path);                    
                     break;  
                 }
             }
         }
-        if(!is_null($this->layout)){
-            return $this->layout->render(['yield'=>$content], $returnString);
+
+        if(!is_null($this->getLayout())){        
+            return $this->getLayout()->render(['yield'=>$content], $returnString);
         }
-        
-        if($returnString){ 
+
+        if($returnString){             
             return $content;                                  
         }
         echo $content;

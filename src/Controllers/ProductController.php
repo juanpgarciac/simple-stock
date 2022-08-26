@@ -32,10 +32,7 @@ class ProductController extends Controller
             redirect('/product');
         }
         $product = $product->toArray();
-        view('product/show')
-        ->layout('layouts/main')
-        ->with(compact('product'))
-        ->render();
+        return compact('product');
     }
 
     /**

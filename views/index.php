@@ -1,3 +1,4 @@
+<?php /** @layout layouts.main */ ?>
 <div class="row align-items-center">
     <div class="col align-self-center text-center">
     <h2>Simple Stock</h2>        
