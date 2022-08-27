@@ -1,0 +1,9 @@
+<?php if(request('message')):?>
+<div class="row mb-2 text-center">
+    <div class="col">        
+        <div class="alert alert-<?=request('error')?'danger':'success'?>" role="alert">
+            <?=request('message')?>
+        </div>
+    </div>
+</div>
+<?php endif;?>
