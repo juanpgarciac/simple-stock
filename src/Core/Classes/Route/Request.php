@@ -50,18 +50,16 @@ final class Request
 
     public function getParameter(string $name)
     {
-        $key = $name;
+
         $parameters = $this->getParameters();
         $method = $this->getMethod();
-
-        //dd($name, $parameters);
 
         if(isset($parameters[$name])){
             return $parameters[$name];
         }
         
         if(isset($parameters[$method]) && isset($parameters[$method][$name])){
-            $parameters[$method][$name];
+            return $parameters[$method][$name];
         }
 
         if(isset($parameters['_request']) && isset($parameters['_request'][$name])){

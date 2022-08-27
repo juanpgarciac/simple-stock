@@ -74,7 +74,7 @@ abstract class SQLBaseDriver implements IStorageDriver
         return $id;
     }
 
-    public function results($fields, $conditions, $table): array
+    public function results($fields, $conditions, $table, $id_field = 'id'): array
     {
         $records = [];
         $query = SQLUtils::selectQuery($fields, $conditions, $table);
@@ -82,7 +82,11 @@ abstract class SQLBaseDriver implements IStorageDriver
         if($result){
             $nativeResult = self::class_or_resource($result);
             while ($row =  $this->commonFetch($result, $nativeResult)) {
-                $records[] = $row;
+                if(array_key_exists($id_field,$row)){
+                    $records[$row[$id_field]] = $row;
+                }else{
+                    $records[] = $row;
+                }
             }
             $this->free_result($result);
         }
@@ -92,8 +96,8 @@ abstract class SQLBaseDriver implements IStorageDriver
 
     public function resultByID($recordID, $table, $id_field = 'id'): array|null
     {
-        $results = $this->results(['*'], ["$id_field = $recordID"], $table);
-        return count($results)>0 ? $results[0] : null;
+        $results = $this->results(['*'], ["$id_field = $recordID"], $table, $id_field);
+        return !empty($results) ? $results[array_key_first($results)] : null;
     }
 
     public function updateRecord($recordID, $recordData, $table, $id_field = 'id'): string|int

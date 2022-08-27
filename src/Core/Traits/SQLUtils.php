@@ -49,7 +49,7 @@ trait SQLUtils
     public static function insertQuery(array $record, string $table, string $suffix = ''): string
     {
         $fields = implode(', ', array_keys($record));
-        $values = "'".implode("', '", array_values($record))."'";
+        $values = implode(', ',array_map(fn($item)=>(  is_null($item) ? 'NULL' : "'$item'"),array_values($record)));
         $query = "INSERT INTO $table ($fields) VALUES ($values) $suffix;";
         return $query;
     }
@@ -67,7 +67,7 @@ trait SQLUtils
 
         $set = [];
         foreach ($record as $field => $value) {
-            $set[] = "$field = '$value'";
+            $set[] = "$field = " . (is_null($value) ? 'NULL' : "'$value'");
         }
 
         $setString = implode(", ", $set);

@@ -43,6 +43,11 @@ abstract class ModelRepository
     protected string $modelClass = Model::class;
 
     /**
+     * @var array
+     */
+    protected array $nullable = [];
+
+    /**
      * @param IStorageDriver $DBDriver
      */
     public function __construct(IStorageDriver $DBDriver)
@@ -196,8 +201,7 @@ abstract class ModelRepository
         foreach ($this->fields as $field) {
             if($field == $this->id_field && $ignoreIDField)
                 continue;
-
-            if(isset($record[$field]) && !is_null($record[$field] ))
+            if(array_key_exists($field,$record) && (!is_null($record[$field] || in_array($field,$this->nullable))))
                 $insertArray[$field] = $record[$field];
         }
 
