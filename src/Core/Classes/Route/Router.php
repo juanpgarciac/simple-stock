@@ -248,4 +248,9 @@ final class Router extends Singleton
         header("location: $uri",true,301);
         die;
     }
+
+    public static function back(mixed $args = []):void
+    {
+        self::redirect($_SERVER['HTTP_REFERER'].$args);
+    }
 }

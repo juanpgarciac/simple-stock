@@ -8,7 +8,7 @@
         <?php endif ?>
     </div>
 </div>
-<?php include path(configdir('views'),'layouts','message.phtml'); ?>
+<?php slot('layouts/message',['message'=>request('message'), 'error' => request('error')]); ?>
 <div class="row">
     <div class="col-6">   
         <form method="POST" action="/unit/store">

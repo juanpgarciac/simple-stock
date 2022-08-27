@@ -4,15 +4,7 @@
         <h2><i class="bi bi-list-check"></i> Category Index</h2>
     </div>
 </div>
-<?php if(request('message')):?>
-<div class="row mb-2 text-center">
-    <div class="col">        
-        <div class="alert alert-<?=request('error')?'danger':'success'?>" role="alert">
-            <?=request('message')?>
-        </div>
-    </div>
-</div>
-<?php endif;?>
+<?php slot('layouts/message',['message'=>request('message'), 'error' => request('error')]); ?>
 <div class="row">
     <div class="col-12">
         <a class="btn btn-primary" href="/category/create"><i class="bi bi-tag"></i> Create category</a>

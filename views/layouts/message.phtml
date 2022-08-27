@@ -1,8 +1,8 @@
-<?php if(request('message')):?>
+<?php if(isset($message)):?>
 <div class="row mb-2 text-center">
     <div class="col">        
-        <div class="alert alert-<?=request('error')?'danger':'success'?>" role="alert">
-            <?=request('message')?>
+        <div class="alert alert-<?=isset($error)?'danger':'success'?>" role="alert">
+            <?=$message?>
         </div>
     </div>
 </div>

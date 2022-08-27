@@ -25,7 +25,7 @@ class UnitController extends Controller
     {
         $id = request('id');
         if(empty(request('unit'))){
-            redirect('/unit/create?message=Unit description cannot be empty&error=1');  
+            back('?message=Unit description cannot be empty&error=1');  
         }
         $message = 'created';
         if(is_null($id)){

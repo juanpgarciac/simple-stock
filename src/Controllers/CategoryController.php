@@ -23,6 +23,9 @@ class CategoryController extends Controller
 
     public function store()
     {
+        if(empty(request('category'))){
+            back('?message=Category description cannot be empty&error=1');  
+        }
         $insert = request('_request');
         $id = request('id');
         $insert['parent_id'] = empty($insert['parent_id']) ? null : $insert['parent_id']; 

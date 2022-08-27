@@ -46,7 +46,12 @@ function request(string $name = null): mixed
 
 function redirect($uri):void
 {
-    router()->redirect($uri);
+    router()::redirect($uri);
+}
+
+function back(mixed $args = [])
+{
+    router()::back($args);
 }
 
 function view($name, array $args = null)
@@ -64,6 +69,19 @@ function config(): ConfigManager
 function configdir($dir):string
 {
     return config()->dir($dir);
+}
+
+function slot($descriptor, $args = []){
+    $descriptor = str_replace('.','/',$descriptor);
+    $supportedExtensions = ['php','html','phtml'];
+    foreach ($supportedExtensions as $extension) {
+        $path = path(configdir('views'), $descriptor.'.'.$extension);
+        if(is_file($path)){
+            extract($args);
+            include $path;
+            break;
+        }
+    }
 }
 
 /**
