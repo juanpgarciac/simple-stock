@@ -3,6 +3,7 @@
 namespace Core\Classes;
 
 use Exception;
+use ReflectionClass;
 
 abstract class Model
 {
@@ -14,10 +15,20 @@ abstract class Model
      */
     public static function fromArray(array $args = []):Model
     {
-        $self = new static();
+        
+        $modelClass = new ReflectionClass(static::class);
+        $modelConstructor = $modelClass->getConstructor();
+        $modelConstructor->getParameters();
+
+        $modelConstructorParameters = array_intersect_key($args, array_flip(array_column($modelConstructor->getParameters(),'name')));
+
+        $self = new static(...$modelConstructorParameters);
+       
+        //also set values that did not set in the constructor.
         foreach ($args as $key => $value) {
             if(property_exists($self,$key)){
-                if(!is_null($value) || gettype($self->$key) === "NULL")
+                //check if property is already set by constructor. 
+                if( !isset($self->$key) && (!is_null($value) || gettype($self->$key) === "NULL"))
                     $self->$key = $value;
             }
         }
