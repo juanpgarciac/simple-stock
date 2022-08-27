@@ -20,7 +20,7 @@ route(['/product/:id',[ProductController::class,'show']])->view('product/show');
 post('/stock/adjust','StockController@adjustStock');
 
 get('/category',[CategoryController::class,'index']);
-get('/category/create',view('category/create'));
+get('/category/create',[CategoryController::class,'edit'])->view('category/create');
 get('/category/edit/:id',[CategoryController::class,'edit'])->view('category/create');
 post('/category/store',[CategoryController::class,'store']);
 post('/category/delete/:id:',[CategoryController::class,'destroy']);

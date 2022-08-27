@@ -13,22 +13,24 @@ class CategoryController extends Controller
     }
 
     public function edit($id)
-    {   $cat =[];
+    {   $category =[];
         if($id){
-            $cat = (new CategoryRepository(app()->getAppStorage()))->find($id);
-            
+            $category = (new CategoryRepository(app()->getAppStorage()))->find($id);
         }
-        return $cat;
+        $categories = (new CategoryRepository(app()->getAppStorage()))->results();        
+        return compact('category','categories');
     }
 
     public function store()
     {
+        $insert = request('_request');
         $id = request('id');
+        $insert['parent_id'] = empty($insert['parent_id']) ? null : $insert['parent_id']; 
         $message = 'created';
         if(is_null($id)){
-            $category = (new CategoryRepository(app()->getAppStorage()))->insert(request());
+            $category = (new CategoryRepository(app()->getAppStorage()))->insert($insert);
         }else{
-            $category = (new CategoryRepository(app()->getAppStorage()))->update(request());
+            $category = (new CategoryRepository(app()->getAppStorage()))->update($insert);
             $message = 'updated';
         }
         if($category === false){

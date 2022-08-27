@@ -1,8 +1,18 @@
 <?php /** @layout layouts.main */ ?>
+<?php 
+$id = null;
+$name = null;
+$parent_id = null;
+if (isset($category)){
+    $id = $category['id'];
+    $name = $category['category'];
+    $parent_id = $category['parent_id'];
+}
+?>
 <div class="row mb-2">
     <div class="col">    
         <?php if(isset($id) && $id): ?>
-            <h2><i class="bi bi-box-seam"></i> Category <?=$category?> (<?=$id?>)</h2>
+            <h2><i class="bi bi-box-seam"></i> Category <?=$name?> (<?=$id?>)</h2>
         <?php else: ?>
             <h2><i class="bi bi-box-seam"></i> Create category</h2>
         <?php endif ?>
@@ -13,8 +23,18 @@
         <form method="POST" action="/category/store">
             <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?> 
             <div class="mb-3 col">
+                <label for="parent_id" class="form-label">Parent category</label>
+                <select name="parent_id" id="parent_id" class="form-select">
+                    <option value="" selected>No parent category</option>
+                    <?php foreach($categories as $cat):?>
+                        <option <?= $parent_id == $cat['id'] ? 'selected' : ''; ?> value="<?=$cat['id']?>"><?=ucwords($cat['category']);?></option>
+                    <?php endforeach; ?>
+                    
+                </select>
+            </div>
+            <div class="mb-3 col">
                 <label for="category" class="form-label">Category name</label>
-                <input type="text" class="form-control" id="category" name="category" placeholder="e.g. Cold drinks" value="<?=$category?>">
+                <input type="text" class="form-control" id="category" name="category" placeholder="e.g. Cold drinks" value="<?=$name?>">
             </div>           
             <button type="submit" class="btn btn-primary"><i class="bi bi-box-seam"></i> <?=isset($id)?'Update':'Save'?> category</button>
             <a href="/category" class="btn btn-warning"><i class="bi bi-house-door"></i>Back to index</a>

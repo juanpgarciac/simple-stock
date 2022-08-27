@@ -201,10 +201,10 @@ abstract class ModelRepository
         foreach ($this->fields as $field) {
             if($field == $this->id_field && $ignoreIDField)
                 continue;
-            if(array_key_exists($field,$record) && (!is_null($record[$field] || in_array($field,$this->nullable))))
+            if(array_key_exists($field,$record) && (!is_null($record[$field]) || in_array($field,$this->nullable))){
                 $insertArray[$field] = $record[$field];
+            }                
         }
-
         return $insertArray;
     }
 

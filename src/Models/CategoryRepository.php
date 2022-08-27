@@ -10,6 +10,8 @@ class CategoryRepository extends ModelRepository
     /**
      * @var array<string>
      */
-    protected array $fields = ['id','category'];
+    protected array $fields = ['id','category','parent_id'];
+
+    protected array $nullable = ['parent_id'];
 
 }

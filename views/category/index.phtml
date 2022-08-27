@@ -17,11 +17,12 @@
     <div class="col-12">
         <a class="btn btn-primary" href="/category/create"><i class="bi bi-box-seam"></i> Create category</a>
     </div>
-    <div class="col-4">        
+    <div class="col-6">        
         <table class="table">
             <thead>
                 <tr>
                 <th scope="col">ID</th>
+                <th scope="col">Parent category</th>
                 <th scope="col">Category</th>
                 <th scope="col">Actions</th>
                 </tr>
@@ -33,6 +34,7 @@
                 ?>
                 <tr>
                     <th scope="row"><?=$id?></th>
+                    <td><?=$categories[$parent_id]['category']?></td>
                     <td><?=$category?></td>
                     <td>
                         <form method="POST" action="/category/delete/<?=$id?>" class="m-0">
