@@ -10,6 +10,6 @@ class UnitRepository extends ModelRepository
     /**
      * @var array<string>
      */
-    protected array $fields = ['unit'];
+    protected array $fields = ['id','unit'];
 
 }

@@ -1,7 +1,7 @@
 <?php /** @layout layouts.main */ ?>
 <div class="row mb-2">
     <div class="col">
-        <h2><i class="bi bi-list-check"></i>Category Index</h2>
+        <h2><i class="bi bi-list-check"></i>unit Index</h2>
     </div>
 </div>
 <?php if(request('message')):?>
@@ -15,28 +15,28 @@
 <?php endif;?>
 <div class="row">
     <div class="col-12">
-        <a class="btn btn-primary" href="/category/create"><i class="bi bi-box-seam"></i> Create category</a>
+        <a class="btn btn-primary" href="/unit/create"><i class="bi bi-box-seam"></i> Create unit</a>
     </div>
     <div class="col-4">        
         <table class="table">
             <thead>
                 <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Category</th>
+                <th scope="col">Unit</th>
                 <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
             <?php
-                foreach ($categories as $id => $category) {
-                extract($category);
+                foreach ($units as $id => $unit) {
+                extract($unit);
                 ?>
                 <tr>
                     <th scope="row"><?=$id?></th>
-                    <td><?=$category?></td>
+                    <td><?=$unit?></td>
                     <td>
-                        <form method="POST" action="/category/delete/<?=$id?>" class="m-0">
-                            <a class="btn btn-secondary btn-sm" href="/category/edit/<?=$id?>"><i class="bi bi-pencil-square"></i></a>
+                        <form method="POST" action="/unit/delete/<?=$id?>" class="m-0">
+                            <a class="btn btn-secondary btn-sm" href="/unit/edit/<?=$id?>"><i class="bi bi-pencil-square"></i></a>
                             <button class="btn btn-danger btn-sm" type="submit"><i class="bi bi-trash"></i></button>
                         </form>
                     </td>
