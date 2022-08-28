@@ -18,6 +18,6 @@ class StockController extends Controller
         $stockRepository = new StockTransactionRepository(app()->getAppStorage());
         $stockRepository->updateStock($productRepository, $stockTransaction, request('transactionType'));
 
-        redirect('/product/index?message=Stock updated for product '.request('product_id'));
+        redirect('/product/'.request('product_id').'?message=Stock updated ');
     }
 }

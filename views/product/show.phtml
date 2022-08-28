@@ -5,9 +5,9 @@
         <h2><i class="bi bi-journal-text"></i> Product details</h2>
     </div>
 </div>
-
+<?php slot('layouts/message',['message'=>request('message'), 'error' => request('error')]); ?>
 <div class="row">
-    <div class="col-4">
+    <div class="col-sm-12 col-md-4">
         <div class="card" style="width: 18rem;">
             <img src="/img/product.png" class="card-img-top mx-auto d-block p-2" alt="Product <?=$name?>" style="max-width:150px">
             <div class="card-body">
@@ -28,9 +28,10 @@
             </div>
         </div>
     </div>
-    <div class="col-8">
+    <div class="col-sm-12 col-md-8">
         <h3>Stock transactions</h3>
-        <table class="table">
+        <div class="overflow-auto" style="max-height:400px;">
+        <table class="table" >
             <thead>
                 <tr>
                     <td>ID</td>
@@ -58,5 +59,6 @@
             </tbody>
 
         </table>
+        </div>
     </div>
 </div>
