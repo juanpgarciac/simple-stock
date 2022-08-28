@@ -1,5 +1,7 @@
 <?php
 
+/** Application helper functions */
+
 use Core\Classes\App;
 use Core\Classes\ConfigManager;
 use Core\Classes\Route\RouteHandler as Route;
@@ -92,4 +94,14 @@ function runApp(): void
 {
     router()->clearRoutePool();
     router()->registerRoutes(arrayFromFile(path(configdir('config'), 'routes.php')));    
+}
+
+
+/**
+ * Concrete server start.
+ * @return void
+ */
+function runServer():void
+{
+    router()->listenServer();
 }

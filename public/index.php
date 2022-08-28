@@ -2,4 +2,4 @@
 
 require '../bootstrap.php';
 
-router()->listenServer();
+runServer();
