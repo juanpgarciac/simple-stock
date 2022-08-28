@@ -22,13 +22,14 @@
 
             </div>
             <div class="card-body">
-                <a href="/product" class="btn btn-primary btn-sm"><i class="bi bi-house-door"></i>Back to index</a>
-                <a href="/product/edit/<?=$id?>" class="btn btn-secondary btn-sm"><i class="bi bi-pencil-square"></i>Edit</a>
+            <a href="/product/edit/<?=$id?>" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i>Edit</a>
+                <a href="/product" class="btn btn-warning btn-sm"><i class="bi bi-house-door"></i>Back to index</a>
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-8">
-        <h3>Stock transactions</h3>
+        <h3>Stock transactions <small><a href="/product/edit/<?=$id?>" class="btn btn-primary btn-sm"><i class="bi bi-stack"></i>Update stock</a></small></h3>
+        
         <div class="overflow-auto" style="max-height:400px;">
         <table class="table" >
             <thead>
