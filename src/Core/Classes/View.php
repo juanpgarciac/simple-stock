@@ -58,11 +58,7 @@ final class View
             foreach ($supportedExtensions as $extension) {
                 $path = path($this->viewsDir, $this->definition.'.'.$extension);
                 if(is_file($path)){
-                    ob_start();
-                    extract($args); 
-                    include $path;                    
-                    $content = ob_get_contents();
-                    ob_end_clean();  
+                    $content = self::getRenderedViewFile($args,$path);
                     $this->getLayoutFromViewFileComment($path);                    
                     break;  
                 }
@@ -78,6 +74,16 @@ final class View
         }
         echo $content;
         return '';
+    }
+
+    private static function getRenderedViewFile(array $viewBag, string $__path):string
+    {
+        extract($viewBag);
+        ob_start(); 
+        include $__path;                    
+        $content = ob_get_contents();
+        ob_end_clean(); 
+        return $content; 
     }
 
     public function getLayout():View|null
