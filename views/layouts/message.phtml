@@ -1,8 +1,13 @@
 <?php if(isset($message)):?>
 <div class="row mb-2 text-center">
-    <div class="col">        
+    <div class="col-6">        
         <div class="alert alert-<?=isset($error)?'danger':'success'?>" role="alert">
+            <h5>
             <?=$message?>
+            <?php if(isset($error)): ?> <i class="bi bi-x-circle"></i> 
+            <?php else: ?> <i class="bi bi-check-circle"></i> 
+            <?php endif?>
+            </h5>
         </div>
     </div>
 </div>

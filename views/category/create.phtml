@@ -21,7 +21,7 @@ if (isset($category)){
 <?php slot('layouts/message',['message'=>request('message'), 'error' => request('error')]); ?>
 <div class="row">
     <div class="col-6">   
-        <form method="POST" action="/category/store">
+        <form method="POST" action="/category/store" class="needs-validation" novalidate>
             <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?> 
             <div class="mb-3 col">
                 <label for="parent_id" class="form-label">Parent category</label>
@@ -35,7 +35,10 @@ if (isset($category)){
             </div>
             <div class="mb-3 col">
                 <label for="category" class="form-label">Category name</label>
-                <input type="text" class="form-control" id="category" name="category" placeholder="e.g. Cold drinks" value="<?=$name?>">
+                <input type="text" class="form-control" id="category" name="category" placeholder="e.g. Cold drinks" value="<?=$name?>" required>
+                <div class="invalid-feedback">
+                Please provide a valid category name.
+                </div>
             </div>           
             <button type="submit" class="btn btn-primary"><i class="bi bi-tag"></i> <?=isset($id)?'Update':'Save'?> category</button>
             <a href="/category" class="btn btn-warning"><i class="bi bi-house-door"></i>Back to index</a>

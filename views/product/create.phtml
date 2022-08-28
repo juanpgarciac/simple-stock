@@ -14,15 +14,21 @@
         <?php if(isset($id) && $id): ?>
         <h3>Basic details</h3>   
         <?php endif ?>
-        <form method="POST" action="/product/store">
+        <form method="POST" action="/product/store" class="needs-validation" novalidate>
             <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?> 
             <div class="mb-3 col">
                 <label for="name" class="form-label">Product name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Keptchup" value="<?=$name?>">
+                <input type="text" class="form-control" id="name" name="name" placeholder="e.g. Keptchup" value="<?=$name?>" required>
+                <div class="invalid-feedback">
+                Please provide a valid product name.
+                </div>
             </div>
             <div class="mb-3 col">
                 <label for="name" class="form-label">Product presentation</label>
-                <input type="text" class="form-control" id="presentation" name="presentation" placeholder="e.g. 1 Bottle" value="<?=$presentation?>">
+                <input type="text" class="form-control" id="presentation" name="presentation" placeholder="e.g. 1 Bottle" value="<?=$presentation?>" required>
+                <div class="invalid-feedback">
+                Please provide a valid product presentation.
+                </div>
             </div>
             <div class="mb-3 col">
                 <label for="unit" class="form-label">Unit</label>
@@ -45,21 +51,22 @@
             <?php if(!isset($id)):?>
                 <div class="mb-3 col">
                     <label for="initialStock" class="form-label">Initial stock</label>
-                    <input type="number" step="0.1" class="form-control" id="initialStock" name="initialStock" placeholder="e.g. 100.00" value="0">
+                    <input type="number" step="0.1" class="form-control" id="initialStock" name="initialStock" placeholder="e.g. 100.00" value="0" required>
+                    <div class="invalid-feedback">
+                    Please provide a valid stock quantity.
+                    </div>
                 </div>   
             <?php endif;?>            
             <button type="submit" class="btn btn-primary"><i class="bi bi-box-seam"></i> <?=isset($id)?'Update':'Save'?> product</button>
             <a href="/product" class="btn btn-warning"><i class="bi bi-house-door"></i>Back to index</a>
         </form>
 
-
-
     </div>
     <?php if(isset($id)):?>
     <div class="col-6">
         <h3>Adjust current stock (<?=$stock.' '.$unit?>) </h3>
         
-        <form class="" method="POST" action="/stock/adjust">
+        <form class="needs-validation" method="POST" action="/stock/adjust" novalidate>
             <?=  isset($id) ? '<input type="hidden" name="product_id" value="'.$id.'">' : '' ?> 
             <div class="mb-3 col form-fieldset">
                 <label for="AdjustmentTypes" class="form-label">Adjustment type</label>
@@ -81,7 +88,10 @@
             
             <div class="mb-3 col">
                 <label for="amount" class="form-label">Amount</label>
-                <input type="number" min="0" step="0.01" class="form-control" id="amount" name="amount" placeholder="e.g. 100.00" value="">
+                <input type="number" min="0" step="0.01" class="form-control" id="amount" name="amount" placeholder="e.g. 100.00" value="" required>
+                <div class="invalid-feedback">
+                    Please provide a valid stock quantity.
+                </div>
             </div>   
             <div class="mb-3 col">
                 <label for="observation" class="form-label">Observation</label>

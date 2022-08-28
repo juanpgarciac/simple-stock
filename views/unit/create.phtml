@@ -11,11 +11,14 @@
 <?php slot('layouts/message',['message'=>request('message'), 'error' => request('error')]); ?>
 <div class="row">
     <div class="col-6">   
-        <form method="POST" action="/unit/store">
+        <form method="POST" action="/unit/store" class="needs-validation" novalidate>
             <?=  isset($id) ? '<input type="hidden" name="id" value="'.$id.'">' : '' ?> 
             <div class="mb-3 col">
                 <label for="unit" class="form-label">Unit name</label>
-                <input type="text" class="form-control" id="unit" name="unit" placeholder="e.g. Kg" value="<?=$unit?>">
+                <input type="text" class="form-control" id="unit" name="unit" placeholder="e.g. Kg" value="<?=$unit?>" required>
+                <div class="invalid-feedback">
+                Please provide a valid unit name.
+                </div>
             </div>           
             <button type="submit" class="btn btn-primary"><i class="bi bi-info-circle"></i> <?=isset($id)?'Update':'Save'?> unit</button>
             <a href="/unit" class="btn btn-warning"><i class="bi bi-house-door"></i>Back to index</a>
