@@ -65,7 +65,7 @@ class ProductController extends Controller
         $productRepository = new ProductRepository(app()->getAppStorage());
         
         $product = Product::create(request());
-        $message = 'Awesome!!! Product ';
+        $message = 'Product ';
         if($product->id()){
             $product = $productRepository->update($product);
             $message .= 'Updated';
@@ -85,6 +85,6 @@ class ProductController extends Controller
     {
         $productRepository = new ProductRepository(app()->getAppStorage());
         $productRepository->delete($id);
-        redirect('/product');
+        redirect("/product?message=Product $id deleted");
     }
 }
