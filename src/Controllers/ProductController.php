@@ -31,8 +31,13 @@ class ProductController extends Controller
         if(is_null($product)){
             redirect('/product');
         }
+        $transactions = ((new StockTransactionRepository(app()->getAppStorage()))
+        ->where('product_id','=',$product->id())->results());
+
+        usort($transactions,fn($a, $b)=> ($a['id'] < $b['id']));
+
         $product = $product->toArray();
-        return compact('product');
+        return compact('product','transactions');
     }
 
     /**

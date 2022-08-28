@@ -28,4 +28,35 @@
             </div>
         </div>
     </div>
+    <div class="col-8">
+        <h3>Stock transactions</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Date</td>
+                    <td>Amount</td>                   
+                    <td>Balance</td>
+                    <td>Observation</td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php    
+                foreach ($transactions as $id => $transaction):
+                extract($transaction);
+            ?>
+                    <tr>
+                        <td><?=$id?></td>
+                        <td><?=$date?></td>
+                        <td><?=$amount?></td>
+                        <td><?=$stock?></td>
+                        <td><?=$observation?></td>
+                    </tr>
+            <?php
+                endforeach;
+            ?>
+            </tbody>
+
+        </table>
+    </div>
 </div>
