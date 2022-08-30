@@ -8,8 +8,6 @@ use Core\Traits\SQLUtils;
 
 abstract class SQLBaseDriver implements IStorageDriver
 {
-    use SQLUtils;
-
     /**
      * @var DBConfiguration
      */

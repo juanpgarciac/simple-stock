@@ -217,4 +217,15 @@ trait QueryBuilder
         $this->closeGrps();
         return implode(' ',$this->queryArray);
     }
+
+
+
+    /**
+     * @return array
+     */
+    public function getQueryArray():array
+    {
+        $this->closeGrps();
+        return $this->queryArray;
+    }
 }

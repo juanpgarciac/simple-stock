@@ -4,22 +4,21 @@ namespace Core\Traits;
 
 trait SQLUtils
 {
+
     /**
-     * @param array<string> $conditions
-     *
+     * Where query receives and array (from QueryBuilder Trait and implode it) or a direct raw SQL Query
+     * @param array|string $conditions
+     * 
      * @return string
      */
-    private static function whereQuery(array $conditions): string
+    private static function whereQuery(array|string $conditions): string
     {
-        $wherecount = count($conditions);
-        if ($wherecount  > 0) {
-            $whereString = " WHERE ";
-            $whereString .= (count($conditions) == 1) ? $conditions[0] : implode(' AND ', $conditions);
-        } else {
-            $whereString = "";
-        }
-
-        return $whereString;
+        if(is_array($conditions)){
+            if(count($conditions) > 0)
+                return ' WHERE '.implode(' ', $conditions);
+            return '';
+        }            
+        return $conditions;
     }
 
     /**
@@ -29,7 +28,7 @@ trait SQLUtils
      *
      * @return string
      */
-    public static function selectQuery(array $fields, array $conditions, string $table): string
+    public static function selectQuery(array $fields, array|string $conditions, string $table): string
     {
         $whereString = self::whereQuery($conditions);
 
@@ -61,7 +60,7 @@ trait SQLUtils
      *
      * @return string
      */
-    public static function updateQuery(array $record, array $conditions, string $table): string
+    public static function updateQuery(array $record, array|string $conditions, string $table): string
     {
         $whereString = self::whereQuery($conditions);
 

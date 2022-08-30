@@ -3,10 +3,13 @@
 namespace Core\Classes;
 
 use Core\Interfaces\IStorageDriver;
+use Core\Traits\QueryBuilder;
 use InvalidArgumentException;
 
 abstract class ModelRepository
 {
+    use QueryBuilder;
+
     /**
      * @var string
      */
@@ -101,25 +104,7 @@ abstract class ModelRepository
      */
     public function getConditions(): array
     {
-        return $this->where;
-    }
-
-    /**
-     * @param string $field
-     * @param string $operator
-     * @param string $compare
-     *
-     * @return ModelRepository
-     */
-    public function where(string $field, string $operator, string $compare): ModelRepository
-    {
-        if (!in_array($operator, ['=','>','<','>=','<=','like','<>','!='])) {
-            throw new InvalidArgumentException("Invalid comparisor operator", 1);
-        }
-
-        $this->where[] = "$field $operator '$compare'";
-
-        return $this;
+        return $this->getQueryArray();
     }
 
     /**
