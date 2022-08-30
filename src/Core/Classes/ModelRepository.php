@@ -4,7 +4,6 @@ namespace Core\Classes;
 
 use Core\Interfaces\IStorageDriver;
 use Core\Traits\QueryBuilder;
-use InvalidArgumentException;
 
 abstract class ModelRepository
 {
@@ -31,10 +30,7 @@ abstract class ModelRepository
      * @var array<string>
      */
     protected array $select = ['*'];
-    /**
-     * @var array<string>
-     */
-    protected array $where = [];
+
     /**
      * @var array<mixed>
      */
@@ -127,7 +123,7 @@ abstract class ModelRepository
     private function clear_query(): void
     {
         $this->select = ['*'];
-        $this->where = [];
+        $this->clearQuery();
     }
 
 

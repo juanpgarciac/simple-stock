@@ -8,7 +8,7 @@ trait QueryBuilder
     private $queryArray = [];
     private $openGroupsCount = 0;
 
-    private static function assambleBase(array $args)
+    private static function assambleConditionItem(array $args)
     {
         $field = '';
         $operator = '=';
@@ -64,7 +64,7 @@ trait QueryBuilder
 
     private function addQueryCondition($args)
     {
-        list($field, $operator, $compareTo) =  self::assambleBase($args);
+        list($field, $operator, $compareTo) =  self::assambleConditionItem($args);
         $this->addQueryItem("$field $operator '$compareTo'");
     }
 
@@ -137,19 +137,6 @@ trait QueryBuilder
         return  $this->whereNot(...$args);
     }
 
-    private function startGroup()
-    {
-        $this->addQueryItem("(");
-        $this->incrementGroupCount();
-    }
-    private function finishGroup()
-    {
-        if($this->openGroupsCount > 0){
-            $this->addQueryItem(")");
-            $this->decrementGroupCount();
-        }            
-    }
-
     public function andGrp(...$args)
     {
         if(!$this->queryIsOpen())
@@ -185,11 +172,31 @@ trait QueryBuilder
         return $this;
     }
 
-    public function closeGrps():self
+    public function closeGrps()
     {
         while($this->openGroupsCount > 0)
             $this->closeGrp();
         return $this;
+    }
+
+    /**
+     * @return void
+     */
+    private function startGroup():void
+    {
+        $this->addQueryItem("(");
+        $this->incrementGroupCount();
+    }
+
+    /**
+     * @return void
+     */
+    private function finishGroup():void
+    {
+        if($this->openGroupsCount > 0){
+            $this->addQueryItem(")");
+            $this->decrementGroupCount();
+        }            
     }
 
     /**
@@ -218,8 +225,6 @@ trait QueryBuilder
         return implode(' ',$this->queryArray);
     }
 
-
-
     /**
      * @return array
      */
@@ -227,5 +232,13 @@ trait QueryBuilder
     {
         $this->closeGrps();
         return $this->queryArray;
+    }
+
+    /**
+     * @return void
+     */
+    public function clearQuery():void
+    {
+        $this->queryArray = [];
     }
 }
