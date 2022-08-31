@@ -102,4 +102,24 @@ final class QueryBuilderTest extends TestCase
         $this->assertSame("name LIKE '%Apple%' OR presentation LIKE '%can'",$result);        
     }
 
+
+    public function test_order_query()
+    {
+        $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
+
+        $result = $queryBuilder->orderBy('ID')->getOrderQuery();
+
+        $this->assertSame("ORDER BY ID",$result);
+
+        $result = $queryBuilder->orderBy('name','desc')->getOrderQuery();
+
+        $this->assertSame("ORDER BY ID, name DESC",$result);
+
+        $result = $queryBuilder->orderAscBy('CITY')->getOrderQuery();
+
+        $this->assertSame("ORDER BY ID, name DESC, CITY ASC",$result);
+
+
+    }
+
 }
