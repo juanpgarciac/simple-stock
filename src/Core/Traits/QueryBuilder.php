@@ -16,7 +16,7 @@ trait QueryBuilder
 
         switch (count($args)) {
             case 0:
-                //throw
+                throw new \InvalidArgumentException("Condition Item requires a field, an operator and a compareTo value");
                 break;
             case 1: 
                 $field = $args[0]; 
@@ -239,5 +239,6 @@ trait QueryBuilder
     public function clearQuery():void
     {
         $this->queryArray = [];
+        $this->openGroupsCount = 0;
     }
 }
