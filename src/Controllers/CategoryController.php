@@ -17,7 +17,7 @@ class CategoryController extends Controller
         if($id){
             $category = (new CategoryRepository(app()->getAppStorage()))->find($id);
         }
-        $categories = (new CategoryRepository(app()->getAppStorage()))->results();        
+        $categories = (new CategoryRepository(app()->getAppStorage()))->orderBy('category')->results();        
         return compact('category','categories');
     }
 

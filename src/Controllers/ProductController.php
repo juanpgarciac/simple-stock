@@ -32,9 +32,9 @@ class ProductController extends Controller
             redirect('/product');
         }
         $transactions = ((new StockTransactionRepository(app()->getAppStorage()))
-        ->where('product_id','=',$product->id())->results());
+        ->where('product_id','=',$product->id())->orderDescBy('id')->results());
 
-        usort($transactions,fn($a, $b)=> ($a['id'] < $b['id']));
+        //usort($transactions,fn($a, $b)=> ($a['id'] < $b['id']));
 
         $product = $product->toArray();
         return compact('product','transactions');
@@ -51,8 +51,8 @@ class ProductController extends Controller
                 redirect('/product');
             }
         }
-        $categories = (new CategoryRepository(app()->getAppStorage()))->results();     
-        $units = (new UnitRepository(app()->getAppStorage()))->results();     
+        $categories = (new CategoryRepository(app()->getAppStorage()))->orderBy('category')->results();     
+        $units = (new UnitRepository(app()->getAppStorage()))->orderBy('unit')->results();     
         view('/product/create')
         ->with($product?->toArray() ?? [])        
         ->with(compact('categories','units'))
