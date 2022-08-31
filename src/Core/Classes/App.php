@@ -5,11 +5,14 @@ namespace Core\Classes;
 use Core\Classes\DBConfiguration;
 use Core\Classes\Route\Router;
 use Core\Classes\StorageDrivers\StorageDriverFactory;
+use Core\Interfaces\ISingleton;
 use Core\Interfaces\IStorageDriver;
+use Core\Traits\Singleton;
 
-class App extends Singleton
+class App implements ISingleton
 {
-    private static ?App $instance = null;
+    use Singleton;
+
     private Router $appRouter;
     private DBConfiguration $appDBConfiguration;
     private IStorageDriver $appStorage;
@@ -23,14 +26,6 @@ class App extends Singleton
         $this->appRouter = Router::getInstance();
         $this->configManager = ConfigManager::getInstance();
 
-    }
-
-    public static function getInstance(): App
-    {
-        if (empty(self::$instance)) {
-            self::$instance = new static();
-        }
-        return self::$instance;
     }
 
     public function getAppStorage(): IStorageDriver

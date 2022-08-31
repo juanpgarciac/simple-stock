@@ -7,6 +7,6 @@ interface ISingleton
     public static function getInstance(): ISingleton;
 
     public function __clone();
-
-    public function __wakeup(): void;
+    public function __sleep();
+    public function __wakeup();
 }

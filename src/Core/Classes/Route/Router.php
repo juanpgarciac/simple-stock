@@ -2,13 +2,14 @@
 
 namespace Core\Classes\Route;
 
-use Core\Classes\Singleton;
 use Core\Classes\Route\RouteHandler as Route;
+use Core\Interfaces\ISingleton;
+use Core\Traits\Singleton;
 
-final class Router extends Singleton
+final class Router implements ISingleton
 {
-    private static ?Router $instance = null;
-
+    use Singleton;
+    
     /**
      * @var array<mixed>
      */
@@ -30,17 +31,6 @@ final class Router extends Singleton
     {
         $this->clearRoutePool();
         $this->notFoundRoute= Route::notFoundRoute();
-    }
-
-    /**
-     * @return Router
-     */
-    public static function getInstance(): Router
-    {
-        if (empty(self::$instance)) {
-            self::$instance = new static();
-        }
-        return self::$instance;
     }
 
     /**

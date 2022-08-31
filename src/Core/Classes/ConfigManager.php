@@ -2,9 +2,12 @@
 
 namespace Core\Classes;
 
-final class ConfigManager extends Singleton
+use Core\Interfaces\ISingleton;
+use Core\Traits\Singleton;
+
+final class ConfigManager implements ISingleton
 {
-    private static ?ConfigManager $instance = null;
+    use Singleton;
 
     private array $configurations = [];
 
@@ -13,16 +16,6 @@ final class ConfigManager extends Singleton
         $this->configurations = envPool();
     }
 
-    /**
-     * @return ConfigManager
-     */
-    public static function getInstance(): ConfigManager
-    {
-        if (empty(self::$instance)) {
-            self::$instance = new static();
-        }
-        return self::$instance;
-    }
     public static function configurations():array
     {
         return self::getInstance()->configurations;
