@@ -19,7 +19,7 @@ interface IStorageDriver
      *
      * @return array<mixed>
      */
-    public function results(array $fields, array $conditions, string $table): array;
+    public function results(array $fields, array $conditions, string $table, string $id_field = 'id', string $orderBy = ''): array;
     /**
      * @param array<mixed> $recordData
      * @param string $table

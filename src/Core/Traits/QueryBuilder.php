@@ -305,4 +305,15 @@ trait QueryBuilder
     {
         $this->orderArray = [];
     }
+
+    /**
+     * @return string
+     */
+    public function getWhereQuery():string
+    {
+        $query = $this->getQuery();
+        if(empty($query))
+            return '';
+        return 'WHERE '.$query;
+    }
 }

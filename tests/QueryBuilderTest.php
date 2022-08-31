@@ -122,4 +122,36 @@ final class QueryBuilderTest extends TestCase
 
     }
 
+    public function test_where_query_with_where_keyword()
+    {
+        $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
+
+        $result = $queryBuilder
+        ->where('name','juan')
+        ->and('age','=',5)
+        ->or('age','>',10)
+
+        ->getWhereQuery();
+
+        $this->assertSame("WHERE name = 'juan' AND age = '5' OR age > '10'",$result);
+    }
+
+    public function test_where_and_order_query()
+    {
+        $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
+
+        $queryBuilder
+        ->where('name','juan')
+        ->and('age','=',5)
+        ->or('age','>',10)
+        ->orderBy('name')
+        ->orderDescBy('age');
+        
+        $result = $queryBuilder->getWhereQuery();
+        $result .= ' '.$queryBuilder->getOrderQuery();
+
+        $this->assertSame("WHERE name = 'juan' AND age = '5' OR age > '10' ORDER BY name, age DESC",$result);
+    }
+
+
 }

@@ -28,14 +28,13 @@ trait SQLUtils
      *
      * @return string
      */
-    public static function selectQuery(array $fields, array|string $conditions, string $table): string
+    public static function selectQuery(array $fields, array|string $conditions, string $table, string $orderBy = ''): string
     {
         $whereString = self::whereQuery($conditions);
 
         $selectString = implode(', ', $fields);
 
-        $query = "SELECT ".$selectString." FROM ".$table.$whereString.';';
-
+        $query = "SELECT ".$selectString." FROM ".trim($table.$whereString.' '.$orderBy).';';
         return $query;
     }
 

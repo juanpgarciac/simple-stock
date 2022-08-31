@@ -111,7 +111,7 @@ abstract class ModelRepository
     public function results(bool $cached = false): array
     {
         if (!$cached || empty($this->results)) {
-            $this->results = $this->DB->results($this->getFieldSelection(), $this->getConditions(), $this->getTable());
+            $this->results = $this->DB->results($this->getFieldSelection(), $this->getConditions(), $this->getTable(), $this->id_field, $this->getOrderQuery());
         }
         $this->clear_query();
         return $this->results;

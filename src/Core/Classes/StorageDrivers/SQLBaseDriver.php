@@ -72,10 +72,10 @@ abstract class SQLBaseDriver implements IStorageDriver
         return $id;
     }
 
-    public function results($fields, $conditions, $table, $id_field = 'id'): array
+    public function results($fields, $conditions, $table, $id_field = 'id', $orderBy = ''): array
     {
         $records = [];
-        $query = SQLUtils::selectQuery($fields, $conditions, $table);
+        $query = SQLUtils::selectQuery($fields, $conditions, $table, $orderBy);
         $result = $this->query($query);
         if($result){
             $nativeResult = self::class_or_resource($result);

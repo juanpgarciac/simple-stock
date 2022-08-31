@@ -17,11 +17,9 @@ class FakeDBDriver implements IStorageDriver
      */
     private array $tables_ids = [];
 
-    public function __construct()
-    {
-    }
+    public function __construct() { }
 
-    public function results($fields, $conditions, $table): array
+    public function results($fields, $conditions, $table, string $id_field = 'id', string $orderBy = ''): array
     {
         return array_filter($this->tables[$table], function (array $row) use ($conditions) {
             foreach ($conditions as $condition) {
