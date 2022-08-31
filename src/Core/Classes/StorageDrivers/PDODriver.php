@@ -4,8 +4,6 @@ namespace Core\Classes\StorageDrivers;
 
 use Core\Classes\DBDrivers\PDODBDriverClass;
 use PDO;
-use PDOException;
-use Core\Traits\SQLUtils;
 use PDOStatement;
 
 class PDODriver extends SQLBaseDriver
