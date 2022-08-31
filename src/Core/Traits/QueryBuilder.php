@@ -69,7 +69,7 @@ trait QueryBuilder
     }
 
 
-    public function where(...$args)
+    public function where(...$args):static
     {        
         if(!$this->queryIsOpen()){
             $this->addQueryOperator('AND');
@@ -80,7 +80,7 @@ trait QueryBuilder
         return $this;
     }
 
-    public function orWhere(...$args)
+    public function orWhere(...$args):static
     {
         if(!$this->queryIsOpen()){
             $this->addQueryOperator('OR'); 
@@ -91,7 +91,7 @@ trait QueryBuilder
 
     }
 
-    public function whereNot(...$args)
+    public function whereNot(...$args):static
     {
 
         if(!$this->queryIsOpen()){
@@ -106,22 +106,22 @@ trait QueryBuilder
 
     }
 
-    public function and(...$args)
+    public function and(...$args):static
     {
         return $this->where(...$args);        
     }
 
-    public function or(...$args)
+    public function or(...$args):static
     {
         return $this->orWhere(...$args);        
     }
 
-    public function not(...$args)
+    public function not(...$args):static
     {
         return $this->whereNot(...$args);
     }
 
-    public function andNot(...$args)
+    public function andNot(...$args):static
     {
         if(!$this->queryIsOpen()){
             $this->addQueryOperator('AND');
@@ -129,7 +129,7 @@ trait QueryBuilder
         return $this->whereNot(...$args);        
     }
 
-    public function orNot(...$args)
+    public function orNot(...$args):static
     {
         if(!$this->queryIsOpen()){
             $this->addQueryOperator('OR');
@@ -137,7 +137,7 @@ trait QueryBuilder
         return  $this->whereNot(...$args);
     }
 
-    public function andGrp(...$args)
+    public function andGrp(...$args):static
     {
         if(!$this->queryIsOpen())
             $this->addQueryOperator('AND');
@@ -146,7 +146,7 @@ trait QueryBuilder
         return $this;
     }
 
-    public function orGrp(...$args)
+    public function orGrp(...$args):static
     {
         if(!$this->queryIsOpen())
             $this->addQueryOperator('OR');
@@ -155,7 +155,7 @@ trait QueryBuilder
         return $this;
     }
 
-    public function notGrp(...$args)
+    public function notGrp(...$args):static
     {
         if(!$this->queryIsOpen()){
             $this->addQueryOperator('AND');
@@ -166,13 +166,13 @@ trait QueryBuilder
         return $this;
     }
 
-    public function closeGrp()
+    public function closeGrp():static
     {
         $this->finishGroup();
         return $this;
     }
 
-    public function closeGrps()
+    public function closeGrps():static
     {
         while($this->openGroupsCount > 0)
             $this->closeGrp();
@@ -221,8 +221,7 @@ trait QueryBuilder
      */
     public function getQuery():string
     {
-        $this->closeGrps();
-        return implode(' ',$this->queryArray);
+        return implode(' ',$this->getQueryArray());
     }
 
     /**
