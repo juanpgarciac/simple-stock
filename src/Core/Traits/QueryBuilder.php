@@ -7,6 +7,7 @@ trait QueryBuilder
 
     private $orderArray = [];
     private $queryArray = [];
+    private $joinArray = [];
     private $openGroupsCount = 0;
 
     private static function assambleConditionItem(array $args)
@@ -240,6 +241,8 @@ trait QueryBuilder
     public function clearQuery():void
     {
         $this->queryArray = [];
+        $this->orderArray = [];
+        $this->joinArray = [];
         $this->openGroupsCount = 0;
     }
 
@@ -299,14 +302,6 @@ trait QueryBuilder
     }
 
     /**
-     * @return void
-     */
-    public function clearOrderQuery():void
-    {
-        $this->orderArray = [];
-    }
-
-    /**
      * @return string
      */
     public function getWhereQuery():string
@@ -316,4 +311,51 @@ trait QueryBuilder
             return '';
         return 'WHERE '.$query;
     }
+
+
+    private function createJoin(string $joinType, string $joinTo, string $usingField, string $withField = null)
+    {
+        $joinType = empty($joinType)? '':strtoupper($joinType);
+        $joinType = !in_array($joinType, ['INNER','LEFT','RIGHT','FULL']) ? '' : $joinType;
+        $withField = $withField ?? "`$joinTo`.`$usingField`";
+
+        $this->joinArray[] = trim($joinType." JOIN $joinTo ON $usingField = $withField");
+        return $this;
+    }
+
+    public function join(string $joinTo, string $usingField, string $withField = null):static
+    {
+        return $this->createJoin('',$joinTo,$usingField,$withField);
+    }
+
+    public function innerJoin(string $joinTo, string $usingField, string $withField = null):static
+    {                
+        return $this->createJoin('INNER', $joinTo, $usingField, $withField);
+    }
+
+    public function leftJoin(string $joinTo, string $usingField, string $withField = null):static
+    {        
+        return $this->createJoin('LEFT', $joinTo, $usingField, $withField);
+    }
+
+    public function rightJoin(string $joinTo, string $usingField, string $withField = null):static
+    {        
+        return $this->createJoin('RIGHT', $joinTo, $usingField, $withField);
+    }
+
+    public function fulljoin(string $joinTo, string $usingField, string $withField = null):static
+    {        
+        return $this->createJoin('FULL', $joinTo, $usingField, $withField);
+    }
+
+    public function getJoinQuery():string
+    {
+        return trim(implode(' ',$this->getJoinQueryArray()));
+    }
+
+    public function getJoinQueryArray():array
+    {
+        return $this->joinArray;
+    }
+
 }

@@ -153,5 +153,20 @@ final class QueryBuilderTest extends TestCase
         $this->assertSame("WHERE name = 'juan' AND age = '5' OR age > '10' ORDER BY name, age DESC",$result);
     }
 
+    public function test_join_query()
+    {
+        $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
+
+        $result = $queryBuilder->join('table','id','other_id')->getJoinQuery();
+
+        $this->assertSame("JOIN table ON id = other_id",$result);
+
+        $queryBuilder->clearQuery();
+
+        $result = $queryBuilder->join('otherTable','id')->getJoinQuery();
+
+        $this->assertSame("JOIN otherTable ON id = `otherTable`.`id`",$result);
+    }
+
 
 }

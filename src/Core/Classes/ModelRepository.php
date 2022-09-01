@@ -111,7 +111,7 @@ abstract class ModelRepository
     public function results(bool $cached = false): array
     {
         if (!$cached || empty($this->results)) {
-            $this->results = $this->DB->results($this->getFieldSelection(), $this->getConditions(), $this->getTable(), $this->id_field, $this->getOrderQuery());
+            $this->results = $this->DB->results($this->getFieldSelection(), $this->getConditions(), $this->getFrom(), $this->id_field, $this->getOrderQuery());
         }
         $this->clear_query();
         return $this->results;
@@ -238,6 +238,11 @@ abstract class ModelRepository
             }
         }
         return null;
+    }
+
+    private function getFrom():string
+    {
+        return trim($this->getTable().' '.$this->getJoinQuery());
     }
 
 }

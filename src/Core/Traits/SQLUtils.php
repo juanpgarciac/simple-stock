@@ -35,6 +35,7 @@ trait SQLUtils
         $selectString = implode(', ', $fields);
 
         $query = "SELECT ".$selectString." FROM ".trim($table.$whereString.' '.$orderBy).';';
+
         return $query;
     }
 
