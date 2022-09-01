@@ -226,18 +226,24 @@ abstract class ModelRepository
      */
     public function find(string|int $recordID): Model|array|null
     {
-        $this->clear_query();
-        $result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
-        if (!empty($result)) {
-            if(!is_null($this->getModelClass())){
-                if(!is_subclass_of($this->getModelClass(), Model::class)){
-                    //throw new \InvalidArgumentException(" {$this->getModelClass()} should extend ".Model::class, 1);
-                    return $result;
-                }
-                return $this->getModelClass()::fromState($result);
-            }
+        $result = $this->where($this->getTable().'.'.$this->id_field,$recordID)->results();
+        $this->clear_query();  
+        //$result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
+        if(empty($result)){
+            return null;
         }
-        return null;
+
+        $result = $result[array_key_first($result)];
+
+        if (!empty($this->getModelClass())){
+
+            if(is_subclass_of($this->getModelClass(), Model::class))
+                return $this->getModelClass()::fromState($result);//return model instance
+            else
+                trigger_error("{$this->getModelClass()} should extend ".Model::class, E_USER_WARNING);
+        }
+
+        return $result;//return the result assoc array
     }
 
     private function getFrom():string

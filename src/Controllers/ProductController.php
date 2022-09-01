@@ -31,19 +31,16 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $result = (new ProductRepository(app()->getAppStorage()))
+        $product =  (new ProductRepository(app()->getAppStorage()))
         ->select('product.*, unit.unit, category.category')
         ->leftJoin('category','product.category_id','category.id')
         ->leftJoin('unit','product.unit_id','unit.id')
-        //->find($id);
-        ->where('product.id',$id)
-        ->results();
-
-        if(empty($result)){
+        ->find($id);
+                
+        if(empty($product)){
             redirect('/product');
         }
 
-        $product = Product::fromArray($result[array_key_first($result)]);
         $transactions = ((new StockTransactionRepository(app()->getAppStorage()))
         ->where('product_id','=',$product->id())->orderDescBy('id')->results());
 
