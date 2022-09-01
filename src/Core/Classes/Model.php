@@ -23,8 +23,11 @@ abstract class Model
         $modelConstructorParameters = array_intersect_key($args, array_flip(array_column($modelConstructor->getParameters(),'name')));
 
         $self = new static(...$modelConstructorParameters);
-       
+
+        
         //also set values that did not set in the constructor.
+        $args = array_diff_key($args,$modelConstructorParameters);        
+
         foreach ($args as $key => $value) {
             if(property_exists($self,$key)){
                 //check if property is already set by constructor. 
