@@ -43,7 +43,9 @@ trait JoinQueryBuilder
 
     public function getJoinQuery():string
     {
-        return trim(implode(' ',$this->getJoinQueryArray()));
+        if(!empty($this->getJoinQueryArray()))
+            return trim(implode(' ',$this->getJoinQueryArray()));
+        return '';
     }
 
     public function getJoinQueryArray():array

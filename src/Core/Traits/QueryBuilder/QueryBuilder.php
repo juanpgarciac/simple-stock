@@ -4,6 +4,8 @@ namespace Core\Traits\QueryBuilder;
 
 trait QueryBuilder
 {
+    use Segments\SelectQueryBuilder;
+    use Segments\FromQueryBuilder;
     use Segments\JoinQueryBuilder;
     use Segments\WhereQueryBuilder;
     use Segments\OrderQueryBuilder;
@@ -16,6 +18,8 @@ trait QueryBuilder
         $this->clearWhereQuery();
         $this->clearJoinQuery();
         $this->clearOrderQuery();
+        $this->clearSelectQuery();
+        $this->clearFromQuery();
     }
 
     /**
@@ -25,6 +29,8 @@ trait QueryBuilder
     {
         return trim(implode(' ',
             [
+                $this->getSelectQuery(),
+                $this->getFromQuery(),
                 $this->getJoinQuery(),
                 $this->getWhereQuery(),
                 $this->getOrderQuery()

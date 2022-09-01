@@ -26,10 +26,6 @@ abstract class ModelRepository
      * @var IStorageDriver
      */
     protected IStorageDriver $DB;
-    /**
-     * @var array<string>
-     */
-    protected array $select = ['*'];
 
     /**
      * @var array<mixed>
@@ -66,18 +62,6 @@ abstract class ModelRepository
     {
         return $this->modelClass;
     }
-    /**
-     * @param array<string>|string $fields
-     *
-     * @return ModelRepository
-     */
-    public function select(array|string $fields = '*'): ModelRepository
-    {
-        if (!is_array($fields)) {
-            $this->select = explode(',', $fields);
-        }
-        return $this;
-    }
 
     /**
      * @return string
@@ -92,7 +76,7 @@ abstract class ModelRepository
      */
     public function getFieldSelection(): array
     {
-        return $this->select;
+        return !empty($this->getSelectQueryArray()) ?$this->getSelectQueryArray():['*'];
     }
 
     /**
@@ -122,7 +106,6 @@ abstract class ModelRepository
      */
     private function clear_query(): void
     {
-        $this->select = ['*'];
         $this->clearQuery();
     }
 
@@ -249,6 +232,11 @@ abstract class ModelRepository
     private function getFrom():string
     {
         return trim($this->getTable().' '.$this->getJoinQuery());
+    }
+
+    private function from($from)
+    {
+        return $this->getTable();
     }
 
 }

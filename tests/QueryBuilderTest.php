@@ -173,7 +173,8 @@ final class QueryBuilderTest extends TestCase
         $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
 
         $result = $queryBuilder
-        ->join('table','id','other_id')
+        ->from('initialTable')
+        ->join('table','id','other_id')        
         ->where('name','juan')
         ->and('age','=',5)
         ->or('age','>',10)
@@ -181,7 +182,7 @@ final class QueryBuilderTest extends TestCase
         ->orderDescBy('age')
         ->getQuery();
 
-        $this->assertSame("JOIN table ON id = other_id WHERE name = 'juan' AND age = '5' OR age > '10' ORDER BY name, age DESC",$result);
+        $this->assertSame("SELECT * FROM initialTable JOIN table ON id = other_id WHERE name = 'juan' AND age = '5' OR age > '10' ORDER BY name, age DESC",$result);
 
     }
 
