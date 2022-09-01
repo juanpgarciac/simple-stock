@@ -15,8 +15,8 @@
                 <p class="card-text"></p>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><label for="presentation">Presentation:</label> <span><?=$presentation?></span></li>
-                    <li class="list-group-item"><label for="unit">Unit:</label> <span><?=$unit?></span><br></li>
-                    <li class="list-group-item"><label for="category">Category:</label> <span><?=ucwords($category)?></span></li>
+                    <li class="list-group-item"><label for="unit">Unit:</label> <span><?=$unit ?? '-' ?></span><br></li>
+                    <li class="list-group-item"><label for="category">Category:</label> <span><?=$category ? ucwords($category) : '-' ?></span></li>
                     <li class="list-group-item"><label for="stock">Stock:</label> <span><?=$stock?></span></li>
                 </ul>
 

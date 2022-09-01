@@ -17,7 +17,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products =((new ProductRepository(app()->getAppStorage()))->results());
+        $products =((new ProductRepository(app()->getAppStorage()))
+        ->select('product.*, unit.unit, category.category')
+        ->leftJoin('category','product.category_id','category.id')
+        ->leftJoin('unit','product.unit_id','unit.id')
+        ->results());
 
         return compact('products');
     }
@@ -27,10 +31,19 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = (new ProductRepository(app()->getAppStorage()))->find($id);
-        if(is_null($product)){
+        $result = (new ProductRepository(app()->getAppStorage()))
+        ->select('product.*, unit.unit, category.category')
+        ->leftJoin('category','product.category_id','category.id')
+        ->leftJoin('unit','product.unit_id','unit.id')
+        //->find($id);
+        ->where('product.id',$id)
+        ->results();
+
+        if(empty($result)){
             redirect('/product');
         }
+
+        $product = Product::fromArray($result[array_key_first($result)]);
         $transactions = ((new StockTransactionRepository(app()->getAppStorage()))
         ->where('product_id','=',$product->id())->orderDescBy('id')->results());
 
@@ -70,7 +83,7 @@ class ProductController extends Controller
             $product = $productRepository->update($product);
             $message .= 'Updated';
         }else{
-            $product = $productRepository->insert(request());
+            $product = $productRepository->insert($product);
             $message .= 'Saved';   
             $stockTransaction = new StockTransaction($product->id(),request('initialStock'),'Initial Stock');
             $stockRepository = new StockTransactionRepository(app()->getAppStorage());

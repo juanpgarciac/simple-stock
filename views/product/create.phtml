@@ -30,21 +30,21 @@
                 </div>
             </div>
             <div class="mb-3 col">
-                <label for="unit" class="form-label">Unit</label>
-                <select name="unit" id="unit" class="form-select">
+                <label for="unit_id" class="form-label">Unit</label>
+                <select name="unit_id" id="unit_id" class="form-select">
+                    <option value="">Uncategorized</option>
                     <?php foreach($units as $un):?>
-                        <option <?= $unit == $un['unit'] ? 'selected' : ''; ?>><?=$un['unit'];?></option>
+                        <option <?= $unit_id == $un['id'] ? 'selected' : ''; ?> value="<?=$un['id']?>"><?=$un['unit'];?></option>
                     <?php endforeach; ?>
-                    <option>Other</option>
                 </select>
             </div>
             <div class="mb-3 col">
-                <label for="category" class="form-label">Category</label>
-                <select name="category" id="category" class="form-select">
+                <label for="category_id" class="form-label">Category</label>
+                <select name="category_id" id="category_id" class="form-select">
+                    <option value="">Uncategorized</option>
                     <?php foreach($categories as $cat):?>
-                        <option <?= $category == $cat['category'] ? 'selected' : ''; ?>><?=ucwords($cat['category']);?></option>
-                    <?php endforeach; ?>
-                    <option>Other</option>
+                        <option <?= $category_id == $cat['id'] ? 'selected' : ''; ?> value="<?=$cat['id']?>"><?=ucwords($cat['category']);?></option>
+                    <?php endforeach; ?>                    
                 </select>
             </div>
             <?php if(!isset($id)):?>

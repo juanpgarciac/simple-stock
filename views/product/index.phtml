@@ -30,10 +30,10 @@
                 <tr>
                     <th scope="row"><?=$id?></th>
                     <td><a href="/product/<?=$id?>"><?=$name?></a></td>
-                    <td><?=$category?></td>
+                    <td><?=$category ?? '-' ?></td>
                     <td><?=ucwords($presentation)?></td>
                     <td><?=$stock?></td>
-                    <td><?=$unit?></td>
+                    <td><?=$unit ?? '-' ?></td>
                     <td>
                         <form method="POST" action="/product/delete/<?=$id?>" class="m-0">
                             <a class="btn btn-secondary btn-sm" href="/product/edit/<?=$id?>"><i class="bi bi-pencil-square"></i></a>
