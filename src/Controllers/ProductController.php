@@ -17,11 +17,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products =((new ProductRepository(app()->getAppStorage()))
-        ->select('product.*, unit.unit, category.category')
-        ->leftJoin('category','product.category_id','category.id')
-        ->leftJoin('unit','product.unit_id','unit.id')
-        ->results());
+        $productRepository = (new ProductRepository(app()->getAppStorage()))
+        ->select('product.*, unit.unit, c.category, p.category parent')
+        ->leftJoin('category c','product.category_id','c.id')
+        ->leftJoin('category p','c.parent_id','p.id')
+        ->leftJoin('unit','product.unit_id','unit.id');
+
+        $search = trim(request('search'));
+        if(!empty($search)){
+            foreach (['name','presentation','c.category','p.category'] as $field) {
+                $productRepository->orWhere($field,'like',"%$search%");
+            }            
+        }
+
+        $products = $productRepository->results();
 
         return compact('products');
     }
@@ -36,7 +45,7 @@ class ProductController extends Controller
         ->leftJoin('category','product.category_id','category.id')
         ->leftJoin('unit','product.unit_id','unit.id')
         ->find($id);
-                
+
         if(empty($product)){
             redirect('/product');
         }

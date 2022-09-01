@@ -8,6 +8,18 @@
     <div class="col-4">
         <a class="btn btn-primary" href="/product/create"><i class="bi bi-box-seam"></i> Create product</a>
     </div>
+    <div class="col-4 offset-4">
+        <form method="GET" action="/product">
+            <div class="input-group mb-3">
+                <input value="<?= request('search') ?>" type="text" class="form-control" name="search" placeholder="Search product" aria-label="Search product" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" onclick="location = '/product'"><i class="bi bi-x-circle"></i></button>
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="bi bi-search"></i></button>                
+            </div>
+        </form>
+    </div>
+    
+</div>
+<div class="row">
     <div class="col-12">        
         <table class="table">
             <thead>
@@ -30,7 +42,7 @@
                 <tr>
                     <th scope="row"><?=$id?></th>
                     <td><a href="/product/<?=$id?>"><?=$name?></a></td>
-                    <td><?=$category ?? '-' ?></td>
+                    <td><?=($parent?$parent . ' > ' : '' ).($category ?? '-') ?></td>
                     <td><?=ucwords($presentation)?></td>
                     <td><?=$stock?></td>
                     <td><?=$unit ?? '-' ?></td>
