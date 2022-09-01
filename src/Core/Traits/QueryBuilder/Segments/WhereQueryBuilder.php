@@ -1,13 +1,11 @@
 <?php 
 
-namespace Core\Traits;
+namespace Core\Traits\QueryBuilder\Segments;
 
-trait QueryBuilder
+trait WhereQueryBuilder
 {
 
-    private $orderArray = [];
     private $queryArray = [];
-    private $joinArray = [];
     private $openGroupsCount = 0;
 
     private static function assambleConditionItem(array $args)
@@ -219,86 +217,12 @@ trait QueryBuilder
     }
 
     /**
-     * @return string
-     */
-    public function getQuery():string
-    {
-        return trim(implode(' ',$this->getQueryArray()));
-    }
-
-    /**
-     * @return array
-     */
-    public function getQueryArray():array
-    {
-        $this->closeGrps();
-        return $this->queryArray;
-    }
-
-    /**
      * @return void
      */
-    public function clearQuery():void
+    public function clearWhereQuery():void
     {
         $this->queryArray = [];
-        $this->orderArray = [];
-        $this->joinArray = [];
         $this->openGroupsCount = 0;
-    }
-
-    /**
-     * @param string $field
-     * @param string|null $sort
-     * 
-     * @return static
-     */
-    public function orderBy(string $field, string $sort = null):static
-    {
-        $sort = !empty($sort) ? trim(strtoupper($sort)) : '';
-        $sort = !in_array($sort,['ASC','DESC']) ? '' : ' '.$sort;
-        $this->orderArray[] = $field.$sort;
-        return $this;
-    }
-
-    /**
-     * @param string $field
-     * 
-     * @return static
-     */
-    public function orderAscBy(string $field):static
-    {
-        $this->orderBy($field,'ASC');
-        return $this;
-    }
-
-    /**
-     * @param string $field
-     * 
-     * @return static
-     */
-    public function orderDescBy(string $field):static
-    {
-        $this->orderBy($field,'DESC');
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOrderQuery():string
-    {
-        $arr = $this->getOrderQueryArray();
-        if(empty($arr))
-            return '';
-        return 'ORDER BY '.trim(implode(', ',$this->getOrderQueryArray()));
-    }
-
-    /**
-     * @return array
-     */
-    public function getOrderQueryArray():array
-    {
-        return $this->orderArray;
     }
 
     /**
@@ -306,56 +230,18 @@ trait QueryBuilder
      */
     public function getWhereQuery():string
     {
-        $query = $this->getQuery();
+        $query = trim(implode(' ',$this->getWhereQueryArray()));
         if(empty($query))
             return '';
         return 'WHERE '.$query;
     }
 
-
-    private function createJoin(string $joinType, string $joinTo, string $usingField, string $withField = null)
+    /**
+     * @return array
+     */
+    public function getWhereQueryArray():array
     {
-        $joinType = empty($joinType)? '':strtoupper($joinType);
-        $joinType = !in_array($joinType, ['INNER','LEFT','RIGHT','FULL']) ? '' : $joinType;
-        $withField = $withField ?? "`$joinTo`.`$usingField`";
-
-        $this->joinArray[] = trim($joinType." JOIN $joinTo ON $usingField = $withField");
-        return $this;
+        $this->closeGrps();
+        return $this->queryArray;
     }
-
-    public function join(string $joinTo, string $usingField, string $withField = null):static
-    {
-        return $this->createJoin('',$joinTo,$usingField,$withField);
-    }
-
-    public function innerJoin(string $joinTo, string $usingField, string $withField = null):static
-    {                
-        return $this->createJoin('INNER', $joinTo, $usingField, $withField);
-    }
-
-    public function leftJoin(string $joinTo, string $usingField, string $withField = null):static
-    {        
-        return $this->createJoin('LEFT', $joinTo, $usingField, $withField);
-    }
-
-    public function rightJoin(string $joinTo, string $usingField, string $withField = null):static
-    {        
-        return $this->createJoin('RIGHT', $joinTo, $usingField, $withField);
-    }
-
-    public function fulljoin(string $joinTo, string $usingField, string $withField = null):static
-    {        
-        return $this->createJoin('FULL', $joinTo, $usingField, $withField);
-    }
-
-    public function getJoinQuery():string
-    {
-        return trim(implode(' ',$this->getJoinQueryArray()));
-    }
-
-    public function getJoinQueryArray():array
-    {
-        return $this->joinArray;
-    }
-
 }

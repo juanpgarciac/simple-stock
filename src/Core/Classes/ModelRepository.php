@@ -3,7 +3,7 @@
 namespace Core\Classes;
 
 use Core\Interfaces\IStorageDriver;
-use Core\Traits\QueryBuilder;
+use Core\Traits\QueryBuilder\QueryBuilder;
 
 abstract class ModelRepository
 {
@@ -100,7 +100,7 @@ abstract class ModelRepository
      */
     public function getConditions(): array
     {
-        return $this->getQueryArray();
+        return $this->getWhereQueryArray();
     }
 
     /**

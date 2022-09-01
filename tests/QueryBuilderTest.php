@@ -3,8 +3,8 @@
 
 declare(strict_types=1);
 
-use Core\Traits\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Core\Traits\QueryBuilder\QueryBuilder;
 
 final class QueryBuilderTest extends TestCase
 {
@@ -12,9 +12,9 @@ final class QueryBuilderTest extends TestCase
     {
         $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
 
-        $result = $queryBuilder->where('id',1)->getQuery();
+        $result = $queryBuilder->where('id',1)->getWhereQuery();
 
-        $this->assertSame("id = '1'",$result);
+        $this->assertSame("WHERE id = '1'",$result);
     }
 
     public function test_where_query_chain()
@@ -23,9 +23,9 @@ final class QueryBuilderTest extends TestCase
 
         $result = $queryBuilder->where('id',1)
         ->where('age','>',18)
-        ->getQuery();
+        ->getWhereQuery();
 
-        $this->assertSame("id = '1' AND age > '18'",$result);
+        $this->assertSame("WHERE id = '1' AND age > '18'",$result);
     }
 
     public function test_where_query_chain_and_or()
@@ -37,9 +37,9 @@ final class QueryBuilderTest extends TestCase
         ->and('age','=',5)
         ->or('age','>',10)
 
-        ->getQuery();
+        ->getWhereQuery();
 
-        $this->assertSame("name = 'juan' AND age = '5' OR age > '10'",$result);
+        $this->assertSame("WHERE name = 'juan' AND age = '5' OR age > '10'",$result);
     }
 
 
@@ -52,9 +52,9 @@ final class QueryBuilderTest extends TestCase
         ->andGrp('age','=',5)
         ->or('age','=',8)
         ->or('age','>',10)
-        ->getQuery();
+        ->getWhereQuery();
 
-        $this->assertSame("name = 'juan' AND ( age = '5' OR age = '8' OR age > '10' )",$result);
+        $this->assertSame("WHERE name = 'juan' AND ( age = '5' OR age = '8' OR age > '10' )",$result);
     }
 
     public function test_query_with_advanced_groups()
@@ -69,9 +69,9 @@ final class QueryBuilderTest extends TestCase
         ->and('country','Germany')
         ->closeGrp()
         ->or('profession','developer')
-        ->getQuery();
+        ->getWhereQuery();
 
-        $this->assertSame("name = 'Juan' AND lastname = 'García' AND ( age = '5' OR ( country = 'Italy' AND country = 'Germany' ) OR profession = 'developer' )",$result);
+        $this->assertSame("WHERE name = 'Juan' AND lastname = 'García' AND ( age = '5' OR ( country = 'Italy' AND country = 'Germany' ) OR profession = 'developer' )",$result);
     }
 
     public function test_query_with_not_and_not_groups()
@@ -85,9 +85,9 @@ final class QueryBuilderTest extends TestCase
         ->and('e','f')
         ->not('h','g')
         ->andNot('i','j')
-        ->getQuery();
+        ->getWhereQuery();
 
-        $this->assertSame("NOT ( a = 'b' OR c = 'd' ) AND e = 'f' AND NOT ( h = 'g' ) AND NOT ( i = 'j' )",$result);        
+        $this->assertSame("WHERE NOT ( a = 'b' OR c = 'd' ) AND e = 'f' AND NOT ( h = 'g' ) AND NOT ( i = 'j' )",$result);        
     }
 
     public function test_query_for_stock_table()
@@ -97,9 +97,9 @@ final class QueryBuilderTest extends TestCase
         $result = $queryBuilder
         ->where('name','like','%Apple%')
         ->or('presentation','like','%can')
-        ->getQuery();
+        ->getWhereQuery();
 
-        $this->assertSame("name LIKE '%Apple%' OR presentation LIKE '%can'",$result);        
+        $this->assertSame("WHERE name LIKE '%Apple%' OR presentation LIKE '%can'",$result);        
     }
 
 
@@ -166,6 +166,23 @@ final class QueryBuilderTest extends TestCase
         $result = $queryBuilder->join('otherTable','id')->getJoinQuery();
 
         $this->assertSame("JOIN otherTable ON id = `otherTable`.`id`",$result);
+    }
+
+    public function test_query_multitrait()
+    {
+        $queryBuilder = $this->getObjectForTrait(QueryBuilder::class);
+
+        $result = $queryBuilder
+        ->join('table','id','other_id')
+        ->where('name','juan')
+        ->and('age','=',5)
+        ->or('age','>',10)
+        ->orderBy('name')
+        ->orderDescBy('age')
+        ->getQuery();
+
+        $this->assertSame("JOIN table ON id = other_id WHERE name = 'juan' AND age = '5' OR age > '10' ORDER BY name, age DESC",$result);
+
     }
 
 
