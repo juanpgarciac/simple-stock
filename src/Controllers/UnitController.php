@@ -6,16 +6,23 @@ use Models\UnitRepository;
 
 class UnitController extends Controller
 {
+    private $unitRepository;
+
+    public function __construct()
+    {
+        $this->unitRepository = new UnitRepository(app()->getAppStorage());
+    }
+
     public function index()
     {
-        $units = (new UnitRepository(app()->getAppStorage()))->results();
+        $units = $this->unitRepository->results();
         view('/unit/index')->with(compact('units'))->render();
     }
 
     public function edit($id)
     {   $record =[];
         if($id){
-            $record = (new UnitRepository(app()->getAppStorage()))->find($id);
+            $record = $this->unitRepository->find($id);
             
         }
         return $record;
@@ -29,9 +36,9 @@ class UnitController extends Controller
         }
         $message = 'created';
         if(is_null($id)){
-            $unit = (new UnitRepository(app()->getAppStorage()))->insert(request());
+            $unit = $this->unitRepository->insert(request());
         }else{
-            $unit = (new UnitRepository(app()->getAppStorage()))->update(request());
+            $unit = $this->unitRepository->update(request());
             $message = 'updated';
         }
         if($unit === false){
@@ -43,7 +50,7 @@ class UnitController extends Controller
 
     public function destroy($id)
     {
-        (new UnitRepository(app()->getAppStorage()))->delete($id);
+        $this->unitRepository->delete($id);
         redirect('/unit?message=Unit deleted');
     }
 }

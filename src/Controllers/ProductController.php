@@ -11,14 +11,19 @@ use Models\StockTransactionRepository;
 use Models\UnitRepository;
 
 class ProductController extends Controller
-{
+{   
+    private $productRepository;
+
+    public function __construct()
+    {
+            $this->productRepository = new ProductRepository(app()->getAppStorage());
+    }
     /**
      * @return void
      */
     public function index()
     {
-        $productRepository = (new ProductRepository(app()->getAppStorage()))
-        ->select('product.*, unit.unit, c.category, p.category parent')
+        $this->productRepository->select('product.*, unit.unit, c.category, p.category parent')
         ->leftJoin('category c','product.category_id','c.id')
         ->leftJoin('category p','c.parent_id','p.id')
         ->leftJoin('unit','product.unit_id','unit.id');
@@ -26,11 +31,11 @@ class ProductController extends Controller
         $search = trim(request('search'));
         if(!empty($search)){
             foreach (['name','presentation','c.category','p.category'] as $field) {
-                $productRepository->orWhere($field,'like',"%$search%");
+                $this->productRepository->orWhere($field,'like',"%$search%");
             }            
         }
 
-        $products = $productRepository->results();
+        $products = $this->productRepository->results();
 
         return compact('products');
     }
@@ -40,7 +45,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product =  (new ProductRepository(app()->getAppStorage()))
+        $product =  $this->productRepository
         ->select('product.*, unit.unit, category.category')
         ->leftJoin('category','product.category_id','category.id')
         ->leftJoin('unit','product.unit_id','unit.id')
@@ -65,7 +70,7 @@ class ProductController extends Controller
     public function edit(string $id = null)
     {   $product = null;
         if(!is_null($id)){
-            $product = (new ProductRepository(app()->getAppStorage()))->find($id);   
+            $product = $this->productRepository->find($id);   
             if(is_null($product)){
                 redirect('/product');
             }
@@ -81,7 +86,7 @@ class ProductController extends Controller
 
     public function store()
     {
-        $productRepository = new ProductRepository(app()->getAppStorage());
+        $productRepository = $this->productRepository;
         
         $product = Product::create(request());
         $message = 'Product ';
@@ -102,8 +107,7 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $productRepository = new ProductRepository(app()->getAppStorage());
-        $productRepository->delete($id);
+        $this->productRepository->delete($id);
         redirect("/product?message=Product $id deleted");
     }
 }

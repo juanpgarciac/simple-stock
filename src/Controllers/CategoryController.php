@@ -6,18 +6,25 @@ use Models\CategoryRepository;
 
 class CategoryController extends Controller
 {
+    private $categoryRepository;
+
+    public function __construct()
+    {
+        $this->categoryRepository = new CategoryRepository(app()->getAppStorage());
+    }
+    
     public function index()
     {
-        $categories = (new CategoryRepository(app()->getAppStorage()))->results();
+        $categories = $this->categoryRepository->results();
         view('/category/index')->with(compact('categories'))->render();
     }
 
     public function edit($id)
     {   $category =[];
         if($id){
-            $category = (new CategoryRepository(app()->getAppStorage()))->find($id);
+            $category = $this->categoryRepository->find($id);
         }
-        $categories = (new CategoryRepository(app()->getAppStorage()))->orderBy('category')->results();        
+        $categories = $this->categoryRepository->orderBy('category')->results();        
         return compact('category','categories');
     }
 
@@ -31,9 +38,9 @@ class CategoryController extends Controller
         $insert['parent_id'] = empty($insert['parent_id']) ? null : $insert['parent_id']; 
         $message = 'created';
         if(is_null($id)){
-            $category = (new CategoryRepository(app()->getAppStorage()))->insert($insert);
+            $category = $this->categoryRepository->insert($insert);
         }else{
-            $category = (new CategoryRepository(app()->getAppStorage()))->update($insert);
+            $category = $this->categoryRepository->update($insert);
             $message = 'updated';
         }
         if($category === false){
@@ -45,7 +52,7 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-        (new CategoryRepository(app()->getAppStorage()))->delete($id);
+        $this->categoryRepository->delete($id);
         redirect('/category?message=Category deleted');
     }
 }
