@@ -36,15 +36,17 @@ if (!function_exists('env')) {
      * @param string $set
      *
      * @return string
-     * return env value. If $set value is sent the function will return old value. Will return set value if doesn't exist. 
+     * Return env variable requested/set.
      */
     function env(string $key, string $set = ''): string
-    {
-        $env = array_key_exists($key, envPool()) ? envPool()[$key] : '';
+    {        
         if(!empty($set)){
-            envPool()[$key] = $set;
-        }
-        return !empty($env) ? $env : $set;
+            $pool = envPool([$key => $set]);
+        }else 
+            $pool = envPool();
+
+        $env = array_key_exists($key, $pool) ? $pool[$key] : '';
+        return $env;
     }
 }
 
@@ -82,24 +84,4 @@ function slash(): string
 function path(string  ...$pathParts): string
 {
     return implode(slash(),$pathParts);
-}
-
-/**
- * @param string $dir
- * @param string $extension
- *
- * @return array
- */
-function getClassesSourceFiles(string $dir = SRC_DIR, string $extension = 'php'): array
-{
-    $classes = [];
-    $dir_iterator = new RecursiveDirectoryIterator($dir);
-    $iterator = new RecursiveIteratorIterator($dir_iterator, RecursiveIteratorIterator::SELF_FIRST);
-    foreach ($iterator as $file) {
-        if ($file->isFile() && $file->getExtension() == $extension) {
-            $class =  str_replace(['.php',$dir,slash()], ['', '', '\\'], $file->getPathname());
-            $classes[$class] = $file->getPathname();
-        }
-    }
-    return $classes;
 }

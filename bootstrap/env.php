@@ -18,27 +18,36 @@ function envPool(array $set = [] ):array|null
 }
 
 
+/**
+ * Retrieve all environment variables required for the project. 
+ * Following this order: 
+ * 1. User defined bootstrap constants
+ * 2. Defined on config/env.php
+ * 3. Defined on /.env file
+ * 4. Defined within the system environment
+ * 
+ * @return void
+ */
 function bootEnvironment():void
 {
+    //get and set env variables from defined constants
+    envPool(get_defined_constants(true)['user']);
+
+    //then take env variables from config/env.php
+    envPool(arrayFromFile(path(CONFIG_DIR, 'env.php')));
+
+    //Then if .env file exists take env variables from it
     if (is_file(path(ROOT_DIR,'.env'))) {
-        //get and set env variables from defined constants
-        envPool(get_defined_constants(true)['user']);
-        
-        if ($env = parse_ini_file(path(ROOT_DIR,'.env'))) {
+        if ($envFromFile = parse_ini_file(path(ROOT_DIR,'.env'))) {
             //get and set env variables from .env file
-            envPool($env);
-            $sysenv = getenv(null,true);
-            $newenv = [];
-            foreach($env as $key => $value){
-                if(isset($sysenv[$key])){
-                    $newenv[$key] = $sysenv[$key];
-                }
-            }
-            envPool($newenv);
+            envPool($envFromFile);
         }
     } else {
-        trigger_error("No environment file detected (.env)", E_USER_ERROR);
+        trigger_error("No environment file detected (.env)", E_USER_WARNING);
     }    
+    //And last, replace any env set with the system environment 
+    //(e.g phpunit <php><env> elements or with the putenv function)
+    envPool(array_intersect_key(getenv(null,true),envPool()));
 }
 
 bootEnvironment();

@@ -57,7 +57,7 @@ final class RouteCallback
             if (!class_exists($class)) {
                 $classes = preg_grep("#".preg_quote($class)."#", get_declared_classes());
                 if (empty($classes)) {
-                    $classes = preg_grep("#".preg_quote($class)."#", array_keys(getClassesSourceFiles()));
+                    $classes = preg_grep("#".preg_quote($class)."#", array_keys(self::getClassesSourceFiles()));
                     if (empty($classes)) {
                         throw new \InvalidArgumentException("$class is not defined", 1);
                     }
@@ -109,6 +109,26 @@ final class RouteCallback
             return call_user_func($functionToCall, $args);
         }
         return null;
+    }
+
+    /**
+     * @param string $dir
+     * @param string $extension
+     *
+     * @return array
+     */
+    private static function getClassesSourceFiles(string $dir = SRC_DIR, string $extension = 'php'): array
+    {
+        $classes = [];
+        $dir_iterator = new \RecursiveDirectoryIterator($dir);
+        $iterator = new \RecursiveIteratorIterator($dir_iterator, \RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getExtension() == $extension) {
+                $class =  str_replace(['.php',$dir,slash()], ['', '', '\\'], $file->getPathname());
+                $classes[$class] = $file->getPathname();
+            }
+        }
+        return $classes;
     }
 
 
