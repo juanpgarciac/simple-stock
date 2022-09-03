@@ -45,9 +45,10 @@ abstract class ModelRepository
     /**
      * @param IStorageDriver $DBDriver
      */
-    public function __construct(IStorageDriver $DBDriver)
+    final public function __construct(IStorageDriver $DBDriver)
     {
         $this->DB = $DBDriver;
+        $this->fields = array_merge($this->fields, $this->nullable);
     }
 
     /**

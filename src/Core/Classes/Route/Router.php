@@ -73,8 +73,10 @@ final class Router implements ISingleton
      *
      * @return array<Route>
      */
-    public function getRoutePool(string $method = Route::GET): array
+    public function getRoutePool(string|null $method = Route::GET): array
     {
+        if(empty($method) || !in_array($method,Route::METHODS))
+            return $this->routePool;    
         return $this->routePool[$method];
     }
 
