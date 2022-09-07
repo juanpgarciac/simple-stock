@@ -27,7 +27,7 @@ class FakeDBDriver implements IStorageDriver
                 $field = $arr[0];
                 $operator = $arr[1];
                 $compare = trim(implode(" ", array_slice($arr, 2)), "\'");
-                if (!Utils::operate($row[$field], $operator, trim($compare, '\''))) {
+                if (!self::operate($row[$field], $operator, trim($compare, '\''))) {
                     return false;
                 }
             }
@@ -98,7 +98,7 @@ class FakeDBDriver implements IStorageDriver
         $this->tables[$table]  = array_filter($this->tables[$table], function (array $row) use ($conditions) {
             foreach ($conditions as $condition) {
                 list($field, $operator, $compare) = explode(' ', $condition);
-                if (!Utils::operate($row[$field], $operator, $compare)) {
+                if (!self::operate($row[$field], $operator, $compare)) {
                     return false;
                 }
             }
@@ -120,5 +120,35 @@ class FakeDBDriver implements IStorageDriver
         $this->tables_ids[$table]++;
 
         return $this->tables_ids[$table]."";
+    }
+
+        /**
+     * @param string $exp1
+     * @param string $operator
+     * @param string $exp2
+     *
+     * @return bool
+     */
+    public static function operate(string $exp1, string $operator, string $exp2): bool
+    {
+        switch ($operator) {
+            case '=':
+                return $exp1 === $exp2;
+            case '!=':
+            case '<>':
+                return $exp1 != $exp2;
+            case '>':
+                return $exp1 > $exp2;
+            case '>=':
+                return $exp1 > $exp2;
+            case '<':
+                return $exp1 < $exp2;
+            case '<=':
+                return $exp1 <= $exp2;
+            case 'like':
+                return $exp1 == $exp2;
+
+        }
+        throw new \InvalidArgumentException("No valid operator given", 1);
     }
 }

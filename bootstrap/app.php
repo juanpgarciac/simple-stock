@@ -7,6 +7,7 @@ use Core\Classes\ConfigManager;
 use Core\Classes\Route\RouteHandler as Route;
 use Core\Classes\Route\Router;
 use Core\Classes\View;
+use Core\Command\PleaseCommand;
 
 function app(): App
 {
@@ -86,6 +87,11 @@ function slot($descriptor, $args = []){
     }
 }
 
+function please():PleaseCommand
+{
+   return PleaseCommand::getInstance();
+}
+
 /**
  * Concrete application start. 
  * @return void
@@ -94,6 +100,7 @@ function runApp(): void
 {
     router()->clearRoutePool();
     router()->registerRoutes(arrayFromFile(path(configdir('config'), 'routes.php')));    
+    please()->registerCommands(arrayFromFile(path(configdir('config'), 'commands.php')));    
 }
 
 

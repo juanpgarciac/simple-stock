@@ -1,0 +1,13 @@
+<?php 
+return <<<PHP
+<?php
+
+namespace Controllers;
+
+use Core\Classes\Controller;
+
+class @ClassName extends Controller
+{
+
+}
+PHP;

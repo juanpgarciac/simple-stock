@@ -1,0 +1,10 @@
+<?php 
+require_once 'bootstrap.php';
+
+(function($argv)
+{
+    please()->doFromCLI($argv);
+
+})($argv);
+
+exit();

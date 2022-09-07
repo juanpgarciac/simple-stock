@@ -1,0 +1,42 @@
+
+<?php
+return <<<PHP
+<?php
+namespace Models;
+
+use Core\Classes\ModelRepository;
+
+class @ClassName extends ModelRepository
+{
+    /**
+     * DB Table name. e. g. 'product'
+     * @var string
+     */
+    protected string \$table = '@table';
+
+    /**
+     * Array of table's field e.g. ['name','price','category_id']
+     * @var array
+     */
+    protected array \$fields = [];
+
+    /**
+     * The table ID field. By default is 'id'
+     * @var string
+     */
+    //protected string \$id_field = 'id';
+                    
+    /**
+     * Table's nullable fields e.g. ['category_id'].
+     * 
+     * @var array
+     */
+    //protected array \$nullable = [];
+
+    /**
+     * The model class name (in case the repository serves a model). 
+     * @var string
+     */
+    //protected string \$modelClass = ''; #E.g. Product::class
+}
+PHP;

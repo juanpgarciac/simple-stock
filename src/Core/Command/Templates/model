@@ -1,0 +1,13 @@
+<?php 
+return <<<PHP
+<?php
+
+namespace Models;
+
+use Core\Classes\Model;
+
+class @ClassName extends Model
+{
+    
+}
+PHP;
