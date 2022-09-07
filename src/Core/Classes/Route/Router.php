@@ -9,7 +9,7 @@ use Core\Traits\Singleton;
 final class Router implements ISingleton
 {
     use Singleton;
-    
+
     /**
      * @var array<mixed>
      */
@@ -75,8 +75,9 @@ final class Router implements ISingleton
      */
     public function getRoutePool(string|null $method = Route::GET): array
     {
-        if(empty($method) || !in_array($method,Route::METHODS))
-            return $this->routePool;    
+        if (empty($method) || !in_array($method, Route::METHODS)) {
+            return $this->routePool;
+        }
         return $this->routePool[$method];
     }
 
@@ -107,15 +108,16 @@ final class Router implements ISingleton
             }
 
             foreach ($methodRoutePool as $uri_pattern => $route) {
-                if (preg_match("#^$uri_pattern\/?$#", $uri)) {    
-                    //check if the route is a direct route                     
-                    if(strtolower(str_replace('/','',$route->getBaseURI()) === strtolower(str_replace('/','',$uri))))
+                if (preg_match("#^$uri_pattern\/?$#", $uri)) {
+                    //check if the route is a direct route
+                    if (strtolower(str_replace('/', '', $route->getBaseURI()) === strtolower(str_replace('/', '', $uri)))) {
                         return $route;
-                    $candidates[] = $route;//save candidate URL. 
+                    }
+                    $candidates[] = $route;//save candidate URL.
                 }
             }
         }
-        //TODO we can have a criterian for best candidate to route. 
+        //TODO we can have a criterian for best candidate to route.
         return !empty($candidates) ? $candidates[0] : false;
     }
 
@@ -148,12 +150,13 @@ final class Router implements ISingleton
 
         $uriParameters = $route->getParametersValues($uri);
 
-        $request = new Request($method,$requestData,$uriParameters);
+        $request = new Request($method, $requestData, $uriParameters);
 
-        $this->response = $this->routeTheRequest($route,$request);
+        $this->response = $this->routeTheRequest($route, $request);
 
-        if($route->getView())
-            $this->response = $route->getView()->render($this->response,true);
+        if ($route->getView()) {
+            $this->response = $route->getView()->render($this->response, true);
+        }
         return $this->response;
     }
 
@@ -165,7 +168,7 @@ final class Router implements ISingleton
      */
     public function routeTheRequest(Route $route, Request $request): mixed
     {
-        $this->currentRequest = $request;       
+        $this->currentRequest = $request;
         return $route->callback($request->getParameters());
     }
 
@@ -190,7 +193,7 @@ final class Router implements ISingleton
         return $this->currentRequest?->getParameters() ?? [];
     }
 
-    public function getRequestParameter(string $name):mixed
+    public function getRequestParameter(string $name): mixed
     {
         return $this->currentRequest?->getParameter($name) ?? null;
     }
@@ -235,13 +238,13 @@ final class Router implements ISingleton
         return $response;
     }
 
-    public static function redirect(string $uri):void
+    public static function redirect(string $uri): void
     {
-        header("location: $uri",true,301);
+        header("location: $uri", true, 301);
         die;
     }
 
-    public static function back(mixed $args = []):void
+    public static function back(mixed $args = []): void
     {
         self::redirect($_SERVER['HTTP_REFERER'].$args);
     }

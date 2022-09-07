@@ -21,7 +21,7 @@ function router(): Router
 function route(string|array|Route $route): Route
 {
     $routeInstance = Route::create($route);
-    
+
     router()->add($routeInstance);
 
     return $routeInstance;
@@ -39,14 +39,14 @@ function post($uri, $handler = null): Route
 
 function request(string $name = null): mixed
 {
-    $parameters = router()->getRequestParameters();    
+    $parameters = router()->getRequestParameters();
     if (is_null($name)) {
         return $parameters;
     }
     return router()->getRequestParameter($name);
 }
 
-function redirect($uri):void
+function redirect($uri): void
 {
     router()::redirect($uri);
 }
@@ -58,27 +58,29 @@ function back(mixed $args = [])
 
 function view($name, array $args = null)
 {
-    if(!is_null($args))
-        return (new View($name))->render($args);    
+    if (!is_null($args)) {
+        return (new View($name))->render($args);
+    }
     return (new View($name));
 }
 
 function config(): ConfigManager
 {
-   return app()->getConfigManager();
+    return app()->getConfigManager();
 }
 
-function configdir($dir):string
+function configdir($dir): string
 {
     return config()->dir($dir);
 }
 
-function slot($descriptor, $args = []){
-    $descriptor = str_replace('.','/',$descriptor);
+function slot($descriptor, $args = [])
+{
+    $descriptor = str_replace('.', '/', $descriptor);
     $supportedExtensions = ['php','html','phtml'];
     foreach ($supportedExtensions as $extension) {
         $path = path(configdir('views'), $descriptor.'.'.$extension);
-        if(is_file($path)){
+        if (is_file($path)) {
             extract($args);
             include $path;
             break;
@@ -87,13 +89,13 @@ function slot($descriptor, $args = []){
 }
 
 /**
- * Concrete application start. 
+ * Concrete application start.
  * @return void
  */
 function runApp(): void
 {
     router()->clearRoutePool();
-    router()->registerRoutes(arrayFromFile(path(configdir('config'), 'routes.php')));    
+    router()->registerRoutes(arrayFromFile(path(configdir('config'), 'routes.php')));
 }
 
 
@@ -101,7 +103,7 @@ function runApp(): void
  * Concrete server start.
  * @return void
  */
-function runServer():void
+function runServer(): void
 {
     router()->listenServer();
 }

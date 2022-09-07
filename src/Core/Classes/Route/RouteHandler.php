@@ -168,7 +168,7 @@ final class RouteHandler
             return false;
         }
 
-        $uriParts = explode('/', explode('?',$uri)[0]);
+        $uriParts = explode('/', explode('?', $uri)[0]);
         $values = [];
 
         foreach ($uriParts as $index => $part) {

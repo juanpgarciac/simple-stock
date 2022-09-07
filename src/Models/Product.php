@@ -28,10 +28,8 @@ class Product extends Model
         $this->id = null;
         $this->name = $name;
         $this->presentation = $presentation;
-        $this->unit_id = !empty($unit_id)?(int)$unit_id:null;
-        $this->category_id = !empty($category_id)?(int)$category_id:null;
+        $this->unit_id = !empty($unit_id) ? (int)$unit_id : null;
+        $this->category_id = !empty($category_id) ? (int)$category_id : null;
         $this->stock = $stock;
     }
-
-
 }

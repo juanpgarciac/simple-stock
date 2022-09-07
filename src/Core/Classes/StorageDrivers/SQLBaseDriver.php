@@ -77,12 +77,12 @@ abstract class SQLBaseDriver implements IStorageDriver
         $records = [];
         $query = SQLUtils::selectQuery($fields, $conditions, $table, $orderBy);
         $result = $this->query($query);
-        if($result){
+        if ($result) {
             $nativeResult = self::class_or_resource($result);
             while ($row =  $this->commonFetch($result, $nativeResult)) {
-                if(array_key_exists($id_field,$row)){
+                if (array_key_exists($id_field, $row)) {
                     $records[$row[$id_field]] = $row;
-                }else{
+                } else {
                     $records[] = $row;
                 }
             }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Core\Classes\Route;
 
@@ -6,7 +6,7 @@ use Closure;
 use ReflectionFunction;
 use ReflectionMethod;
 
-final class RouteCallback 
+final class RouteCallback
 {
     private mixed $callback = null;
 
@@ -34,7 +34,7 @@ final class RouteCallback
         };
     }
 
-    private function getCallback():array|callable
+    private function getCallback(): array|callable
     {
         return $this->callback;
     }
@@ -105,7 +105,7 @@ final class RouteCallback
                 }
             }
             return call_user_func_array($functionToCall, $data);
-        }else{
+        } else {
             return call_user_func($functionToCall, $args);
         }
         return null;
@@ -130,6 +130,4 @@ final class RouteCallback
         }
         return $classes;
     }
-
-
 }

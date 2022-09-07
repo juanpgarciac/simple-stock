@@ -18,8 +18,8 @@ final class StockTest extends TestCase
     private ProductRepository $productRepository;
     private IStorageDriver $storagedriver;
     private DBConfiguration $dbconfiguration;
-    
-    protected function setUp():void
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dbconfiguration = app()->getDBConfiguration();
@@ -34,16 +34,15 @@ final class StockTest extends TestCase
         $fakestorage = new FakeDBDriver();
         $stock = new StockTransaction();
         $stockRepository = new StockTransactionRepository($fakestorage);
-        $this->assertInstanceOf(StockTransaction::class,$stock);
-        $this->assertInstanceOf(StockTransactionRepository::class,$stockRepository);
-    }  
-    
+        $this->assertInstanceOf(StockTransaction::class, $stock);
+        $this->assertInstanceOf(StockTransactionRepository::class, $stockRepository);
+    }
+
     public function test_stockrepository_update_product_stock()
     {
-
         $product =  new Product(uniqid());
 
-        
+
         $productRepository = $this->productRepository;
         $stockRepository = $this->stockRepository;
 
@@ -52,18 +51,17 @@ final class StockTest extends TestCase
 
         $product_id = $productRepository->insert($product)->id();
 
-        $stockRepository->updateStock($productRepository,new StockTransaction($product_id,10));
-        $stockRepository->updateStock($productRepository,new StockTransaction($product_id,20));
-        $stockRepository->updateStock($productRepository,new StockTransaction($product_id,30));
+        $stockRepository->updateStock($productRepository, new StockTransaction($product_id, 10));
+        $stockRepository->updateStock($productRepository, new StockTransaction($product_id, 20));
+        $stockRepository->updateStock($productRepository, new StockTransaction($product_id, 30));
 
-        $this->assertCount(3,$stockRepository->results());
+        $this->assertCount(3, $stockRepository->results());
 
         $product = $productRepository->find($product_id);
         $this->assertSame((float)60, $product->getValue('stock'));
 
-        $stockRepository->updateStock($productRepository,new StockTransaction($product_id,-10));
+        $stockRepository->updateStock($productRepository, new StockTransaction($product_id, -10));
         $product = $productRepository->find($product_id);
         $this->assertSame((float)50, $product->getValue('stock'));
-
     }
 }

@@ -16,12 +16,12 @@ final class ConfigManager implements ISingleton
         $this->configurations = envPool();
     }
 
-    public static function configurations():array
+    public static function configurations(): array
     {
         return self::getInstance()->configurations;
     }
 
-    public static function configuration(string $name):string
+    public static function configuration(string $name): string
     {
         $name = strtoupper($name);
         return array_key_exists($name, self::configurations()) ? self::configurations()[$name] : '';
@@ -32,13 +32,12 @@ final class ConfigManager implements ISingleton
         return self::getInstance()->configuration($dir."_DIR");
     }
 
-    public static function set(string $key, string $value):void
+    public static function set(string $key, string $value): void
     {
         $key = strtoupper($key);
-        if(array_key_exists($key, self::configurations())){
+        if (array_key_exists($key, self::configurations())) {
             self::configurations()[$key] = $value;
             trigger_error("Changing $key should be for testing purposes only.", E_USER_WARNING);
         }
     }
-
 }

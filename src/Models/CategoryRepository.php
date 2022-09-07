@@ -13,5 +13,4 @@ class CategoryRepository extends ModelRepository
     protected array $fields = ['id','category','parent_id'];
 
     protected array $nullable = ['parent_id'];
-
 }

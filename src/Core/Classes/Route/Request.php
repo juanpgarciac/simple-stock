@@ -19,23 +19,20 @@ final class Request
         Request::POST
     ];
 
-    public function __construct($method = Request::GET, $requestData = null, $uriParameters = false )
+    public function __construct($method = Request::GET, $requestData = null, $uriParameters = false)
     {
-        
         if ($uriParameters === false) {
             $uriParameters = [];
         }
         if (empty($requestData)) {
             $requestData = [];
-        }else{
+        } else {
             $requestData = is_array($requestData) ? $requestData : [$requestData];
-            $requestData = array_merge($requestData,['_request' => $requestData], ['_'.$method => $requestData]);
+            $requestData = array_merge($requestData, ['_request' => $requestData], ['_'.$method => $requestData]);
         }
 
         $this->parameters = array_merge($requestData, $uriParameters);
         $this->method = $method;
-        
-
     }
 
     public function getParameters()
@@ -50,19 +47,18 @@ final class Request
 
     public function getParameter(string $name)
     {
-
         $parameters = $this->getParameters();
         $method = $this->getMethod();
 
-        if(isset($parameters[$name])){
+        if (isset($parameters[$name])) {
             return $parameters[$name];
         }
-        
-        if(isset($parameters[$method]) && isset($parameters[$method][$name])){
+
+        if (isset($parameters[$method]) && isset($parameters[$method][$name])) {
             return $parameters[$method][$name];
         }
 
-        if(isset($parameters['_request']) && isset($parameters['_request'][$name])){
+        if (isset($parameters['_request']) && isset($parameters['_request'][$name])) {
             return $parameters['_request'][$name];
         }
         return null;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Classes\Controller;
@@ -20,10 +21,10 @@ class UnitController extends Controller
     }
 
     public function edit($id)
-    {   $record =[];
-        if($id){
+    {
+        $record =[];
+        if ($id) {
             $record = $this->unitRepository->find($id);
-            
         }
         return $record;
     }
@@ -31,20 +32,20 @@ class UnitController extends Controller
     public function store()
     {
         $id = request('id');
-        if(empty(request('unit'))){
-            back('?message=Unit description cannot be empty&error=1');  
+        if (empty(request('unit'))) {
+            back('?message=Unit description cannot be empty&error=1');
         }
         $message = 'created';
-        if(is_null($id)){
+        if (is_null($id)) {
             $unit = $this->unitRepository->insert(request());
-        }else{
+        } else {
             $unit = $this->unitRepository->update(request());
             $message = 'updated';
         }
-        if($unit === false){
-            redirect('/unit?message=Error&error=1');    
+        if ($unit === false) {
+            redirect('/unit?message=Error&error=1');
         }
-        
+
         redirect('/unit?message=Unit '.$message);
     }
 

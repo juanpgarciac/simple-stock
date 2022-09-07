@@ -1,10 +1,9 @@
-<?php 
+<?php
 
 namespace Core\Traits\QueryBuilder\Segments;
 
 trait WhereQueryBuilder
 {
-
     private $queryArray = [];
     private $openGroupsCount = 0;
 
@@ -18,14 +17,14 @@ trait WhereQueryBuilder
             case 0:
                 throw new \InvalidArgumentException("Condition Item requires a field, an operator and a compareTo value");
                 break;
-            case 1: 
-                $field = $args[0]; 
+            case 1:
+                $field = $args[0];
                 break;
-            case 2: 
-                list($field, $compareTo) = array_slice($args,0,2);
+            case 2:
+                list($field, $compareTo) = array_slice($args, 0, 2);
                 break;
             default:
-                list($field, $operator, $compareTo) = [$args[0], $args[1], implode('',array_slice($args,2))];
+                list($field, $operator, $compareTo) = [$args[0], $args[1], implode('', array_slice($args, 2))];
                 break;
         }
 
@@ -41,8 +40,8 @@ trait WhereQueryBuilder
 
 
     private function queryIsOpen()
-    {        
-        $isIt =  $this->queryIsEmpty() || in_array(end($this->queryArray),['AND','OR','(']);
+    {
+        $isIt =  $this->queryIsEmpty() || in_array(end($this->queryArray), ['AND','OR','(']);
         reset($this->queryArray);
         return $isIt;
     }
@@ -69,9 +68,9 @@ trait WhereQueryBuilder
     }
 
 
-    public function where(...$args):static
-    {        
-        if(!$this->queryIsOpen()){
+    public function where(...$args): static
+    {
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('AND');
         }
 
@@ -80,109 +79,109 @@ trait WhereQueryBuilder
         return $this;
     }
 
-    public function orWhere(...$args):static
+    public function orWhere(...$args): static
     {
-        if(!$this->queryIsOpen()){
-            $this->addQueryOperator('OR'); 
+        if (!$this->queryIsOpen()) {
+            $this->addQueryOperator('OR');
         }
         $this->addQueryCondition($args);
 
         return $this;
-
     }
 
-    public function whereNot(...$args):static
+    public function whereNot(...$args): static
     {
-
-        if(!$this->queryIsOpen()){
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('AND');
         }
 
-        $this->addQueryOperator('NOT'); 
+        $this->addQueryOperator('NOT');
         $this->startGroup();
         $this->addQueryCondition($args);
         $this->closeGrp();
         return $this;
-
     }
 
-    public function and(...$args):static
+    public function and(...$args): static
     {
-        return $this->where(...$args);        
+        return $this->where(...$args);
     }
 
-    public function or(...$args):static
+    public function or(...$args): static
     {
-        return $this->orWhere(...$args);        
+        return $this->orWhere(...$args);
     }
 
-    public function not(...$args):static
+    public function not(...$args): static
     {
         return $this->whereNot(...$args);
     }
 
-    public function andNot(...$args):static
+    public function andNot(...$args): static
     {
-        if(!$this->queryIsOpen()){
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('AND');
         }
-        return $this->whereNot(...$args);        
+        return $this->whereNot(...$args);
     }
 
-    public function orNot(...$args):static
+    public function orNot(...$args): static
     {
-        if(!$this->queryIsOpen()){
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('OR');
         }
         return  $this->whereNot(...$args);
     }
 
-    public function andGrp(...$args):static
+    public function andGrp(...$args): static
     {
-        if(!$this->queryIsOpen())
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('AND');
+        }
         $this->startGroup();
         $this->and(...$args);
         return $this;
     }
 
-    public function orGrp(...$args):static
+    public function orGrp(...$args): static
     {
-        if(!$this->queryIsOpen())
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('OR');
+        }
         $this->startGroup();
-        $this->or(...$args);       
+        $this->or(...$args);
         return $this;
     }
 
-    public function notGrp(...$args):static
+    public function notGrp(...$args): static
     {
-        if(!$this->queryIsOpen()){
+        if (!$this->queryIsOpen()) {
             $this->addQueryOperator('AND');
         }
-        $this->addQueryOperator('NOT'); 
+        $this->addQueryOperator('NOT');
         $this->startGroup();
         $this->where(...$args);
         return $this;
     }
 
-    public function closeGrp():static
+    public function closeGrp(): static
     {
         $this->finishGroup();
         return $this;
     }
 
-    public function closeGrps():static
+    public function closeGrps(): static
     {
-        while($this->openGroupsCount > 0)
+        while ($this->openGroupsCount > 0) {
             $this->closeGrp();
+        }
         return $this;
     }
 
     /**
      * @return void
      */
-    private function startGroup():void
+    private function startGroup(): void
     {
         $this->addQueryItem("(");
         $this->incrementGroupCount();
@@ -191,18 +190,18 @@ trait WhereQueryBuilder
     /**
      * @return void
      */
-    private function finishGroup():void
+    private function finishGroup(): void
     {
-        if($this->openGroupsCount > 0){
+        if ($this->openGroupsCount > 0) {
             $this->addQueryItem(")");
             $this->decrementGroupCount();
-        }            
+        }
     }
 
     /**
      * @return void
      */
-    private function incrementGroupCount():void
+    private function incrementGroupCount(): void
     {
         $this->openGroupsCount++;
     }
@@ -210,16 +209,17 @@ trait WhereQueryBuilder
     /**
      * @return void
      */
-    private function decrementGroupCount():void
+    private function decrementGroupCount(): void
     {
-        if($this->openGroupsCount > 0)
+        if ($this->openGroupsCount > 0) {
             $this->openGroupsCount--;
+        }
     }
 
     /**
      * @return void
      */
-    public function clearWhereQuery():void
+    public function clearWhereQuery(): void
     {
         $this->queryArray = [];
         $this->openGroupsCount = 0;
@@ -228,18 +228,19 @@ trait WhereQueryBuilder
     /**
      * @return string
      */
-    public function getWhereQuery():string
+    public function getWhereQuery(): string
     {
-        $query = trim(implode(' ',$this->getWhereQueryArray()));
-        if(empty($query))
+        $query = trim(implode(' ', $this->getWhereQueryArray()));
+        if (empty($query)) {
             return '';
+        }
         return 'WHERE '.$query;
     }
 
     /**
      * @return array
      */
-    public function getWhereQueryArray():array
+    public function getWhereQueryArray(): array
     {
         $this->closeGrps();
         return $this->queryArray;

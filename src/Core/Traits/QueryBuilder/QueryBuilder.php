@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Core\Traits\QueryBuilder;
 
@@ -13,7 +13,7 @@ trait QueryBuilder
     /**
      * @return void
      */
-    public function clearQuery():void
+    public function clearQuery(): void
     {
         $this->clearWhereQuery();
         $this->clearJoinQuery();
@@ -25,9 +25,10 @@ trait QueryBuilder
     /**
      * @return string
      */
-    public function getQuery():string
+    public function getQuery(): string
     {
-        return trim(implode(' ',
+        return trim(implode(
+            ' ',
             [
                 $this->getSelectQuery(),
                 $this->getFromQuery(),

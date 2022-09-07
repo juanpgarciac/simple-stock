@@ -28,7 +28,7 @@ class StockTransaction extends Model
         $this->date = $date ?? date('Y-m-d h:i:s');
     }
 
-    public function getProductID():int
+    public function getProductID(): int
     {
         return $this->product_id;
     }

@@ -16,7 +16,13 @@ trait Singleton
         return static::$instance;
     }
 
-    public function __clone() { }
-    public function __sleep() { }
-    public function __wakeup() { }
+    public function __clone()
+    {
+    }
+    public function __sleep()
+    {
+    }
+    public function __wakeup()
+    {
+    }
 }

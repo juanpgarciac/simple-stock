@@ -22,7 +22,7 @@ function boot()
         //files in proper order
         BOOTSTRAP_DIR => ['global','env','autoload','app'],
     ];
-    
+
     foreach ($_boostrap_includes as $dir => $files) {
         foreach ($files as $file) {
             $filepath =  $dir.DIRECTORY_SEPARATOR.$file.'.php';

@@ -11,5 +11,4 @@ class UnitRepository extends ModelRepository
      * @var array<string>
      */
     protected array $fields = ['id','unit'];
-
 }

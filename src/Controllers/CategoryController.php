@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Classes\Controller;
@@ -12,7 +13,7 @@ class CategoryController extends Controller
     {
         $this->categoryRepository = new CategoryRepository(app()->getAppStorage());
     }
-    
+
     public function index()
     {
         $categories = $this->categoryRepository->results();
@@ -20,33 +21,34 @@ class CategoryController extends Controller
     }
 
     public function edit($id)
-    {   $category =[];
-        if($id){
+    {
+        $category =[];
+        if ($id) {
             $category = $this->categoryRepository->find($id);
         }
-        $categories = $this->categoryRepository->orderBy('category')->results();        
-        return compact('category','categories');
+        $categories = $this->categoryRepository->orderBy('category')->results();
+        return compact('category', 'categories');
     }
 
     public function store()
     {
-        if(empty(request('category'))){
-            back('?message=Category description cannot be empty&error=1');  
+        if (empty(request('category'))) {
+            back('?message=Category description cannot be empty&error=1');
         }
         $insert = request('_request');
         $id = request('id');
-        $insert['parent_id'] = empty($insert['parent_id']) ? null : $insert['parent_id']; 
+        $insert['parent_id'] = empty($insert['parent_id']) ? null : $insert['parent_id'];
         $message = 'created';
-        if(is_null($id)){
+        if (is_null($id)) {
             $category = $this->categoryRepository->insert($insert);
-        }else{
+        } else {
             $category = $this->categoryRepository->update($insert);
             $message = 'updated';
         }
-        if($category === false){
-            redirect('/category?message=Error&error=1');    
+        if ($category === false) {
+            redirect('/category?message=Error&error=1');
         }
-        
+
         redirect('/category?message=Category '.$message);
     }
 

@@ -25,7 +25,6 @@ class App implements ISingleton
         $this->appStorage =  StorageDriverFactory::createStorage($this->appDBConfiguration);
         $this->appRouter = Router::getInstance();
         $this->configManager = ConfigManager::getInstance();
-
     }
 
     public function getAppStorage(): IStorageDriver

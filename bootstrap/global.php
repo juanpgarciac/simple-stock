@@ -39,11 +39,12 @@ if (!function_exists('env')) {
      * Return env variable requested/set.
      */
     function env(string $key, string $set = ''): string
-    {        
-        if(!empty($set)){
+    {
+        if (!empty($set)) {
             $pool = envPool([$key => $set]);
-        }else 
+        } else {
             $pool = envPool();
+        }
 
         $env = array_key_exists($key, $pool) ? $pool[$key] : '';
         return $env;
@@ -83,5 +84,5 @@ function slash(): string
  */
 function path(string  ...$pathParts): string
 {
-    return implode(slash(),$pathParts);
+    return implode(slash(), $pathParts);
 }

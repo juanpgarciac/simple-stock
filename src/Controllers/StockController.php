@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers;
 
 use Core\Classes\Controller;
@@ -8,11 +9,8 @@ use Models\StockTransactionRepository;
 
 class StockController extends Controller
 {
-
-
     public function adjustStock()
     {
-        
         $productRepository = new ProductRepository(app()->getAppStorage());
         $stockTransaction = StockTransaction::fromArray(request());
         $stockRepository = new StockTransactionRepository(app()->getAppStorage());

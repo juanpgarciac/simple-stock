@@ -1,4 +1,5 @@
 <?php
+
 return [
     'PROJECT_NAME'  => 'PROJECT',
 
@@ -16,5 +17,5 @@ return [
 
     'DB_PORT'       =>  '3306',
 
-    'DB_SOCKET'     =>  '', 
+    'DB_SOCKET'     =>  '',
 ];

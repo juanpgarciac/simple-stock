@@ -10,29 +10,29 @@ abstract class Model
     /**
      * Receives an  associative array, set the properties accordingly and return a new Model instance
      * @param array $args
-     * 
+     *
      * @return Model
      */
-    public static function fromArray(array $args = []):Model
+    public static function fromArray(array $args = []): Model
     {
-        
         $modelClass = new ReflectionClass(static::class);
         $modelConstructor = $modelClass->getConstructor();
         $modelConstructor->getParameters();
 
-        $modelConstructorParameters = array_intersect_key($args, array_flip(array_column($modelConstructor->getParameters(),'name')));
+        $modelConstructorParameters = array_intersect_key($args, array_flip(array_column($modelConstructor->getParameters(), 'name')));
 
         $self = new static(...$modelConstructorParameters);
 
-        
+
         //also set values that did not set in the constructor.
-        $args = array_diff_key($args,$modelConstructorParameters);        
+        $args = array_diff_key($args, $modelConstructorParameters);
 
         foreach ($args as $key => $value) {
-            if(property_exists($self,$key)){
-                //check if property is already set by constructor. 
-                if( !isset($self->$key) && (!is_null($value) || gettype($self->$key) === "NULL"))
+            if (property_exists($self, $key)) {
+                //check if property is already set by constructor.
+                if (!isset($self->$key) && (!is_null($value) || gettype($self->$key) === "NULL")) {
                     $self->$key = $value;
+                }
             }
         }
         return $self;
@@ -41,10 +41,10 @@ abstract class Model
     /**
      * (alias for fromArray) Receives an  associative array, set the properties accordingly and return a new Model instance
      * @param array $args
-     * 
+     *
      * @return Model
      */
-    public static function fromState(array $args = []):Model
+    public static function fromState(array $args = []): Model
     {
         return self::fromArray($args);
     }
@@ -52,15 +52,17 @@ abstract class Model
     /**
      * creator function. Receives an array or nothing, set the properties accordingly and return a new Model instance
      * @param mixed $args
-     * 
+     *
      * @return Model
      */
-    public static function create(mixed $args = []):Model
+    public static function create(mixed $args = []): Model
     {
-        if(is_array($args))
+        if (is_array($args)) {
             return static::fromArray($args);
-        if($args instanceof static)
+        }
+        if ($args instanceof static) {
             return $args;
+        }
         return new static();
     }
 
@@ -85,8 +87,9 @@ abstract class Model
         if (property_exists($this::class, $fieldName)) {
             return isset($this->$fieldName) ? $this->$fieldName : null;
         }
-        if($exceptionCheck)
+        if ($exceptionCheck) {
             throw new Exception("Field $fieldName doesn't exist in ".$this::class." scope", 1);
+        }
         return null;
     }
 
@@ -111,7 +114,7 @@ abstract class Model
 
     public function toArray(): array
     {
-        return get_object_vars($this); 
+        return get_object_vars($this);
     }
 
     public function toObject(): object

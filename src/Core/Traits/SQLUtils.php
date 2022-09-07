@@ -4,20 +4,20 @@ namespace Core\Traits;
 
 trait SQLUtils
 {
-
     /**
      * Where query receives and array (from QueryBuilder Trait and implode it) or a direct raw SQL Query
      * @param array|string $conditions
-     * 
+     *
      * @return string
      */
     private static function whereQuery(array|string $conditions): string
     {
-        if(is_array($conditions)){
-            if(count($conditions) > 0)
+        if (is_array($conditions)) {
+            if (count($conditions) > 0) {
                 return ' WHERE '.implode(' ', $conditions);
+            }
             return '';
-        }            
+        }
         return $conditions;
     }
 
@@ -48,7 +48,7 @@ trait SQLUtils
     public static function insertQuery(array $record, string $table, string $suffix = ''): string
     {
         $fields = implode(', ', array_keys($record));
-        $values = implode(', ',array_map(fn($item)=>(  is_null($item) ? 'NULL' : "'$item'"),array_values($record)));
+        $values = implode(', ', array_map(fn ($item) =>(is_null($item) ? 'NULL' : "'$item'"), array_values($record)));
         $query = "INSERT INTO $table ($fields) VALUES ($values) $suffix;";
         return $query;
     }

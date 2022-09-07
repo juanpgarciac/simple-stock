@@ -59,7 +59,7 @@ abstract class ModelRepository
         return $this->DB::class;
     }
 
-    public function getModelClass():string
+    public function getModelClass(): string
     {
         return $this->modelClass;
     }
@@ -77,7 +77,7 @@ abstract class ModelRepository
      */
     public function getFieldSelection(): array
     {
-        return !empty($this->getSelectQueryArray()) ?$this->getSelectQueryArray():['*'];
+        return !empty($this->getSelectQueryArray()) ? $this->getSelectQueryArray() : ['*'];
     }
 
     /**
@@ -119,10 +119,11 @@ abstract class ModelRepository
     public function insert(Model|array $modelRecord): Model|array|false
     {
         $insertArray = $this->getInsertArray($modelRecord, true);
-        if (!empty($insertArray)) {            
+        if (!empty($insertArray)) {
             $id = $this->DB->insertRecord($insertArray, $this->getTable(), $this->id_field);
-            if(!is_null($id))//ID null, why ?
-                return $this->find($id);//get whole record updated
+            if (!is_null($id)) {//ID null, why ?
+                return $this->find($id);
+            }//get whole record updated
         }
         return false;
     }
@@ -138,37 +139,37 @@ abstract class ModelRepository
 
         if (!empty($insertArray)) {
             $modelID = null;
-            if(isset($insertArray[$this->id_field])){
+            if (isset($insertArray[$this->id_field])) {
                 $modelID = $insertArray[$this->id_field];
-            }elseif(is_subclass_of($modelRecord,Model::class)){
+            } elseif (is_subclass_of($modelRecord, Model::class)) {
                 $modelID = $modelRecord->id($this->id_field);
-            }           
-            if(!is_null($modelID)){
+            }
+            if (!is_null($modelID)) {
                 $id = $this->DB->updateRecord($modelID, $insertArray, $this->getTable(), $this->id_field);
                 $modelRecord = $this->find($id);
                 return $modelRecord;
             }
         }
         return false;
-        
     }
 
     /**
      * @param Model|array $modelRecord
-     * 
+     *
      * @return array
      */
-    private function getInsertArray(Model|array $modelRecord, $ignoreIDField = false):array
+    private function getInsertArray(Model|array $modelRecord, $ignoreIDField = false): array
     {
         $insertArray = [];
         $record = is_array($modelRecord) ? $modelRecord : $modelRecord->toArray();
 
         foreach ($this->fields as $field) {
-            if($field == $this->id_field && $ignoreIDField)
+            if ($field == $this->id_field && $ignoreIDField) {
                 continue;
-            if(array_key_exists($field,$record) && (!is_null($record[$field]) || in_array($field,$this->nullable))){
+            }
+            if (array_key_exists($field, $record) && (!is_null($record[$field]) || in_array($field, $this->nullable))) {
                 $insertArray[$field] = $record[$field];
-            }                
+            }
         }
         return $insertArray;
     }
@@ -210,27 +211,28 @@ abstract class ModelRepository
      */
     public function find(string|int $recordID): Model|array|null
     {
-        $result = $this->where($this->getTable().'.'.$this->id_field,$recordID)->results();
-        $this->clear_query();  
+        $result = $this->where($this->getTable().'.'.$this->id_field, $recordID)->results();
+        $this->clear_query();
         //$result = $this->DB->resultByID($recordID, $this->getTable(), $this->id_field);
-        if(empty($result)){
+        if (empty($result)) {
             return null;
         }
 
         $result = $result[array_key_first($result)];
 
-        if (!empty($this->getModelClass())){
-
-            if(is_subclass_of($this->getModelClass(), Model::class))
-                return $this->getModelClass()::fromState($result);//return model instance
-            else
+        if (!empty($this->getModelClass())) {
+            if (is_subclass_of($this->getModelClass(), Model::class)) {
+                return $this->getModelClass()::fromState($result);
+            }//return model instance
+            else {
                 trigger_error("{$this->getModelClass()} should extend ".Model::class, E_USER_WARNING);
+            }
         }
 
         return $result;//return the result assoc array
     }
 
-    private function getFrom():string
+    private function getFrom(): string
     {
         return trim($this->getTable().' '.$this->getJoinQuery());
     }
@@ -239,5 +241,4 @@ abstract class ModelRepository
     {
         return $this->getTable();
     }
-
 }
