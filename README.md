@@ -23,7 +23,6 @@ To use the app, you will need a running php 8 server, and follow:
 4. Then go to the public folder and run php -S ip:port command.
 5. Have fun!
 
-
 TO-DO: 
 
 * Basically separate the framework layer to another repository and continue it (Session, authenticathion, file handling, ?). 
@@ -33,3 +32,17 @@ TO-DO:
 * Complete the "please CLI", check branch "command-feature". 
 
 * Improve this README file. 
+
+### Screenshots:
+
+![image](https://user-images.githubusercontent.com/6114482/189206352-8929c6cb-c229-43f3-97d7-22710ff88053.png)
+![image](https://user-images.githubusercontent.com/6114482/189206440-4a0f598a-4869-4613-ae7f-0d1477168d08.png)
+![image](https://user-images.githubusercontent.com/6114482/189206480-177d61d1-3341-4e37-95bb-58d764378928.png)
+![image](https://user-images.githubusercontent.com/6114482/189206562-30ee90b0-57af-43f1-9849-bfdce4b94059.png)
+![image](https://user-images.githubusercontent.com/6114482/189206591-a01bc06d-b67a-4a80-97fa-3f34cb306f12.png)
+![image](https://user-images.githubusercontent.com/6114482/189206645-c2408dfd-a687-4f9f-b34e-ae7ceb70f86c.png)
+![image](https://user-images.githubusercontent.com/6114482/189206781-f4fa8fbe-d893-41bb-bf1d-4ecb60a598ba.png)
+![image](https://user-images.githubusercontent.com/6114482/189206843-dcf76795-831f-4b91-aa29-9ff488b0f9e5.png)
+
+
+
